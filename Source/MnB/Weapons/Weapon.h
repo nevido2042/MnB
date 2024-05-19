@@ -30,8 +30,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class UCapsuleComponent* CapsuleComponent;
 
-	/*UPROPERTY(EditAnywhere)
-	class UParticleSystemComponent* ParticleSystemComponent;*/
+	UPROPERTY(EditAnywhere)
+	class UParticleSystemComponent* ParticleSystemComponent;
 
 protected:
 	 UFUNCTION()

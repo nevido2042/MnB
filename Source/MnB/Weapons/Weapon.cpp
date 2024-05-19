@@ -17,14 +17,10 @@ AWeapon::AWeapon()
 	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
 	CapsuleComponent->SetupAttachment(StaticMeshComponent);
 
-	//CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
-	//CapsuleComponent->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel1);
-	//CapsuleComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Overlap);
-
 	CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::OnCapsuleBeginOverlap);
 	CapsuleComponent->SetGenerateOverlapEvents(true);
 
-	//ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystemComponent"));
+	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystemComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -44,7 +40,7 @@ void AWeapon::Tick(float DeltaTime)
 void AWeapon::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	FTransform HitTransform = FTransform(SweepResult.Location);
-	/*ParticleSystemComponent->SetWorldTransform(HitTransform);
-	ParticleSystemComponent->ActivateSystem();*/
+	ParticleSystemComponent->SetWorldTransform(HitTransform);
+	ParticleSystemComponent->ActivateSystem();
 }
 
