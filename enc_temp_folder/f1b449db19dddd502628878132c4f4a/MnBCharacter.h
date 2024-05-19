@@ -79,7 +79,7 @@ public:
 public:
 	bool IsReadyToRightAttack() { return bReadyToRightAttack; }
 	bool IsReadyToLeftAttack() { return bReadyToLeftAttack; }
-	FVector2D GetLookAxisVector(){ return LookAxisVector; }
+
 protected:
 	UPROPERTY(EditAnywhere)
 	class UChildActorComponent* ChildActorComponent;

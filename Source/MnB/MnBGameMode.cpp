@@ -3,6 +3,7 @@
 #include "MnBGameMode.h"
 #include "MnBCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include "Blueprint/UserWidget.h"
 
 AMnBGameMode::AMnBGameMode()
 {
@@ -12,4 +13,13 @@ AMnBGameMode::AMnBGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+}
+
+void AMnBGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	CurrentWidget = CreateWidget(GetWorld(), UserWidget);
+
+	CurrentWidget->AddToViewport();
 }

@@ -13,6 +13,14 @@ class AMnBGameMode : public AGameModeBase
 
 public:
 	AMnBGameMode();
+
+	virtual void BeginPlay();
+
+protected:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> UserWidget;
+
+	class UUserWidget* CurrentWidget;
 };
 
 

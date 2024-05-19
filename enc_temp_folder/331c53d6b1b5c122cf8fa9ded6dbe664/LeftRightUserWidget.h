@@ -16,12 +16,11 @@ class MNB_API ULeftRightUserWidget : public UUserWidget
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	class UImage* LeftImage;
+	class UImage* ImageLeft;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	class UImage* RightImage;
+	class UImage* ImageRight;
 
 protected:
 	virtual void NativeOnInitialized();
-	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
 };
