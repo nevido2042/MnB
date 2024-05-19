@@ -10,6 +10,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Components/ChildActorComponent.h"
+#include "Engine/SkeletalMeshSocket.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -52,6 +54,9 @@ AMnBCharacter::AMnBCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	ChildActorComponent = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
+	ChildActorComponent->SetupAttachment(GetMesh());
 }
 
 void AMnBCharacter::BeginPlay()
@@ -66,6 +71,12 @@ void AMnBCharacter::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+	}
+
+	const USkeletalMeshSocket* WeaponSocket = GetMesh()->GetSocketByName("WeaponSocket");
+	if (WeaponSocket)
+	{
+		WeaponSocket->AttachActor(ChildActorComponent->GetChildActor(), GetMesh());
 	}
 }
 
