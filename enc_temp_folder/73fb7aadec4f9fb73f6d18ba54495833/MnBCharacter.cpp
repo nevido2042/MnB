@@ -88,14 +88,11 @@ void AMnBCharacter::BeginPlay()
 
 void AMnBCharacter::ReadyToAttack()
 {
-	bReadyToLeftAttack = false;
-	bReadyToRightAttack = false;
-
 	if (LookAxisVector.X < 0)
 	{
 		bReadyToLeftAttack = true;
 	}
-	else
+	else if(LookAxisVector.X > 0)
 	{
 		bReadyToRightAttack = true;
 	}

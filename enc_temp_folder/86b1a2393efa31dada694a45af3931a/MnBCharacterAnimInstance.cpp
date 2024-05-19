@@ -49,6 +49,6 @@ void UMnBCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (MnBCharacter)
 	{
 		bReadyToRightAttack = MnBCharacter->IsReadyToRightAttack();
-		bReadyToLeftAttack = MnBCharacter->IsReadyToLeftAttack();
+		bReadyToRightAttack = MnBCharacter->IsReadyToLeftAttack();
 	}
 }
