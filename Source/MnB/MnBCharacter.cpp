@@ -36,7 +36,7 @@ AMnBCharacter::AMnBCharacter()
 	// instead of recompiling to adjust them
 	GetCharacterMovement()->JumpZVelocity = 700.f;
 	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	GetCharacterMovement()->MaxWalkSpeed = 200.f;
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
@@ -80,6 +80,39 @@ void AMnBCharacter::BeginPlay()
 	}
 }
 
+//void AMnBCharacter::Tick(float DeltaSeconds)
+//{
+//	Super::Tick(DeltaSeconds);
+//
+//}
+
+void AMnBCharacter::ReadyToAttack()
+{
+	if (LookAxisVector.X < 0)
+	{
+		bReadyToLeftAttack = true;
+	}
+	else if(LookAxisVector.X > 0)
+	{
+		bReadyToRightAttack = true;
+	}
+
+}
+
+void AMnBCharacter::Attack()
+{
+	if (bReadyToRightAttack)
+	{
+		bReadyToRightAttack = false;
+		PlayAnimMontage(AttackRightAnimMontage);
+	}
+	else if (bReadyToLeftAttack)
+	{
+		bReadyToLeftAttack = false;
+		PlayAnimMontage(AttackLeftAnimMontage);
+	}
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -97,6 +130,10 @@ void AMnBCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMnBCharacter::Look);
+
+		// Attacking
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &AMnBCharacter::ReadyToAttack);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &AMnBCharacter::Attack);
 	}
 	else
 	{
@@ -130,7 +167,9 @@ void AMnBCharacter::Move(const FInputActionValue& Value)
 void AMnBCharacter::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
+	LookAxisVector = Value.Get<FVector2D>();
+
+	UE_LOG(LogTemp, Warning, TEXT("%f"), LookAxisVector.X);
 
 	if (Controller != nullptr)
 	{

@@ -19,11 +19,19 @@ protected:
 
 	class UPawnMovementComponent* MovementComponent;
 
+	class AMnBCharacter* MnBCharacter;
+
 	UPROPERTY(BlueprintReadOnly)
-	bool IsShouldMove;
+	bool bShouldMove;
 
 	UPROPERTY(BlueprintReadOnly)
 	float Speed;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bReadyToRightAttack;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bReadyToLeftAttack;
 
 protected:
 	virtual void NativeInitializeAnimation() override;

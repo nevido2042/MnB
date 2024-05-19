@@ -5,6 +5,7 @@
 #include "MnBCharacterAnimInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Character.h"
+#include "MnBCharacter.h"
 
 void UMnBCharacterAnimInstance::NativeInitializeAnimation()
 {
@@ -24,7 +25,7 @@ void UMnBCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	Speed = MovementComponent->Velocity.Length();
 
-	//IsShouldMove//
+	//IsShouldMove
 	FVector Acceleration;
 	ACharacter * Character = Cast<ACharacter>(Pawn);
 	if (Character)
@@ -36,10 +37,18 @@ void UMnBCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	if (Acceleration != ZeroVector && Speed > 3.0f)
 	{
-		IsShouldMove = true;
+		bShouldMove = true;
 	}
 	else
 	{
-		IsShouldMove = false;
+		bShouldMove = false;
+	}
+
+	//bRedayToRightAttack
+	MnBCharacter = Cast<AMnBCharacter>(Character);
+	if (MnBCharacter)
+	{
+		bReadyToRightAttack = MnBCharacter->IsReadyToRightAttack();
+		bReadyToRightAttack = MnBCharacter->IsReadyToLeftAttack();
 	}
 }

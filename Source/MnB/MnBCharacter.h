@@ -44,6 +44,10 @@ class AMnBCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	/** Attack Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AttackAction;
+
 public:
 	AMnBCharacter();
 	
@@ -64,14 +68,36 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
+	//virtual void Tick(float DeltaSeconds);
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+public:
+	bool IsReadyToRightAttack() { return bReadyToRightAttack; }
+	bool IsReadyToLeftAttack() { return bReadyToLeftAttack; }
+
 protected:
 	UPROPERTY(EditAnywhere)
 	class UChildActorComponent* ChildActorComponent;
+
+	bool bReadyToRightAttack = false;
+	bool bReadyToLeftAttack = false;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* AttackRightAnimMontage;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* AttackLeftAnimMontage;
+
+
+	FVector2D LookAxisVector;
+
+protected:
+	void ReadyToAttack();
+	void Attack();
 };
 
