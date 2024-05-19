@@ -21,6 +21,7 @@ DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 AMnBCharacter::AMnBCharacter()
 {
 	// Set size for collision capsule
+
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 		
 	// Don't rotate when the controller rotates. Let that just affect the camera.
