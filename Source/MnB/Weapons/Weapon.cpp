@@ -21,6 +21,15 @@ AWeapon::AWeapon()
 	CapsuleComponent->SetGenerateOverlapEvents(true);
 
 	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystemComponent"));
+
+	CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	CapsuleComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+
+	// Enable hit events
+	CapsuleComponent->SetNotifyRigidBodyCollision(true);
+
+	// Bind hit event
+	CapsuleComponent->OnComponentHit.AddDynamic(this, &AWeapon::OnHit);
 }
 
 // Called when the game starts or when spawned
@@ -39,8 +48,37 @@ void AWeapon::Tick(float DeltaTime)
 
 void AWeapon::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	FTransform HitTransform = FTransform(SweepResult.Location);
+	if (OtherActor && (OtherActor != this) && OtherComp)
+	{
+		// Calculate the overlap position
+		FVector OverlapPosition = OtherComp->GetComponentLocation();
+
+		// Optionally, log the overlap position
+		UE_LOG(LogTemp, Warning, TEXT("Overlap at position: %s"), *OverlapPosition.ToString());
+
+		// Set the particle system location to the overlap position and activate it
+		ParticleSystemComponent->SetWorldLocation(OverlapPosition);
+		ParticleSystemComponent->ActivateSystem();
+	}
+
+	/*FTransform HitTransform = FTransform(SweepResult.Location);
 	ParticleSystemComponent->SetWorldTransform(HitTransform);
-	ParticleSystemComponent->ActivateSystem();
+	ParticleSystemComponent->ActivateSystem();*/
+}
+
+void AWeapon::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if (OtherActor && (OtherActor != this) && OtherComp)
+	{
+		// Get the hit location
+		FVector HitLocation = Hit.ImpactPoint;
+
+		// Optionally, log the hit location
+		UE_LOG(LogTemp, Warning, TEXT("Hit at location: %s"), *HitLocation.ToString());
+
+		// Set the particle system location to the hit location and activate it
+		ParticleSystemComponent->SetWorldLocation(HitLocation);
+		ParticleSystemComponent->ActivateSystem();
+	}
 }
 
