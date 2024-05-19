@@ -23,15 +23,6 @@ ATestActor::ATestActor()
 	CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &ATestActor::OnCapsuleBeginOverlap);
 	CapsuleComponent->SetGenerateOverlapEvents(true);
 
-	CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	CapsuleComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-
-	// Enable hit events
-	CapsuleComponent->SetNotifyRigidBodyCollision(true);
-
-	// Bind hit event
-	CapsuleComponent->OnComponentHit.AddDynamic(this, &ATestActor::OnHit);
-
 }
 
 // Called when the game starts or when spawned
@@ -50,21 +41,5 @@ void ATestActor::Tick(float DeltaTime)
 
 void ATestActor::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-}
-
-void ATestActor::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
-{
-	if (OtherActor && (OtherActor != this) && OtherComp)
-	{
-		// Get the hit location
-		FVector HitLocation = Hit.ImpactPoint;
-
-		// Optionally, log the hit location
-		UE_LOG(LogTemp, Warning, TEXT("Hit at location: %s"), *HitLocation.ToString());
-
-		// Set the particle system location to the hit location and activate it
-		//ParticleSystemComponent->SetWorldLocation(HitLocation);
-		//ParticleSystemComponent->ActivateSystem();
-	}
 }
 
