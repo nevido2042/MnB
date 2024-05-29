@@ -68,7 +68,7 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
-	//virtual void Tick(float DeltaSeconds);
+	virtual void Tick(float DeltaSeconds) override;
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -93,11 +93,11 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* AttackLeftAnimMontage;
 
-
 	FVector2D LookAxisVector;
 
 protected:
 	void ReadyToAttack();
 	void Attack();
+	void CameraRaycast();
 };
 

@@ -77,15 +77,17 @@ void AMnBCharacter::BeginPlay()
 	const USkeletalMeshSocket* WeaponSocket = GetMesh()->GetSocketByName("WeaponSocket");
 	if (WeaponSocket)
 	{
+		if (ChildActorComponent->GetChildActor() == nullptr) { return; }
+
 		WeaponSocket->AttachActor(ChildActorComponent->GetChildActor(), GetMesh());
 	}
 }
 
-//void AMnBCharacter::Tick(float DeltaSeconds)
-//{
-//	Super::Tick(DeltaSeconds);
-//
-//}
+void AMnBCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	CameraRaycast();
+}
 
 void AMnBCharacter::ReadyToAttack()
 {
@@ -114,6 +116,38 @@ void AMnBCharacter::Attack()
 	{
 		bReadyToLeftAttack = false;
 		PlayAnimMontage(AttackLeftAnimMontage);
+	}
+}
+
+void AMnBCharacter::CameraRaycast()
+{
+	float LineLength = 1000.f;
+	FVector LineStart = GetFollowCamera()->GetComponentLocation();
+	FVector LineEnd = LineStart + GetFollowCamera()->GetComponentRotation().Vector() * LineLength;
+	DrawDebugLine(GetWorld(), LineStart, LineEnd, FColor::Green);
+
+	FHitResult HitResult;
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, LineStart, LineEnd, ECollisionChannel::ECC_GameTraceChannel3);
+	if (bHit)
+	{
+		// 디버그 라인을 빨간색으로 그리기
+		DrawDebugLine(
+			GetWorld(),
+			LineStart,
+			HitResult.Location,
+			FColor::Red,
+			false, 5.0f, 0, 1.0f
+		);
+
+		// 충돌 지점에 디버그 스피어 그리기
+		DrawDebugSphere(
+			GetWorld(),
+			HitResult.Location,
+			12.0f,
+			24,
+			FColor::Red,
+			false, 5.0f
+		);
 	}
 }
 
