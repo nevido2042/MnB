@@ -12,6 +12,8 @@
 #include "InputActionValue.h"
 #include "Components/ChildActorComponent.h"
 #include "Engine/SkeletalMeshSocket.h"
+#include "MnB/Interface/InteractableActor.h"
+#include "MnB/Weapons/Weapon.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -55,9 +57,6 @@ AMnBCharacter::AMnBCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
-
-	ChildActorComponent = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
-	ChildActorComponent->SetupAttachment(GetMesh());
 }
 
 void AMnBCharacter::BeginPlay()
@@ -73,20 +72,34 @@ void AMnBCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
-
-	const USkeletalMeshSocket* WeaponSocket = GetMesh()->GetSocketByName("WeaponSocket");
-	if (WeaponSocket)
-	{
-		if (ChildActorComponent->GetChildActor() == nullptr) { return; }
-
-		WeaponSocket->AttachActor(ChildActorComponent->GetChildActor(), GetMesh());
-	}
 }
 
 void AMnBCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	CameraRaycast();
+}
+
+void AMnBCharacter::Equip()
+{
+	const USkeletalMeshSocket* WeaponSocket = GetMesh()->GetSocketByName("WeaponSocket");
+	if (WeaponSocket)
+	{
+		if (FocusingActor == nullptr) { return; }
+
+		if (EquippedWeapon != nullptr)
+		{
+			EquippedWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+			EquippedWeapon->Unequipped();
+		}
+
+
+		bool bResult = WeaponSocket->AttachActor(FocusingActor, GetMesh());
+		check(bResult);
+
+		EquippedWeapon = Cast<AWeapon>(FocusingActor);
+	}
+
 }
 
 void AMnBCharacter::ReadyToAttack()
@@ -121,7 +134,7 @@ void AMnBCharacter::Attack()
 
 void AMnBCharacter::CameraRaycast()
 {
-	float LineLength = 1000.f;
+	float LineLength = 700.f;
 	FVector LineStart = GetFollowCamera()->GetComponentLocation();
 	FVector LineEnd = LineStart + GetFollowCamera()->GetComponentRotation().Vector() * LineLength;
 	DrawDebugLine(GetWorld(), LineStart, LineEnd, FColor::Green);
@@ -130,7 +143,9 @@ void AMnBCharacter::CameraRaycast()
 	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, LineStart, LineEnd, ECollisionChannel::ECC_GameTraceChannel3);
 	if (bHit)
 	{
-		// µð¹ö±× ¶óÀÎÀ» »¡°£»öÀ¸·Î ±×¸®±â
+		FocusingActor = HitResult.GetActor();
+
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
 		DrawDebugLine(
 			GetWorld(),
 			LineStart,
@@ -139,7 +154,7 @@ void AMnBCharacter::CameraRaycast()
 			false, 5.0f, 0, 1.0f
 		);
 
-		// Ãæµ¹ ÁöÁ¡¿¡ µð¹ö±× ½ºÇÇ¾î ±×¸®±â
+		// ï¿½æµ¹ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ç¾ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
 		DrawDebugSphere(
 			GetWorld(),
 			HitResult.Location,
@@ -148,6 +163,21 @@ void AMnBCharacter::CameraRaycast()
 			FColor::Red,
 			false, 5.0f
 		);
+	}
+	else
+	{
+		FocusingActor = nullptr;
+	}
+}
+
+void AMnBCharacter::Interact()
+{
+	if (FocusingActor == nullptr) { return; }
+
+	IInteractableActor* InteractableActor = Cast<IInteractableActor>(FocusingActor);
+	if (InteractableActor)
+	{
+		InteractableActor->Interact();
 	}
 }
 
@@ -172,6 +202,9 @@ void AMnBCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		// Attacking
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &AMnBCharacter::ReadyToAttack);
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &AMnBCharacter::Attack);
+
+		// Interact
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AMnBCharacter::Interact);
 	}
 	else
 	{
@@ -207,7 +240,7 @@ void AMnBCharacter::Look(const FInputActionValue& Value)
 	// input is a Vector2D
 	LookAxisVector = Value.Get<FVector2D>();
 
-	UE_LOG(LogTemp, Warning, TEXT("%f"), LookAxisVector.X);
+	//UE_LOG(LogTemp, Warning, TEXT("%f"), LookAxisVector.X);
 
 	if (Controller != nullptr)
 	{

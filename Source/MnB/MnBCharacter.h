@@ -48,6 +48,10 @@ class AMnBCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* AttackAction;
 
+	/** Interact Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InteractAction;
+
 public:
 	AMnBCharacter();
 	
@@ -80,9 +84,9 @@ public:
 	bool IsReadyToRightAttack() { return bReadyToRightAttack; }
 	bool IsReadyToLeftAttack() { return bReadyToLeftAttack; }
 	FVector2D GetLookAxisVector(){ return LookAxisVector; }
+
+	void Equip();
 protected:
-	UPROPERTY(EditAnywhere)
-	class UChildActorComponent* ChildActorComponent;
 
 	bool bReadyToRightAttack = false;
 	bool bReadyToLeftAttack = false;
@@ -95,9 +99,14 @@ protected:
 
 	FVector2D LookAxisVector;
 
+	AActor* FocusingActor = nullptr;
+
+	class AWeapon* EquippedWeapon = nullptr;
+
 protected:
 	void ReadyToAttack();
 	void Attack();
 	void CameraRaycast();
+	void Interact();
 };
 

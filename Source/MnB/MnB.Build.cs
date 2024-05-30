@@ -11,5 +11,6 @@ public class MnB : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG" });
 
         PublicIncludePaths.Add("MnB");
+        PublicIncludePaths.Add("MnB/Interface");
     }
 }

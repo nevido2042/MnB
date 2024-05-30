@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "MnB/Interface/InteractableActor.h"
 #include "Weapon.generated.h"
 
 UCLASS()
-class MNB_API AWeapon : public AActor
+class MNB_API AWeapon : public AActor, public IInteractableActor
 {
 	GENERATED_BODY()
 	
@@ -30,9 +31,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class UCapsuleComponent* CapsuleComponent;
 
-	UPROPERTY(EditAnywhere)
-	class UParticleSystemComponent* ParticleSystemComponent;
-
 protected:
 	 UFUNCTION()
     void OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -40,4 +38,10 @@ protected:
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+	virtual void Interact() override;
+
+	void Equipped();
+
+public:
+	void Unequipped();
 };

@@ -4,6 +4,7 @@
 #include "Weapons/Weapon.h"
 #include "Components/CapsuleComponent.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "MnB/MnBCharacter.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -13,6 +14,8 @@ AWeapon::AWeapon()
 
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
 	SetRootComponent(StaticMeshComponent);
+	
+	StaticMeshComponent->SetSimulatePhysics(true);
 
 	CapsuleComponent = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComponent"));
 	CapsuleComponent->SetupAttachment(StaticMeshComponent);
@@ -20,10 +23,7 @@ AWeapon::AWeapon()
 	CapsuleComponent->OnComponentBeginOverlap.AddDynamic(this, &AWeapon::OnCapsuleBeginOverlap);
 	CapsuleComponent->SetGenerateOverlapEvents(true);
 
-	ParticleSystemComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ParticleSystemComponent"));
-
-	CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	CapsuleComponent->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+	CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 
 	// Enable hit events
 	CapsuleComponent->SetNotifyRigidBodyCollision(true);
@@ -57,8 +57,6 @@ void AWeapon::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor*
 		UE_LOG(LogTemp, Warning, TEXT("Overlap at position: %s"), *OverlapPosition.ToString());
 
 		// Set the particle system location to the overlap position and activate it
-		ParticleSystemComponent->SetWorldLocation(OverlapPosition);
-		ParticleSystemComponent->ActivateSystem();
 	}
 
 	/*FTransform HitTransform = FTransform(SweepResult.Location);
@@ -75,10 +73,33 @@ void AWeapon::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrim
 
 		// Optionally, log the hit location
 		UE_LOG(LogTemp, Warning, TEXT("Hit at location: %s"), *HitLocation.ToString());
-
-		// Set the particle system location to the hit location and activate it
-		ParticleSystemComponent->SetWorldLocation(HitLocation);
-		ParticleSystemComponent->ActivateSystem();
 	}
 }
 
+void AWeapon::Interact()
+{
+	UE_LOG(LogTemp, Warning, TEXT(__FUNCTION__));
+	Equipped();
+}
+
+void AWeapon::Equipped()
+{
+	AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+	if (MnBCharacter)
+	{
+		StaticMeshComponent->SetSimulatePhysics(false);
+		StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+
+		MnBCharacter->Equip();
+	}
+}
+
+void AWeapon::Unequipped()
+{
+	StaticMeshComponent->SetSimulatePhysics(true);
+	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	CapsuleComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
