@@ -145,7 +145,7 @@ void AMnBCharacter::CameraRaycast()
 	{
 		FocusingActor = HitResult.GetActor();
 
-		// ����� ������ ���������� �׸���
+		
 		DrawDebugLine(
 			GetWorld(),
 			LineStart,
@@ -154,7 +154,7 @@ void AMnBCharacter::CameraRaycast()
 			false, 5.0f, 0, 1.0f
 		);
 
-		// �浹 ������ ����� ���Ǿ� �׸���
+		
 		DrawDebugSphere(
 			GetWorld(),
 			HitResult.Location,

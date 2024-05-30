@@ -84,7 +84,7 @@ public:
 	bool IsReadyToRightAttack() { return bReadyToRightAttack; }
 	bool IsReadyToLeftAttack() { return bReadyToLeftAttack; }
 	FVector2D GetLookAxisVector(){ return LookAxisVector; }
-
+	class AWeapon* GetEquippedWeapon() { return EquippedWeapon; }
 	void Equip();
 protected:
 

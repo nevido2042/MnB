@@ -28,15 +28,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* StaticMeshComponent;
 
-	UPROPERTY(EditAnywhere)
-	class UCapsuleComponent* CapsuleComponent;
-
 protected:
-	UFUNCTION()
-    void OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 	virtual void Interact() override;
 
@@ -44,4 +36,6 @@ protected:
 
 public:
 	void Unequipped();
+
+	void HitDitect();
 };
