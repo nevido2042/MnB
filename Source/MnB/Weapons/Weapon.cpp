@@ -30,13 +30,15 @@ AWeapon::AWeapon()
 
 	// Bind hit event
 	CapsuleComponent->OnComponentHit.AddDynamic(this, &AWeapon::OnHit);
+	
+	//CapsuleComponent->SweepComponent()
 }
 
 // Called when the game starts or when spawned
 void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -48,13 +50,34 @@ void AWeapon::Tick(float DeltaTime)
 
 void AWeapon::OnCapsuleBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (bFromSweep)
+	{
+		// Get the bone name if the hit result has a valid hit bone name
+		if (SweepResult.BoneName.IsValid())
+		{
+			FName BoneName = SweepResult.BoneName;
+			FString BoneNameString = BoneName.ToString();
+
+			// Do something with the bone name
+			// For example, print it to the log
+			UE_LOG(LogTemp, Warning, TEXT("Collision with bone: %s"), *BoneNameString);
+		}
+		else
+		{
+			// If the hit result doesn't have a valid hit bone name
+			UE_LOG(LogTemp, Warning, TEXT("Collision with unknown bone"));
+		}
+	}
+
+
 	if (OtherActor && (OtherActor != this) && OtherComp)
 	{
 		// Calculate the overlap position
 		FVector OverlapPosition = OtherComp->GetComponentLocation();
+		
 
 		// Optionally, log the overlap position
-		UE_LOG(LogTemp, Warning, TEXT("Overlap at position: %s"), *OverlapPosition.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("Overlap at position: %s, BoneName: %s"), *OverlapPosition.ToString(), SweepResult.BoneName);
 
 		// Set the particle system location to the overlap position and activate it
 	}
