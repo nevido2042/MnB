@@ -108,5 +108,10 @@ protected:
 	void Attack();
 	void CameraRaycast();
 	void Interact();
+
+private:
+	class UAIPerceptionStimuliSourceComponent* StimulusSource;
+
+	void SetupStimulusSource();
 };
 

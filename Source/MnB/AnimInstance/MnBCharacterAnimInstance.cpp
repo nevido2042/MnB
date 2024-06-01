@@ -15,6 +15,10 @@ void UMnBCharacterAnimInstance::NativeInitializeAnimation()
 	if (!Pawn) { return; }
 
 	MovementComponent = Pawn->GetMovementComponent();
+
+	Character = Cast<ACharacter>(Pawn);
+
+	MnBCharacter = Cast<AMnBCharacter>(Character);
 }
 
 void UMnBCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -26,16 +30,7 @@ void UMnBCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Speed = MovementComponent->Velocity.Length();
 
 	//IsShouldMove
-	FVector Acceleration;
-	ACharacter * Character = Cast<ACharacter>(Pawn);
-	if (Character)
-	{
-		Acceleration = Character->GetCharacterMovement()->GetCurrentAcceleration();
-	}
-
-	FVector ZeroVector = FVector::ZeroVector;
-
-	if (Acceleration != ZeroVector && Speed > 3.0f)
+	if (Speed > 3.0f)
 	{
 		bShouldMove = true;
 	}
@@ -45,7 +40,6 @@ void UMnBCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 
 	//bRedayToRightAttack
-	MnBCharacter = Cast<AMnBCharacter>(Character);
 	if (MnBCharacter)
 	{
 		bReadyToRightAttack = MnBCharacter->IsReadyToRightAttack();

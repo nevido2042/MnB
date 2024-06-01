@@ -5,6 +5,8 @@
 
 #include "NavigationSystem.h"
 #include "MnB/AI/MnBAIController.h"
+//#include "BehaviorTree/BehaviorTreeComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
 UBTTask_FindRandomLocation::UBTTask_FindRandomLocation(FObjectInitializer const& ObjectInitializer)
 {
@@ -24,11 +26,16 @@ EBTNodeResult::Type UBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeCompone
 				FNavLocation Loc;
 				if (NavSys->GetRandomPointInNavigableRadius(OriginVector, SearchRadius, Loc))
 				{
-
+					OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), Loc.Location);
 				}
+
+				FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+				return EBTNodeResult::Succeeded;
 			}
 		}
 	}
+
+	return EBTNodeResult::Failed;
 
 	return Super::ExecuteTask(OwnerComp, NodeMemory);
 }

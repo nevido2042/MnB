@@ -21,6 +21,8 @@ protected:
 
 	class AMnBCharacter* MnBCharacter;
 
+	ACharacter* Character;
+
 	UPROPERTY(BlueprintReadOnly)
 	bool bShouldMove;
 
