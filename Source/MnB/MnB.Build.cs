@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
+using UnrealBuildTool.Rules;
 
 public class MnB : ModuleRules
 {
@@ -8,7 +9,12 @@ public class MnB : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", 
+			"UMG", 
+			"AIModule",
+			"GameplayTasks",
+			"NavigationSystem"
+		});
 
         PublicIncludePaths.Add("MnB");
         PublicIncludePaths.Add("MnB/Interface");
