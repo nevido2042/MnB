@@ -2,6 +2,7 @@
 
 
 #include "Weapons/Weapon.h"
+
 #include "Components/CapsuleComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "MnB/MnBCharacter.h"
@@ -16,6 +17,8 @@ AWeapon::AWeapon()
 	SetRootComponent(StaticMeshComponent);
 	
 	StaticMeshComponent->SetSimulatePhysics(true);
+
+	StaticMeshComponent->SetCanEverAffectNavigation(false);
 
 }
 
