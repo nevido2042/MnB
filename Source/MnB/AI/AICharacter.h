@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BehaviorTree.h"
+#include "PatrolPath.h"
 #include "GameFramework/Character.h"
 #include "AICharacter.generated.h"
 
@@ -29,7 +30,12 @@ public:
 
 	UBehaviorTree* GetBehaviorTree() const;
 
+	APatrolPath* GetPatrolPath() const;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	UBehaviorTree* Tree;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
+	APatrolPath* PatrolPath;
 };

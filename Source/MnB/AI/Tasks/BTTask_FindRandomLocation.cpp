@@ -9,6 +9,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 
 UBTTask_FindRandomLocation::UBTTask_FindRandomLocation(FObjectInitializer const& ObjectInitializer)
+	: UBTTask_BlackboardBase{ ObjectInitializer }
 {
 	NodeName = "Find Random Location In NavMesh";
 }

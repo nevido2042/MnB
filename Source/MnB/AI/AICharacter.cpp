@@ -37,3 +37,8 @@ UBehaviorTree* AAICharacter::GetBehaviorTree() const
 	return Tree;
 }
 
+APatrolPath* AAICharacter::GetPatrolPath() const
+{
+	return PatrolPath;
+}
+
