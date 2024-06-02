@@ -10,7 +10,8 @@ void ULeftRightUserWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	LeftImage = Cast<UImage>(GetWidgetFromName(TEXT("ImageLeft")));
+	LeftImage = Cast<UImage>(GetWidgetFromName(
+		"ImageLeft")));
 
 	RightImage = Cast<UImage>(GetWidgetFromName(TEXT("ImageRight")));
 }

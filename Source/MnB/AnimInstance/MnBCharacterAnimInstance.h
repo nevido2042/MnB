@@ -35,7 +35,15 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	bool bReadyToLeftAttack;
 
+	UPROPERTY(BlueprintReadOnly)
+	float MoveDirection;
+
 protected:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+private:
+	void IsShouldMove();
+	void GetMoveDirection();
+	void IsReadyToAttack();
 };

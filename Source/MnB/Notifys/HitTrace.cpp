@@ -7,8 +7,8 @@
 
 void UHitTrace::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
-	AActor* Actor = MeshComp->GetOwner();
-	AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Actor);
+	AActor* const Actor = MeshComp->GetOwner();
+	AMnBCharacter* const MnBCharacter = Cast<AMnBCharacter>(Actor);
 	if (MnBCharacter)
 	{
 		Weapon = MnBCharacter->GetEquippedWeapon();
@@ -26,4 +26,5 @@ void UHitTrace::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* 
 
 void UHitTrace::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
+	Weapon = nullptr;
 }

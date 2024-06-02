@@ -29,6 +29,15 @@ void UMnBCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	Speed = MovementComponent->Velocity.Length();
 
+	IsShouldMove();
+
+	IsReadyToAttack();
+
+	GetMoveDirection();
+}
+
+void UMnBCharacterAnimInstance::IsShouldMove()
+{
 	//IsShouldMove
 	if (Speed > 3.0f)
 	{
@@ -38,7 +47,15 @@ void UMnBCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	{
 		bShouldMove = false;
 	}
+}
 
+void UMnBCharacterAnimInstance::GetMoveDirection()
+{
+	MoveDirection = CalculateDirection(MovementComponent->Velocity, Pawn->GetActorRotation());
+}
+
+void UMnBCharacterAnimInstance::IsReadyToAttack()
+{
 	//bRedayToRightAttack
 	if (MnBCharacter)
 	{
