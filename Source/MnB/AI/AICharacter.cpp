@@ -42,3 +42,18 @@ APatrolPath* AAICharacter::GetPatrolPath() const
 	return PatrolPath;
 }
 
+UAnimMontage* AAICharacter::GetMontage() const
+{
+	return Montage;
+}
+
+int AAICharacter::MeleeAttack_Implementation()
+{
+	if (Montage)
+	{
+		PlayAnimMontage(Montage);
+	}
+
+	return 0;
+}
+
