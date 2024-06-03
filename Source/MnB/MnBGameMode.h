@@ -21,6 +21,11 @@ protected:
 	TSubclassOf<class UUserWidget> UserWidget;
 
 	class UUserWidget* CurrentWidget;
+
+	UClass* VRPawnClass = nullptr;
+	UClass* VRPlayerControllerClass = nullptr;
+
+	virtual APlayerController* Login(UPlayer* NewPlayer, ENetRole InRemoteRole, const FString& Portal, const FString& Options, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;
 };
 
 

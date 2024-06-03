@@ -13,8 +13,10 @@ public class MnB : ModuleRules
 			"UMG", 
 			"AIModule",
 			"GameplayTasks",
-			"NavigationSystem"
-		});
+			"NavigationSystem",
+			"HeadMountedDisplay",
+            "XRBase"
+        });
 
         PublicIncludePaths.Add("MnB");
         PublicIncludePaths.Add("MnB/Interface");
