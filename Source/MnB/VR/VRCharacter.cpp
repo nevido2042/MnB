@@ -80,8 +80,12 @@ void AVRCharacter::BeginPlay()
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
-			const UVRInputDataConfig* VRInputDataConfig = GetDefault<UVRInputDataConfig>();
-			Subsystem->AddMappingContext(VRInputDataConfig->InputMappingContext, 0);
+			const UVRHandsInputDataConfig* VRHandsInputDataConfig = GetDefault<UVRHandsInputDataConfig>();
+			Subsystem->AddMappingContext(VRHandsInputDataConfig->InputMappingContext, 0);
+
+			// HandGraphLeft, HandGraphRight
+			const UVRHandsAnimationInputDataConfig* VRHandsAnimationInputDataConfig = GetDefault<UVRHandsAnimationInputDataConfig>();
+			Subsystem->AddMappingContext(VRHandsAnimationInputDataConfig->InputMappingContext, 1);
 		}
 	}
 }
@@ -101,8 +105,32 @@ void AVRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 
-		HandGraphLeft->SetupPlayerInputComponent(MotionControllerLeft, EnhancedInputComponent);
-		HandGraphRight->SetupPlayerInputComponent(MotionControllerRight, EnhancedInputComponent);
+		{
+			HandGraphLeft->SetupPlayerInputComponent(MotionControllerLeft, EnhancedInputComponent);
+			HandGraphRight->SetupPlayerInputComponent(MotionControllerRight, EnhancedInputComponent);
+		}
+
+		{
+			const UVRHandsInputDataConfig* VRHandsInputDataConfig = GetDefault<UVRHandsInputDataConfig>();
+			EnhancedInputComponent->BindAction(VRHandsInputDataConfig->IA_Grab_Left, ETriggerEvent::Started, this, &ThisClass::OnGrabLeftStarted);
+			EnhancedInputComponent->BindAction(VRHandsInputDataConfig->IA_Grab_Left, ETriggerEvent::Completed, this, &ThisClass::OnGrabLeftCompleted);
+
+			EnhancedInputComponent->BindAction(VRHandsInputDataConfig->IA_Grab_Right, ETriggerEvent::Started, this, &ThisClass::OnGrabRightStarted);
+			EnhancedInputComponent->BindAction(VRHandsInputDataConfig->IA_Grab_Right, ETriggerEvent::Completed, this, &ThisClass::OnGrabRightCompleted);
+		}
+
 	}
+
+
+}
+
+void AVRCharacter::OnGrabStarted(UMotionControllerComponent* MotionControllerComponent, const FInputActionValue& InputActionValue)
+{
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("OnGrabStarted"));
+}
+
+void AVRCharacter::OnGrabCompleted(UMotionControllerComponent* MotionControllerComponent, const FInputActionValue& InputActionValue)
+{
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("OnGrabCompleted"));
 }
 

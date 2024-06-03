@@ -7,7 +7,29 @@
 #include "EnhancedInputComponent.h"
 #include "VRCharacter.h"
 
-UVRInputDataConfig::UVRInputDataConfig()
+UVRHandsInputDataConfig::UVRHandsInputDataConfig()
+{
+	{
+		static ConstructorHelpers::FObjectFinder<UInputMappingContext> Asset
+		{ TEXT("/Script/EnhancedInput.InputMappingContext'/Game/MyAssets/VR/Input/HandsInput/IMC_Hands_Input.IMC_Hands_Input'") };
+		check(Asset.Object);
+		InputMappingContext = Asset.Object;
+	}
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
+		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/HandsInput/IA_Grab_Left_Input.IA_Grab_Left_Input'") };
+		check(Asset.Object);
+		IA_Grab_Left = Asset.Object;
+	}
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
+		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/HandsInput/IA_Grab_Right_Input.IA_Grab_Right_Input'") };
+		check(Asset.Object);
+		IA_Grab_Right = Asset.Object;
+	}
+}
+
+UVRHandsAnimationInputDataConfig::UVRHandsAnimationInputDataConfig()
 {
 	{
 		static ConstructorHelpers::FObjectFinder<UInputMappingContext> Asset
@@ -73,7 +95,7 @@ void UHandGraph::SetupPlayerInputComponent(UMotionControllerComponent* InMotionC
 	AVRCharacter* Character = Cast<AVRCharacter>(MotionControllerComponent->GetOwner());
 	check(Character);
 
-	const UVRInputDataConfig* VRInputDataConfig = GetDefault<UVRInputDataConfig>();
+	const UVRHandsAnimationInputDataConfig* VRInputDataConfig = GetDefault<UVRHandsAnimationInputDataConfig>();
 
 	HandType = MotionControllerComponent->MotionSource == LeftGrip ? EHandType::Left : EHandType::Right;
 	VRHandAnimInstance = HandType == EHandType::Left ?
