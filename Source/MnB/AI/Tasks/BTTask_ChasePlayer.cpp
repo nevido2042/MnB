@@ -10,8 +10,7 @@
 UBTTask_ChasePlayer::UBTTask_ChasePlayer(FObjectInitializer const& ObjectInitializer)
 	: UBTTask_BlackboardBase{ ObjectInitializer }
 {
-	NodeName = 
-		"Chase Player");
+	NodeName = TEXT("Chase Player");
 }
 
 EBTNodeResult::Type UBTTask_ChasePlayer::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)

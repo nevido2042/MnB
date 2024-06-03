@@ -10,8 +10,7 @@ void ULeftRightUserWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	LeftImage = Cast<UImage>(GetWidgetFromName(
-		"ImageLeft")));
+	LeftImage = Cast<UImage>(GetWidgetFromName(TEXT("ImageLeft")));
 
 	RightImage = Cast<UImage>(GetWidgetFromName(TEXT("ImageRight")));
 }
@@ -23,7 +22,7 @@ void ULeftRightUserWidget::NativeTick(const FGeometry& MyGeometry, float InDelta
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (PlayerController)
 	{
-		// ÇÃ·¹ÀÌ¾î Ä³¸¯ÅÍ °¡Á®¿À±â
+		// ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(PlayerController->GetCharacter());
 		if (MnBCharacter)
 		{
