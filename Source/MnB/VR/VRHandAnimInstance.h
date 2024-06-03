@@ -12,17 +12,13 @@
 UCLASS()
 class MNB_API UVRHandAnimInstance : public UAnimInstance
 {
+	friend class UHandGraph;
 	GENERATED_BODY()
 	
-
 protected:
 	virtual void NativeInitializeAnimation() override;
 
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
-
-public:
-	void SetPoseAlphaGrap(float value) { PoseAlphaGrap = value; }
-	void SetPoseAlphaPoint(float value) { PoseAlphaPoint = value; }
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

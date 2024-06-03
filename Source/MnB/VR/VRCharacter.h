@@ -4,54 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "InputMappingContext.h"
-#include "InputAction.h"
 #include "MotionControllerComponent.h"
+#include "VRHandAnimInstance.h"
+#include "VR/HandGraph.h"
 #include "VRCharacter.generated.h"
 
-UCLASS()
-class MNB_API UVRInputDataConfig : public UObject
-{
-	GENERATED_BODY()
-
-public:
-	UVRInputDataConfig();
-
-	UInputMappingContext* InputMappingContext = nullptr;
-
-public:
-	UInputAction* IA_Grab_Left = nullptr;
-	UInputAction* IA_Grab_Right = nullptr;
-
-	UInputAction* IA_Point_Left = nullptr;
-	UInputAction* IA_Point_Right = nullptr;
-
-	UInputAction* IA_IndexCurl_Left = nullptr;
-	UInputAction* IA_IndexCurl_Right = nullptr;
-
-	UInputAction* IA_Thumb_Left = nullptr;
-	UInputAction* IA_Thumb_Right = nullptr;
-};
-
-UCLASS()
-class UHandGraph : public UObject
-{
-	GENERATED_BODY()
-
-public:
-	void Init(UMotionControllerComponent* InMotionControllerComponent)
-	{
-		MotionControllerComponent = InMotionControllerComponent;
-	}
-	void SetupPlayerInputComponent(UEnhancedInputComponent* InputComponent);
-	void OnGrabTriggered(const FInputActionValue& InputActionValue);
-
-	UMotionControllerComponent* MotionControllerComponent;
-};
+static inline const FName LeftGrip = TEXT("LeftGrip");
+static inline const FName RightGrip = TEXT("RightGrip");
 
 UCLASS()
 class MNB_API AVRCharacter : public ACharacter
 {
+	friend class UHandGraph;
 	GENERATED_BODY()
 
 public:

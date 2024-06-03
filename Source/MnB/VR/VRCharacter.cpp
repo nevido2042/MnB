@@ -13,70 +13,6 @@
 #include "VRHandAnimInstance.h"
 #include "InputActionValue.h"
 
-namespace
-{
-	const FName LeftGrip = TEXT("LeftGrip");
-	const FName RightGrip = TEXT("RightGrip");
-}
-
-UVRInputDataConfig::UVRInputDataConfig()
-{
-	{
-		static ConstructorHelpers::FObjectFinder<UInputMappingContext> Asset
-		{ TEXT("/Script/EnhancedInput.InputMappingContext'/Game/MyAssets/VR/Input/IMC_Hands.IMC_Hands'") };
-		check(Asset.Object);
-		InputMappingContext = Asset.Object;
-	}
-	{
-		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
-		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Grab_Left.IA_Grab_Left'") };
-		check(Asset.Object);
-		IA_Grab_Left = Asset.Object;
-	}
-	{
-		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
-		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Grab_Right.IA_Grab_Right'") };
-		check(Asset.Object);
-		IA_Grab_Right = Asset.Object;
-	}
-	{
-		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
-		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Point_Left.IA_Point_Left'") };
-		check(Asset.Object);
-		IA_Point_Left = Asset.Object;
-	}
-	{
-		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
-		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Point_Right.IA_Point_Right'") };
-		check(Asset.Object);
-		IA_Point_Right = Asset.Object;
-	}
-	{
-		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
-		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_IndexCurl_Left.IA_IndexCurl_Left'") };
-		check(Asset.Object);
-		IA_IndexCurl_Left = Asset.Object;
-	}
-	{
-		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
-		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_IndexCurl_Right.IA_IndexCurl_Right'") };
-		check(Asset.Object);
-		IA_IndexCurl_Right = Asset.Object;
-	}
-	{
-		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
-		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Thumb_Left.IA_Thumb_Left'") };
-		check(Asset.Object);
-		IA_Thumb_Left = Asset.Object;
-	}
-	{
-		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
-		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Thumb_Right.IA_Thumb_Right'") };
-		check(Asset.Object);
-		IA_Thumb_Right = Asset.Object;
-	}
-}
-
 // Sets default values
 AVRCharacter::AVRCharacter()
 {
@@ -97,9 +33,6 @@ AVRCharacter::AVRCharacter()
 
 	HandGraphLeft = NewObject<UHandGraph>(this, TEXT("HandGraphLeft"));
 	HandGraphRight = NewObject<UHandGraph>(this, TEXT("HandGraphRight"));
-
-	HandGraphLeft->Init(MotionControllerLeft);
-	HandGraphRight->Init(MotionControllerRight);
 
 	GetMesh()->DestroyComponent();
 
@@ -168,27 +101,8 @@ void AVRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 
-		HandGraphLeft->SetupPlayerInputComponent(EnhancedInputComponent);
-		HandGraphRight->SetupPlayerInputComponent(EnhancedInputComponent);
+		HandGraphLeft->SetupPlayerInputComponent(MotionControllerLeft, EnhancedInputComponent);
+		HandGraphRight->SetupPlayerInputComponent(MotionControllerRight, EnhancedInputComponent);
 	}
-
-}
-
-void UHandGraph::SetupPlayerInputComponent(UEnhancedInputComponent* InputComponent)
-{
-	const UVRInputDataConfig* VRInputDataConfig = GetDefault<UVRInputDataConfig>();
-	if (MotionControllerComponent->MotionSource == LeftGrip)
-	{
-		InputComponent->BindAction(VRInputDataConfig->IA_Grab_Left, ETriggerEvent::Triggered, this, &ThisClass::OnGrabTriggered);
-	}
-	else if (MotionControllerComponent->MotionSource == RightGrip)
-	{
-
-	}
-	else { check(false); }
-}
-
-void UHandGraph::OnGrabTriggered(const FInputActionValue& InputActionValue)
-{
 }
 
