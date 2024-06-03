@@ -20,4 +20,6 @@ class MNB_API UHitTrace : public UAnimNotifyState
 	
 private:
 	class AWeapon* Weapon = nullptr;
+
+	bool bHit = false;
 };

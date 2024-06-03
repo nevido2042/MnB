@@ -28,6 +28,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* StaticMeshComponent;
 
+	AController* Owner;
+
 protected:
 
 	virtual void Interact() override;
@@ -37,5 +39,5 @@ protected:
 public:
 	void Unequipped();
 
-	void HitDitect();
+	bool HitDitect();
 };

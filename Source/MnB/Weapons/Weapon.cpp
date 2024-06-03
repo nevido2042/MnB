@@ -6,6 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "MnB/MnBCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -52,10 +53,12 @@ void AWeapon::Equipped()
 		StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 		MnBCharacter->Equip();
+
+		Owner = MnBCharacter->GetController();
 	}
 }
 
-void AWeapon::HitDitect()
+bool AWeapon::HitDitect()
 {
 	FVector HitStart = StaticMeshComponent->GetSocketLocation(TEXT("HitStart"));
 	FVector HitEnd = StaticMeshComponent->GetSocketLocation(TEXT("HitEnd"));
@@ -83,7 +86,12 @@ void AWeapon::HitDitect()
 			FColor::Red,
 			false, 5.0f
 		);
+
+		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 1, Owner, this, nullptr);
+
 	}
+
+	return bHit;
 }
 
 void AWeapon::Unequipped()

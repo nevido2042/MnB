@@ -139,7 +139,7 @@ void AMnBCharacter::Attack()
 
 void AMnBCharacter::CameraRaycast()
 {
-	float LineLength = 700.f;
+	float LineLength = 500.f;
 	FVector LineStart = GetFollowCamera()->GetComponentLocation();
 	FVector LineEnd = LineStart + GetFollowCamera()->GetComponentRotation().Vector() * LineLength;
 	DrawDebugLine(GetWorld(), LineStart, LineEnd, FColor::Green);

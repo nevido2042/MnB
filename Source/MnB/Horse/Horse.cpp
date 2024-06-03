@@ -3,11 +3,15 @@
 
 #include "Horse/Horse.h"
 
+#include "Components/Health.h"
+
 // Sets default values
 AHorse::AHorse()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	Health = CreateDefaultSubobject<UHealth>(TEXT("Health"));
 
 }
 
@@ -15,7 +19,6 @@ AHorse::AHorse()
 void AHorse::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -34,5 +37,12 @@ void AHorse::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AHorse::Interact()
 {
+}
+
+float AHorse::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+
+
+	return Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 }
 

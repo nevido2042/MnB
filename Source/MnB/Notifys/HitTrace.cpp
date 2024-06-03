@@ -13,6 +13,8 @@ void UHitTrace::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase*
 	{
 		Weapon = MnBCharacter->GetEquippedWeapon();
 	}
+
+	bHit = false;
 }
 
 void UHitTrace::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
@@ -21,7 +23,9 @@ void UHitTrace::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* 
 
 	if (Weapon == nullptr) { return; }
 
-	Weapon->HitDitect();
+	if (bHit == true) { return; } // 한 번만 데미지 줌
+
+	bHit = Weapon->HitDitect();
 }
 
 void UHitTrace::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
