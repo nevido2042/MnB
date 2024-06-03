@@ -22,8 +22,8 @@ protected:
 
 	class UUserWidget* CurrentWidget;
 
-	UClass* VRPawnClass = nullptr;
-	UClass* VRPlayerControllerClass = nullptr;
+	TSubclassOf<APawn> VRPawnClass = nullptr;
+	TSubclassOf<APlayerController> VRPlayerControllerClass = nullptr;
 
 	virtual APlayerController* Login(UPlayer* NewPlayer, ENetRole InRemoteRole, const FString& Portal, const FString& Options, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;
 };

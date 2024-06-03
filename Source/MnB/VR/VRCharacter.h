@@ -35,4 +35,22 @@ private:
 	class UVRHandSkeletalMeshComponent* LeftHand = nullptr;
 	class UVRHandSkeletalMeshComponent* RightHand = nullptr;
 
+private:
+	class UInputMappingContext* MappingContext;
+
+	class UInputAction* IA_GrabRight = nullptr;
+	class UInputAction* IA_GrabLeft = nullptr;
+
+	class UInputAction* IA_PointRight = nullptr;
+	class UInputAction* IA_PointLeft = nullptr;
+
+	void GrabRight(const struct FInputActionValue& Value);
+	void GrabLeft(const struct FInputActionValue& Value);
+
+	void PointRightTouch();
+	void PointLeftTouch();
+	void PointRightTouchEnd();
+	void PointLeftTouchEnd();
+
+
 };

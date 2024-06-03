@@ -15,8 +15,19 @@ public class MnB : ModuleRules
 			"GameplayTasks",
 			"NavigationSystem",
 			"HeadMountedDisplay",
-            "XRBase"
+            "XRBase",
+            
         });
+
+		if(Target.Type == TargetType.Editor)
+		{
+			PublicDependencyModuleNames.AddRange(new string[]
+			{
+				"UnrealEd"
+			}
+			);
+
+        }
 
         PublicIncludePaths.Add("MnB");
         PublicIncludePaths.Add("MnB/Interface");
