@@ -24,7 +24,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	void AddCurrentHP(float value) { CurHP += value; }
+	float GetCurrentHP(){ return CurHP; }
 protected:
-	int MaxHP = 3;
-	int CurHP = MaxHP;
+	float MaxHP = 3.f;
+	float CurHP = MaxHP;
 };

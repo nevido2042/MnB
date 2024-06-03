@@ -41,7 +41,7 @@ void AHorse::Interact()
 
 float AHorse::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-	Health->AddCurrentHP(-Damage);
+	Health->AddCurrentHP(Damage);
 
 	if (FMath::IsNearlyZero(Health->GetCurrentHP()))
 	{
