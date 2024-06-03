@@ -34,6 +34,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
+	void OnMove(const FInputActionValue& InputActionValue);
+
 	void OnGrabLeftStarted(const FInputActionValue& InputActionValue) { OnGrabStarted(MotionControllerLeft, InputActionValue); }
 	void OnGrabRightStarted(const FInputActionValue& InputActionValue) { OnGrabStarted(MotionControllerRight, InputActionValue); }
 	void OnGrabStarted(UMotionControllerComponent* MotionControllerComponent, const FInputActionValue& InputActionValue);
@@ -43,7 +45,7 @@ protected:
 	void OnGrabCompleted(UMotionControllerComponent* MotionControllerComponent, const FInputActionValue& InputActionValue);
 
 private:
-	class UCameraComponent* CameraComponent = nullptr;
+	class UCameraComponent* VRCamera = nullptr;
 
 	class UMotionControllerComponent* MotionControllerLeft = nullptr;
 	class UMotionControllerComponent* MotionControllerRight = nullptr;

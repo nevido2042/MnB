@@ -9,9 +9,10 @@
 #include "VRHandAnimInstance.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
-
+#include "Data/Input/BasicInputDataConfig.h"
 #include "VRHandAnimInstance.h"
 #include "InputActionValue.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AVRCharacter::AVRCharacter()
@@ -19,8 +20,8 @@ AVRCharacter::AVRCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	CameraComponent->SetupAttachment(RootComponent);
+	VRCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	VRCamera->SetupAttachment(RootComponent);
 
 	MotionControllerLeft = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("MotionControllerLeft"));
 	MotionControllerRight = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("MotionControllerRight"));
@@ -80,6 +81,9 @@ void AVRCharacter::BeginPlay()
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
+			const UBasicInputDataConfig* BasicInputDataConfig = GetDefault<UBasicInputDataConfig>();
+			Subsystem->AddMappingContext(BasicInputDataConfig->InputMappingContext, 0);
+
 			const UVRHandsInputDataConfig* VRHandsInputDataConfig = GetDefault<UVRHandsInputDataConfig>();
 			Subsystem->AddMappingContext(VRHandsInputDataConfig->InputMappingContext, 0);
 
@@ -106,6 +110,11 @@ void AVRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 
 		{
+			const UBasicInputDataConfig* BasicInputDataConfig = GetDefault<UBasicInputDataConfig>();
+			EnhancedInputComponent->BindAction(BasicInputDataConfig->Move, ETriggerEvent::Triggered, this, &ThisClass::OnMove);
+		}
+
+		{
 			HandGraphLeft->SetupPlayerInputComponent(MotionControllerLeft, EnhancedInputComponent);
 			HandGraphRight->SetupPlayerInputComponent(MotionControllerRight, EnhancedInputComponent);
 		}
@@ -122,6 +131,26 @@ void AVRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	}
 
 
+}
+
+void AVRCharacter::OnMove(const FInputActionValue& InputActionValue)
+{
+	const FVector2D ActionValue = InputActionValue.Get<FVector2D>();
+
+	const FRotator CameraRotator = VRCamera->GetRelativeRotation();
+	const FRotator CameraYawRotator = FRotator(0., CameraRotator.Yaw, 0.);
+
+	if (!FMath::IsNearlyZero(ActionValue.Y))
+	{
+		const FVector ForwardVector = UKismetMathLibrary::GetForwardVector(CameraYawRotator);
+		AddMovementInput(ForwardVector, ActionValue.Y);
+	}
+
+	if (!FMath::IsNearlyZero(ActionValue.X))
+	{
+		const FVector RightVector = UKismetMathLibrary::GetRightVector(CameraYawRotator);
+		AddMovementInput(RightVector, ActionValue.X);
+	}
 }
 
 void AVRCharacter::OnGrabStarted(UMotionControllerComponent* MotionControllerComponent, const FInputActionValue& InputActionValue)
