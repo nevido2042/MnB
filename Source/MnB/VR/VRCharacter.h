@@ -4,7 +4,50 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "InputMappingContext.h"
+#include "InputAction.h"
+#include "MotionControllerComponent.h"
 #include "VRCharacter.generated.h"
+
+UCLASS()
+class MNB_API UVRInputDataConfig : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	UVRInputDataConfig();
+
+	UInputMappingContext* InputMappingContext = nullptr;
+
+public:
+	UInputAction* IA_Grab_Left = nullptr;
+	UInputAction* IA_Grab_Right = nullptr;
+
+	UInputAction* IA_Point_Left = nullptr;
+	UInputAction* IA_Point_Right = nullptr;
+
+	UInputAction* IA_IndexCurl_Left = nullptr;
+	UInputAction* IA_IndexCurl_Right = nullptr;
+
+	UInputAction* IA_Thumb_Left = nullptr;
+	UInputAction* IA_Thumb_Right = nullptr;
+};
+
+UCLASS()
+class UHandGraph : public UObject
+{
+	GENERATED_BODY()
+
+public:
+	void Init(UMotionControllerComponent* InMotionControllerComponent)
+	{
+		MotionControllerComponent = InMotionControllerComponent;
+	}
+	void SetupPlayerInputComponent(UEnhancedInputComponent* InputComponent);
+	void OnGrabTriggered(const FInputActionValue& InputActionValue);
+
+	UMotionControllerComponent* MotionControllerComponent;
+};
 
 UCLASS()
 class MNB_API AVRCharacter : public ACharacter
@@ -29,28 +72,12 @@ public:
 private:
 	class UCameraComponent* CameraComponent = nullptr;
 
-	class UMotionControllerComponent* MotionControllerComponentLeft = nullptr;
-	class UMotionControllerComponent* MotionControllerComponentRight = nullptr;
+	class UMotionControllerComponent* MotionControllerLeft = nullptr;
+	class UMotionControllerComponent* MotionControllerRight = nullptr;
 
 	class UVRHandSkeletalMeshComponent* LeftHand = nullptr;
 	class UVRHandSkeletalMeshComponent* RightHand = nullptr;
 
-private:
-	class UInputMappingContext* MappingContext;
-
-	class UInputAction* IA_GrabRight = nullptr;
-	class UInputAction* IA_GrabLeft = nullptr;
-
-	class UInputAction* IA_PointRight = nullptr;
-	class UInputAction* IA_PointLeft = nullptr;
-
-	void GrabRight(const struct FInputActionValue& Value);
-	void GrabLeft(const struct FInputActionValue& Value);
-
-	void PointRightTouch();
-	void PointLeftTouch();
-	void PointRightTouchEnd();
-	void PointLeftTouchEnd();
-
-
+	UHandGraph* HandGraphLeft;
+	UHandGraph* HandGraphRight;
 };

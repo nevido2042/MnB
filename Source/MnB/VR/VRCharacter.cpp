@@ -9,10 +9,73 @@
 #include "VRHandAnimInstance.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
-#include "InputMappingContext.h"
-#include "InputAction.h"
+
 #include "VRHandAnimInstance.h"
 #include "InputActionValue.h"
+
+namespace
+{
+	const FName LeftGrip = TEXT("LeftGrip");
+	const FName RightGrip = TEXT("RightGrip");
+}
+
+UVRInputDataConfig::UVRInputDataConfig()
+{
+	{
+		static ConstructorHelpers::FObjectFinder<UInputMappingContext> Asset
+		{ TEXT("/Script/EnhancedInput.InputMappingContext'/Game/MyAssets/VR/Input/IMC_Hands.IMC_Hands'") };
+		check(Asset.Object);
+		InputMappingContext = Asset.Object;
+	}
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
+		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Grab_Left.IA_Grab_Left'") };
+		check(Asset.Object);
+		IA_Grab_Left = Asset.Object;
+	}
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
+		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Grab_Right.IA_Grab_Right'") };
+		check(Asset.Object);
+		IA_Grab_Right = Asset.Object;
+	}
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
+		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Point_Left.IA_Point_Left'") };
+		check(Asset.Object);
+		IA_Point_Left = Asset.Object;
+	}
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
+		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Point_Right.IA_Point_Right'") };
+		check(Asset.Object);
+		IA_Point_Right = Asset.Object;
+	}
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
+		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_IndexCurl_Left.IA_IndexCurl_Left'") };
+		check(Asset.Object);
+		IA_IndexCurl_Left = Asset.Object;
+	}
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
+		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_IndexCurl_Right.IA_IndexCurl_Right'") };
+		check(Asset.Object);
+		IA_IndexCurl_Right = Asset.Object;
+	}
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
+		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Thumb_Left.IA_Thumb_Left'") };
+		check(Asset.Object);
+		IA_Thumb_Left = Asset.Object;
+	}
+	{
+		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
+		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Thumb_Right.IA_Thumb_Right'") };
+		check(Asset.Object);
+		IA_Thumb_Right = Asset.Object;
+	}
+}
 
 // Sets default values
 AVRCharacter::AVRCharacter()
@@ -23,22 +86,28 @@ AVRCharacter::AVRCharacter()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(RootComponent);
 
-	MotionControllerComponentLeft = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("MotionControllerComponentLeft"));
-	MotionControllerComponentRight = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("MotionControllerComponentRight"));
+	MotionControllerLeft = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("MotionControllerLeft"));
+	MotionControllerRight = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("MotionControllerRight"));
 
-	MotionControllerComponentLeft->SetupAttachment(RootComponent);
-	MotionControllerComponentRight->SetupAttachment(RootComponent);
+	MotionControllerLeft->SetupAttachment(RootComponent);
+	MotionControllerRight->SetupAttachment(RootComponent);
 
-	MotionControllerComponentLeft->SetTrackingMotionSource((TEXT("LeftGrip")));
-	MotionControllerComponentRight->SetTrackingMotionSource((TEXT("RightGrip")));
+	MotionControllerLeft->SetTrackingMotionSource(LeftGrip);
+	MotionControllerRight->SetTrackingMotionSource(RightGrip);
+
+	HandGraphLeft = NewObject<UHandGraph>(this, TEXT("HandGraphLeft"));
+	HandGraphRight = NewObject<UHandGraph>(this, TEXT("HandGraphRight"));
+
+	HandGraphLeft->Init(MotionControllerLeft);
+	HandGraphRight->Init(MotionControllerRight);
 
 	GetMesh()->DestroyComponent();
 
 	LeftHand = CreateDefaultSubobject<UVRHandSkeletalMeshComponent>(TEXT("LeftHand"));
 	RightHand = CreateDefaultSubobject<UVRHandSkeletalMeshComponent>(TEXT("RightHand"));
 
-	LeftHand->SetupAttachment(MotionControllerComponentLeft);
-	RightHand->SetupAttachment(MotionControllerComponentRight);
+	LeftHand->SetupAttachment(MotionControllerLeft);
+	RightHand->SetupAttachment(MotionControllerRight);
 
 	{
 		ConstructorHelpers::FObjectFinder<USkeletalMesh>Finder(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/MannequinsXR/Meshes/SKM_MannyXR_right.SKM_MannyXR_right'"));
@@ -66,47 +135,6 @@ AVRCharacter::AVRCharacter()
 		}
 	}
 
-	{
-		ConstructorHelpers::FObjectFinder<UInputMappingContext>Finder(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/MyAssets/VR/Input/IMC_Hands.IMC_Hands'"));
-		ensure(Finder.Object);
-		if (Finder.Object)
-		{
-			MappingContext = Finder.Object;
-		}
-	}
-	{
-		ConstructorHelpers::FObjectFinder<UInputAction>Finder(TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Grab_Right.IA_Grab_Right'"));
-		ensure(Finder.Object);
-		if (Finder.Object)
-		{
-			IA_GrabRight = Finder.Object;
-		}
-	}
-	{
-		ConstructorHelpers::FObjectFinder<UInputAction>Finder(TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Grab_Left.IA_Grab_Left'"));
-		ensure(Finder.Object);
-		if (Finder.Object)
-		{
-			IA_GrabLeft = Finder.Object;
-		}
-	}
-	{
-		ConstructorHelpers::FObjectFinder<UInputAction>Finder(TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Point_Right.IA_Point_Right'"));
-		ensure(Finder.Object);
-		if (Finder.Object)
-		{
-			IA_PointRight = Finder.Object;
-		}
-	}
-	{
-		ConstructorHelpers::FObjectFinder<UInputAction>Finder(TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/IA_Point_Left.IA_Point_Left'"));
-		ensure(Finder.Object);
-		if (Finder.Object)
-		{
-			IA_PointLeft = Finder.Object;
-		}
-	}
-
 }	 
 
 // Called when the game starts or when spawned
@@ -119,7 +147,8 @@ void AVRCharacter::BeginPlay()
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
-			Subsystem->AddMappingContext(MappingContext, 0);
+			const UVRInputDataConfig* VRInputDataConfig = GetDefault<UVRInputDataConfig>();
+			Subsystem->AddMappingContext(VRInputDataConfig->InputMappingContext, 0);
 		}
 	}
 }
@@ -139,72 +168,27 @@ void AVRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 
-		EnhancedInputComponent->BindAction(IA_GrabRight, ETriggerEvent::Triggered, this, &AVRCharacter::GrabRight);
-		EnhancedInputComponent->BindAction(IA_GrabRight, ETriggerEvent::Canceled, this, &AVRCharacter::GrabRight);
-		EnhancedInputComponent->BindAction(IA_GrabRight, ETriggerEvent::Completed, this, &AVRCharacter::GrabRight);
-
-		EnhancedInputComponent->BindAction(IA_GrabLeft, ETriggerEvent::Triggered, this, &AVRCharacter::GrabLeft);
-		EnhancedInputComponent->BindAction(IA_GrabLeft, ETriggerEvent::Canceled, this, &AVRCharacter::GrabLeft);
-		EnhancedInputComponent->BindAction(IA_GrabLeft, ETriggerEvent::Completed, this, &AVRCharacter::GrabLeft);
-
-		EnhancedInputComponent->BindAction(IA_PointRight, ETriggerEvent::Started, this, &AVRCharacter::PointRightTouch);
-		EnhancedInputComponent->BindAction(IA_PointRight, ETriggerEvent::Canceled, this, &AVRCharacter::PointRightTouch);
-		EnhancedInputComponent->BindAction(IA_PointRight, ETriggerEvent::Completed, this, &AVRCharacter::PointRightTouchEnd);
-
-		EnhancedInputComponent->BindAction(IA_PointLeft, ETriggerEvent::Started, this, &AVRCharacter::PointLeftTouch);
-		EnhancedInputComponent->BindAction(IA_PointLeft, ETriggerEvent::Canceled, this, &AVRCharacter::PointLeftTouch);
-		EnhancedInputComponent->BindAction(IA_PointLeft, ETriggerEvent::Completed, this, &AVRCharacter::PointLeftTouchEnd);
-
-
+		HandGraphLeft->SetupPlayerInputComponent(EnhancedInputComponent);
+		HandGraphRight->SetupPlayerInputComponent(EnhancedInputComponent);
 	}
 
 }
 
-void AVRCharacter::GrabRight(const FInputActionValue& Value)
+void UHandGraph::SetupPlayerInputComponent(UEnhancedInputComponent* InputComponent)
 {
-	if (UVRHandAnimInstance* Anim = Cast<UVRHandAnimInstance>(RightHand->GetAnimInstance()))
+	const UVRInputDataConfig* VRInputDataConfig = GetDefault<UVRInputDataConfig>();
+	if (MotionControllerComponent->MotionSource == LeftGrip)
 	{
-		Anim->SetPoseAlphaGrap(Value.Get<float>());
+		InputComponent->BindAction(VRInputDataConfig->IA_Grab_Left, ETriggerEvent::Triggered, this, &ThisClass::OnGrabTriggered);
 	}
+	else if (MotionControllerComponent->MotionSource == RightGrip)
+	{
+
+	}
+	else { check(false); }
 }
 
-void AVRCharacter::GrabLeft(const FInputActionValue& Value)
+void UHandGraph::OnGrabTriggered(const FInputActionValue& InputActionValue)
 {
-	if (UVRHandAnimInstance* Anim = Cast<UVRHandAnimInstance>(LeftHand->GetAnimInstance()))
-	{
-		Anim->SetPoseAlphaGrap(Value.Get<float>());
-	}
-}
-
-void AVRCharacter::PointRightTouch()
-{
-	if (UVRHandAnimInstance* Anim = Cast<UVRHandAnimInstance>(RightHand->GetAnimInstance()))
-	{
-		Anim->SetPoseAlphaPoint(0);
-	}
-}
-
-void AVRCharacter::PointLeftTouch()
-{
-	if (UVRHandAnimInstance* Anim = Cast<UVRHandAnimInstance>(LeftHand->GetAnimInstance()))
-	{
-		Anim->SetPoseAlphaPoint(0);
-	}
-}
-
-void AVRCharacter::PointRightTouchEnd()
-{
-	if (UVRHandAnimInstance* Anim = Cast<UVRHandAnimInstance>(RightHand->GetAnimInstance()))
-	{
-		Anim->SetPoseAlphaPoint(1);
-	}
-}
-
-void AVRCharacter::PointLeftTouchEnd()
-{
-	if (UVRHandAnimInstance* Anim = Cast<UVRHandAnimInstance>(LeftHand->GetAnimInstance()))
-	{
-		Anim->SetPoseAlphaPoint(1);
-	}
 }
 
