@@ -125,6 +125,45 @@ bool AWeapon::HitDitect()
 	return bHit;
 }
 
+bool AWeapon::ObstacleDitect()
+{
+	FVector RayStart = StaticMeshComponent->GetSocketLocation(TEXT("RayStart"));
+	FVector RayEnd = StaticMeshComponent->GetSocketLocation(TEXT("RayEnd"));
+
+	FHitResult HitResult;
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, RayStart, RayEnd, ECollisionChannel::ECC_Visibility);
+	DrawDebugLine(GetWorld(), RayStart, RayEnd, FColor::Black, false, 2.f);
+	if (bHit)
+	{
+
+		DrawDebugLine(
+			GetWorld(),
+			RayStart,
+			HitResult.Location,
+			FColor::Cyan,
+			false, 5.0f, 0, 1.0f
+		);
+
+
+		DrawDebugSphere(
+			GetWorld(),
+			HitResult.Location,
+			2.0f,
+			24,
+			FColor::Blue,
+			false, 5.0f
+		);
+
+		Owner->GetCharacter()->StopAnimMontage();
+
+		//test
+		Cast<AMnBCharacter>(Owner->GetCharacter())->Blocked();
+
+	}
+	
+	return bHit;
+}
+
 void AWeapon::Unequipped()
 {
 	StaticMeshComponent->SetSimulatePhysics(true);

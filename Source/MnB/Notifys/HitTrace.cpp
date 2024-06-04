@@ -26,6 +26,8 @@ void UHitTrace::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* 
 	if (bHit == true) { return; } // 한 번만 데미지 줌
 
 	bHit = Weapon->HitDitect();
+
+	Weapon->ObstacleDitect();
 }
 
 void UHitTrace::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)

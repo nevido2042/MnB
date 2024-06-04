@@ -51,4 +51,6 @@ public:
 	void Unequipped();
 
 	bool HitDitect();
+
+	bool ObstacleDitect();
 };
