@@ -14,12 +14,20 @@ AWeapon::AWeapon()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Scene"));
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMeshComponent"));
-	SetRootComponent(StaticMeshComponent);
-	
-	StaticMeshComponent->SetSimulatePhysics(true);
+	WeaponGrip = CreateDefaultSubobject< USceneComponent>(TEXT("WeaponGrip"));
+	Arrow = CreateDefaultSubobject<UArrowComponent>(TEXT("GrabDirection"));
 
+	SetRootComponent(SceneComponent);
+	
+	StaticMeshComponent->SetupAttachment(RootComponent);
+
+	StaticMeshComponent->SetSimulatePhysics(true);
 	StaticMeshComponent->SetCanEverAffectNavigation(false);
+
+	WeaponGrip->SetupAttachment(RootComponent);
+	Arrow->SetupAttachment(WeaponGrip);
 
 }
 

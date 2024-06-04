@@ -94,15 +94,23 @@ void AMnBCharacter::Equip()
 
 		if (EquippedWeapon != nullptr)
 		{
-			EquippedWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+			//EquippedWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+			UStaticMeshComponent* WeaponMesh = EquippedWeapon->GetComponentByClass<UStaticMeshComponent>();
+			WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+
 			EquippedWeapon->Unequipped();
 		}
 
-
-		bool bResult = WeaponSocket->AttachActor(FocusingActor, GetMesh());
-		check(bResult);
-
 		EquippedWeapon = Cast<AWeapon>(FocusingActor);
+
+		UStaticMeshComponent* WeaponMesh = FocusingActor->GetComponentByClass<UStaticMeshComponent>();
+		WeaponMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform, TEXT("WeaponSocket"));
+		WeaponMesh->SetRelativeLocation(FVector::Zero());
+		WeaponMesh->SetRelativeRotation(EquippedWeapon->GetWeaponGrip()->GetRelativeRotation()); //무기별 로테이터 바꿔줘야함
+		//FocusingActor->AttachToComponent(WeaponScene,FAttachmentTransformRules::KeepWorldTransform,)
+
+		/*bool bResult = WeaponSocket->AttachActor(FocusingActor, GetMesh());
+		check(bResult);*/
 	}
 
 }

@@ -13,7 +13,6 @@
 
 UCLASS()
 class MNB_API UVRHandsAnimationInputDataConfig : public UObject
-
 {
 	GENERATED_BODY()
 

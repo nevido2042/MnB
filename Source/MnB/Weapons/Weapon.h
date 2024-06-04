@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "MnB/Interface/InteractableActor.h"
+#include "Components/ArrowComponent.h"
 #include "Weapon.generated.h"
 
 UCLASS()
@@ -26,7 +27,15 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* StaticMeshComponent;
+	UStaticMeshComponent* StaticMeshComponent = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	USceneComponent* SceneComponent = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	USceneComponent* WeaponGrip = nullptr;
+
+	UArrowComponent* Arrow = nullptr;
 
 	AController* Owner;
 
@@ -37,6 +46,8 @@ protected:
 	void Equipped();
 
 public:
+	USceneComponent* GetWeaponGrip() { return WeaponGrip; }
+
 	void Unequipped();
 
 	bool HitDitect();
