@@ -8,6 +8,7 @@
 #include "MnB/MnBCharacter.h"
 #include "Weapons/Shield.h"
 #include "Kismet/GameplayStatics.h"
+#include "VR/VRCharacter.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -56,6 +57,7 @@ void AWeapon::Interact()
 void AWeapon::Equipped()
 {
 	AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+
 	if (MnBCharacter)
 	{
 		StaticMeshComponent->SetSimulatePhysics(false);
@@ -64,6 +66,18 @@ void AWeapon::Equipped()
 		MnBCharacter->Equip();
 
 		Owner = MnBCharacter->GetController();
+	}
+
+	AVRCharacter* VRCharacter = Cast<AVRCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+
+	if (VRCharacter)
+	{
+		StaticMeshComponent->SetSimulatePhysics(false);
+		StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+		VRCharacter->Equip();
+
+		Owner = VRCharacter->GetController();
 	}
 }
 

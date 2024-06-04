@@ -55,4 +55,15 @@ private:
 
 	UHandGraph* HandGraphLeft;
 	UHandGraph* HandGraphRight;
+
+private:
+	AActor* FocusingActor = nullptr;
+	class AWeapon* EquippedWeapon = nullptr;
+
+	void HandRayCast(UVRHandSkeletalMeshComponent * Hand);
+	void UnEquip();
+	void Interact();
+
+public:
+	void Equip();
 };

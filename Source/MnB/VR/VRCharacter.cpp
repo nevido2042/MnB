@@ -13,6 +13,7 @@
 #include "VRHandAnimInstance.h"
 #include "InputActionValue.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Weapons/Weapon.h"
 
 // Sets default values
 AVRCharacter::AVRCharacter()
@@ -99,6 +100,9 @@ void AVRCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	HandRayCast(LeftHand);
+	HandRayCast(RightHand);
+
 }
 
 // Called to bind functionality to input
@@ -156,10 +160,97 @@ void AVRCharacter::OnMove(const FInputActionValue& InputActionValue)
 void AVRCharacter::OnGrabStarted(UMotionControllerComponent* MotionControllerComponent, const FInputActionValue& InputActionValue)
 {
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("OnGrabStarted"));
+
+	Interact();
 }
 
 void AVRCharacter::OnGrabCompleted(UMotionControllerComponent* MotionControllerComponent, const FInputActionValue& InputActionValue)
 {
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("OnGrabCompleted"));
+
+	UnEquip();
+}
+
+void AVRCharacter::HandRayCast(UVRHandSkeletalMeshComponent* Hand)
+{
+	float LineLength = 500.f;
+	FVector LineStart = Hand->GetComponentLocation();
+	FVector LineEnd = LineStart + Hand->GetComponentRotation().RotateVector(FVector::RightVector) * LineLength;
+	DrawDebugLine(GetWorld(), LineStart, LineEnd, FColor::Green);
+
+	FHitResult HitResult;
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, LineStart, LineEnd, ECollisionChannel::ECC_GameTraceChannel3);
+	if (bHit)
+	{
+		FocusingActor = HitResult.GetActor();
+
+
+		DrawDebugLine(
+			GetWorld(),
+			LineStart,
+			HitResult.Location,
+			FColor::Red,
+			false, 5.0f, 0, 1.0f
+		);
+
+
+		DrawDebugSphere(
+			GetWorld(),
+			HitResult.Location,
+			12.0f,
+			24,
+			FColor::Red,
+			false, 5.0f
+		);
+	}
+	else
+	{
+		FocusingActor = nullptr;
+	}
+}
+
+void AVRCharacter::Equip()
+{
+	const USkeletalMeshSocket* WeaponSocket = RightHand->GetSocketByName("WeaponSocket");
+	if (WeaponSocket)
+	{
+		if (FocusingActor == nullptr) { return; }
+
+		if (EquippedWeapon != nullptr)
+		{
+			//EquippedWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+			UStaticMeshComponent* WeaponMesh = EquippedWeapon->GetComponentByClass<UStaticMeshComponent>();
+			WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+
+			EquippedWeapon->Unequipped();
+		}
+
+		EquippedWeapon = Cast<AWeapon>(FocusingActor);
+
+		UStaticMeshComponent* WeaponMesh = FocusingActor->GetComponentByClass<UStaticMeshComponent>();
+		WeaponMesh->AttachToComponent(RightHand, FAttachmentTransformRules::KeepWorldTransform, TEXT("WeaponSocket"));
+		WeaponMesh->SetRelativeLocation(FVector::Zero());
+		WeaponMesh->SetRelativeRotation(EquippedWeapon->GetWeaponGrip()->GetRelativeRotation()+FRotator(90,0,180));
+
+		//FocusingActor->AttachToComponent(WeaponScene,FAttachmentTransformRules::KeepWorldTransform,)
+
+		/*bool bResult = WeaponSocket->AttachActor(FocusingActor, GetMesh());
+		check(bResult);*/
+	}
+}
+
+void AVRCharacter::UnEquip()
+{
+}
+
+void AVRCharacter::Interact()
+{
+	if (FocusingActor == nullptr) { return; }
+
+	IInteractableActor* InteractableActor = Cast<IInteractableActor>(FocusingActor);
+	if (InteractableActor)
+	{
+		InteractableActor->Interact();
+	}
 }
 
