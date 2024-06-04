@@ -31,4 +31,11 @@ void UHitTrace::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* 
 void UHitTrace::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
 	Weapon = nullptr;
+
+	AActor* const Actor = MeshComp->GetOwner();
+	AMnBCharacter* const MnBCharacter = Cast<AMnBCharacter>(Actor);
+	if (MnBCharacter)
+	{
+		MnBCharacter->SetCurrentAttackDirection(EAttackDirection::AttackNone);
+	}
 }

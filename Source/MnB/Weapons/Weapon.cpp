@@ -6,6 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "MnB/MnBCharacter.h"
+#include "Weapons/Shield.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -94,6 +95,14 @@ bool AWeapon::HitDitect()
 			FColor::Red,
 			false, 5.0f
 		);
+		
+		if (Cast<AShield>(HitResult.GetActor()))
+		{
+			Owner->GetCharacter()->StopAnimMontage();
+
+			//test
+			Cast<AMnBCharacter>(Owner->GetCharacter())->Blocked();
+		}
 
 		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 1, Owner, this, nullptr);
 

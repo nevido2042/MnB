@@ -17,6 +17,7 @@
 #include "Engine/SkeletalMeshSocket.h"
 #include "MnB/Interface/InteractableActor.h"
 #include "MnB/Weapons/Weapon.h"
+#include "MnB/AnimInstance/MnBCharacterAnimInstance.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -136,11 +137,13 @@ void AMnBCharacter::Attack()
 	if (bReadyToRightAttack)
 	{
 		bReadyToRightAttack = false;
+		SetCurrentAttackDirection(EAttackDirection::AttackRight);
 		PlayAnimMontage(AttackRightAnimMontage);
 	}
 	else if (bReadyToLeftAttack)
 	{
 		bReadyToLeftAttack = false;
+		SetCurrentAttackDirection(EAttackDirection::AttackLeft);
 		PlayAnimMontage(AttackLeftAnimMontage);
 	}
 }
@@ -192,6 +195,26 @@ void AMnBCharacter::Interact()
 	{
 		InteractableActor->Interact();
 	}
+}
+
+void AMnBCharacter::RecoverBlockedState()
+{
+	Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance())->SetBlockedDirection(EBlockedDirection::None);
+}
+
+void AMnBCharacter::Blocked()
+{
+	if (CurAttackDir == EAttackDirection::AttackLeft)
+	{
+		Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance())->SetBlockedDirection(EBlockedDirection::Left);
+	}
+	else
+	{
+		Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance())->SetBlockedDirection(EBlockedDirection::Right);
+	}
+
+	FTimerHandle Timer;
+	GetWorldTimerManager().SetTimer(Timer, this, &AMnBCharacter::RecoverBlockedState, 0.5f);
 }
 
 void AMnBCharacter::SetupStimulusSource()

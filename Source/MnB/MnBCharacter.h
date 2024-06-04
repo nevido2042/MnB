@@ -15,6 +15,22 @@ struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
+UENUM(BlueprintType)
+enum EBlockedDirection
+{
+	Left = -1,
+	None = 0,
+	Right = 1
+};
+
+UENUM(BlueprintType)
+enum EAttackDirection
+{
+	AttackLeft = -1,
+	AttackNone = 0,
+	AttackRight = 1
+};
+
 UCLASS(config=Game)
 class AMnBCharacter : public ACharacter
 {
@@ -86,6 +102,7 @@ public:
 	FVector2D GetLookAxisVector(){ return LookAxisVector; }
 	class AWeapon* GetEquippedWeapon() { return EquippedWeapon; }
 	void Equip();
+
 protected:
 
 	bool bReadyToRightAttack = false;
@@ -103,12 +120,18 @@ protected:
 
 	class AWeapon* EquippedWeapon = nullptr;
 
+	EAttackDirection CurAttackDir = EAttackDirection::AttackNone;
+
 protected:
 	void ReadyToAttack();
 	void Attack();
 	void CameraRaycast();
 	void Interact();
+	void RecoverBlockedState();
 
+public:
+	void Blocked();
+	void SetCurrentAttackDirection(EAttackDirection value) { CurAttackDir = value; }
 private:
 	class UAIPerceptionStimuliSourceComponent* StimulusSource;
 

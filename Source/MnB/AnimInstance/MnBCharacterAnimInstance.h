@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "MnBCharacter.h"
 #include "MnBCharacterAnimInstance.generated.h"
 
 /**
@@ -12,6 +13,8 @@
 UCLASS()
 class MNB_API UMnBCharacterAnimInstance : public UAnimInstance
 {
+	friend AMnBCharacter;
+
 	GENERATED_BODY()
 	
 protected:
@@ -38,6 +41,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	float MoveDirection;
 
+	UPROPERTY(BlueprintReadOnly)
+	TEnumAsByte<EBlockedDirection> BlockedDir = EBlockedDirection::None;
+
 protected:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
@@ -46,4 +52,7 @@ private:
 	void IsShouldMove();
 	void GetMoveDirection();
 	void IsReadyToAttack();
+
+public:
+	void SetBlockedDirection(TEnumAsByte<EBlockedDirection> value) { BlockedDir = value; }
 };
