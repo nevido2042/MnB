@@ -19,15 +19,16 @@ void UHitTrace::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase*
 
 void UHitTrace::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
 {
-	Super::NotifyTick(MeshComp, Animation, FrameDeltaTime);
-
 	if (Weapon == nullptr) { return; }
 
 	if (bHit == true) { return; } // 한 번만 데미지 줌
 
 	bHit = Weapon->HitDitect();
 
-	Weapon->ObstacleDitect();
+	if (bHit == false)
+	{
+		Weapon->ObstacleDitect();
+	}
 }
 
 void UHitTrace::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)

@@ -89,6 +89,14 @@ bool AWeapon::HitDitect()
 	DrawDebugLine(GetWorld(), HitStart, HitEnd, FColor::Green, false, 2.f);
 	if (bHit)
 	{
+		if (ACharacter* Character = Cast<ACharacter>(HitResult.GetActor()))
+		{
+			if (Character->GetController() == Owner)
+			{
+				bHit = false;
+				return bHit;
+			}
+		}
 
 		DrawDebugLine(
 			GetWorld(),

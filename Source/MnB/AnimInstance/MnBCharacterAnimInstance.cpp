@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Character.h"
 #include "MnBCharacter.h"
+#include "KismetAnimationLibrary.h"
 
 void UMnBCharacterAnimInstance::NativeInitializeAnimation()
 {
@@ -51,7 +52,7 @@ void UMnBCharacterAnimInstance::IsShouldMove()
 
 void UMnBCharacterAnimInstance::GetMoveDirection()
 {
-	MoveDirection = CalculateDirection(MovementComponent->Velocity, Pawn->GetActorRotation());
+	MoveDirection = UKismetAnimationLibrary::CalculateDirection(MovementComponent->Velocity, Pawn->GetActorRotation());
 }
 
 void UMnBCharacterAnimInstance::IsReadyToAttack()

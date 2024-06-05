@@ -16,7 +16,8 @@ public class MnB : ModuleRules
 			"NavigationSystem",
 			"HeadMountedDisplay",
             "XRBase",
-            
+            "AnimGraphRuntime",
+
         });
 
 		if(Target.Type == TargetType.Editor)
