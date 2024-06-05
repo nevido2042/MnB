@@ -157,14 +157,25 @@ void AVRCharacter::OnMove(const FInputActionValue& InputActionValue)
 	}
 }
 
-void AVRCharacter::OnGrabStarted(UMotionControllerComponent* MotionControllerComponent, const FInputActionValue& InputActionValue)
+void AVRCharacter::OnGrabStarted(UMotionControllerComponent* MotionControllerComponent, const bool bLeft, const FInputActionValue& InputActionValue)
 {
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("OnGrabStarted"));
 
-	Interact();
+	if (bLeft)
+	{
+		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("Left"));
+		Interact(LeftFocusingActor);
+		Equip(LeftFocusingActor);
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("Right"));
+		Interact(RightFocusingActor);
+		Equip(RightFocusingActor);
+	}
 }
 
-void AVRCharacter::OnGrabCompleted(UMotionControllerComponent* MotionControllerComponent, const FInputActionValue& InputActionValue)
+void AVRCharacter::OnGrabCompleted(UMotionControllerComponent* MotionControllerComponent, const bool bLeft, const FInputActionValue& InputActionValue)
 {
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("OnGrabCompleted"));
 
@@ -182,7 +193,15 @@ void AVRCharacter::HandRayCast(UVRHandSkeletalMeshComponent* Hand)
 	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, LineStart, LineEnd, ECollisionChannel::ECC_GameTraceChannel3);
 	if (bHit)
 	{
-		FocusingActor = HitResult.GetActor();
+		if (Hand == LeftHand)
+		{
+			LeftFocusingActor = HitResult.GetActor();
+		}
+		else if (Hand == RightHand)
+		{
+			RightFocusingActor = HitResult.GetActor();
+		}
+		
 
 
 		DrawDebugLine(
@@ -205,16 +224,42 @@ void AVRCharacter::HandRayCast(UVRHandSkeletalMeshComponent* Hand)
 	}
 	else
 	{
-		FocusingActor = nullptr;
+		if (Hand == LeftHand)
+		{
+			LeftFocusingActor = nullptr;
+		}
+		else if (Hand == RightHand)
+		{
+			RightFocusingActor = nullptr;
+		}
 	}
 }
 
-void AVRCharacter::Equip()
+void AVRCharacter::Equip(AActor * HandFoucsing)
 {
-	const USkeletalMeshSocket* WeaponSocket = RightHand->GetSocketByName("WeaponSocket");
+	const USkeletalMeshSocket* WeaponSocket = nullptr;
+	UVRHandSkeletalMeshComponent* Hand = nullptr;
+	AWeapon* EquippedWeapon = nullptr;
+	FRotator RotateOffset = FRotator::ZeroRotator;
+
+	if (HandFoucsing == RightFocusingActor)
+	{
+		WeaponSocket = RightHand->GetSocketByName("WeaponSocket");
+		Hand = RightHand;
+		EquippedWeapon = RightEquippedWeapon;
+		RotateOffset = FRotator(90, 0, 180);
+	}
+	else if (HandFoucsing == LeftFocusingActor)
+	{
+		WeaponSocket = LeftHand->GetSocketByName("WeaponSocket");
+		Hand = LeftHand;
+		EquippedWeapon = LeftEquippedWeapon;
+		RotateOffset = FRotator(-90, 180, 180);
+	}
+	
 	if (WeaponSocket)
 	{
-		if (FocusingActor == nullptr) { return; }
+		if (HandFoucsing == nullptr) { return; }
 
 		if (EquippedWeapon != nullptr)
 		{
@@ -222,15 +267,16 @@ void AVRCharacter::Equip()
 			UStaticMeshComponent* WeaponMesh = EquippedWeapon->GetComponentByClass<UStaticMeshComponent>();
 			WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 
-			EquippedWeapon->Unequipped();
+			EquippedWeapon->Unequipped();// 왼/ 오른 구분해야함
 		}
 
-		EquippedWeapon = Cast<AWeapon>(FocusingActor);
+		EquippedWeapon = Cast<AWeapon>(HandFoucsing);
 
-		UStaticMeshComponent* WeaponMesh = FocusingActor->GetComponentByClass<UStaticMeshComponent>();
-		WeaponMesh->AttachToComponent(RightHand, FAttachmentTransformRules::KeepWorldTransform, TEXT("WeaponSocket"));
+		UStaticMeshComponent* WeaponMesh = HandFoucsing->GetComponentByClass<UStaticMeshComponent>();
+		WeaponMesh->AttachToComponent(Hand, FAttachmentTransformRules::KeepWorldTransform, TEXT("WeaponSocket"));
 		WeaponMesh->SetRelativeLocation(FVector::Zero());
-		WeaponMesh->SetRelativeRotation(EquippedWeapon->GetWeaponGrip()->GetRelativeRotation()+FRotator(90,0,180));
+
+		WeaponMesh->SetRelativeRotation(EquippedWeapon->GetWeaponGrip()->GetRelativeRotation()/*+FRotator(90, 0, 180)*/); //무기별 그립의 로테이션이 다른 것 때문에 문제
 
 		//FocusingActor->AttachToComponent(WeaponScene,FAttachmentTransformRules::KeepWorldTransform,)
 
@@ -243,11 +289,11 @@ void AVRCharacter::UnEquip()
 {
 }
 
-void AVRCharacter::Interact()
+void AVRCharacter::Interact(AActor* HandFoucsing)
 {
-	if (FocusingActor == nullptr) { return; }
+	if (HandFoucsing == nullptr) { return; }
 
-	IInteractableActor* InteractableActor = Cast<IInteractableActor>(FocusingActor);
+	IInteractableActor* InteractableActor = Cast<IInteractableActor>(HandFoucsing);
 	if (InteractableActor)
 	{
 		InteractableActor->Interact();

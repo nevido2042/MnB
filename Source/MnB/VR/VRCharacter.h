@@ -36,13 +36,13 @@ public:
 protected:
 	void OnMove(const FInputActionValue& InputActionValue);
 
-	void OnGrabLeftStarted(const FInputActionValue& InputActionValue) { OnGrabStarted(MotionControllerLeft, InputActionValue); }
-	void OnGrabRightStarted(const FInputActionValue& InputActionValue) { OnGrabStarted(MotionControllerRight, InputActionValue); }
-	void OnGrabStarted(UMotionControllerComponent* MotionControllerComponent, const FInputActionValue& InputActionValue);
+	void OnGrabLeftStarted(const FInputActionValue& InputActionValue) { OnGrabStarted(MotionControllerLeft, true, InputActionValue); }
+	void OnGrabRightStarted(const FInputActionValue& InputActionValue) { OnGrabStarted(MotionControllerRight,false, InputActionValue); }
+	void OnGrabStarted(UMotionControllerComponent* MotionControllerComponent, const bool bLeft, const FInputActionValue& InputActionValue);
 
-	void OnGrabLeftCompleted(const FInputActionValue& InputActionValue) { OnGrabCompleted(MotionControllerLeft, InputActionValue); }
-	void OnGrabRightCompleted(const FInputActionValue& InputActionValue) { OnGrabCompleted(MotionControllerRight, InputActionValue); }
-	void OnGrabCompleted(UMotionControllerComponent* MotionControllerComponent, const FInputActionValue& InputActionValue);
+	void OnGrabLeftCompleted(const FInputActionValue& InputActionValue) { OnGrabCompleted(MotionControllerLeft, true, InputActionValue); }
+	void OnGrabRightCompleted(const FInputActionValue& InputActionValue) { OnGrabCompleted(MotionControllerRight, false, InputActionValue); }
+	void OnGrabCompleted(UMotionControllerComponent* MotionControllerComponent, const bool bLeft, const FInputActionValue& InputActionValue);
 
 private:
 	class UCameraComponent* VRCamera = nullptr;
@@ -57,13 +57,16 @@ private:
 	UHandGraph* HandGraphRight;
 
 private:
-	AActor* FocusingActor = nullptr;
-	class AWeapon* EquippedWeapon = nullptr;
+	AActor* LeftFocusingActor = nullptr;
+	AActor* RightFocusingActor = nullptr;
+
+	class AWeapon* LeftEquippedWeapon = nullptr;
+	class AWeapon* RightEquippedWeapon = nullptr;
 
 	void HandRayCast(UVRHandSkeletalMeshComponent * Hand);
 	void UnEquip();
-	void Interact();
+	void Interact(AActor* HandFoucsing);
 
 public:
-	void Equip();
+	void Equip(AActor* HandFoucsing);
 };

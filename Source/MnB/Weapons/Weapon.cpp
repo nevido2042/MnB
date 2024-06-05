@@ -75,8 +75,6 @@ void AWeapon::Equipped()
 		StaticMeshComponent->SetSimulatePhysics(false);
 		StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-		VRCharacter->Equip();
-
 		Owner = VRCharacter->GetController();
 	}
 }
