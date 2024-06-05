@@ -179,7 +179,9 @@ void AVRCharacter::OnGrabCompleted(UMotionControllerComponent* MotionControllerC
 {
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("OnGrabCompleted"));
 
-	UnEquip();
+	UnEquip(bLeft); //이거 왜 실행 안하고 넘어감?
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("ABC"));
+
 }
 
 void AVRCharacter::HandRayCast(UVRHandSkeletalMeshComponent* Hand)
@@ -235,24 +237,51 @@ void AVRCharacter::HandRayCast(UVRHandSkeletalMeshComponent* Hand)
 	}
 }
 
+void AVRCharacter::UnEquip(bool bLeft)
+{
+	AWeapon* EquippedWeapon;
+
+	if (bLeft)
+	{
+		EquippedWeapon = LeftEquippedWeapon;
+	}
+	else
+	{
+		EquippedWeapon = RightEquippedWeapon;
+	}
+	
+	if (EquippedWeapon == nullptr) { return; }
+	
+	UStaticMeshComponent* WeaponMesh = EquippedWeapon->GetComponentByClass<UStaticMeshComponent>();
+	WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+	
+	EquippedWeapon->Unequipped();
+	EquippedWeapon = nullptr;
+}
+
 void AVRCharacter::Equip(AActor * HandFoucsing)
 {
 	const USkeletalMeshSocket* WeaponSocket = nullptr;
 	UVRHandSkeletalMeshComponent* Hand = nullptr;
+	//UMotionControllerComponent* MotionController = nullptr;
 	AWeapon* EquippedWeapon = nullptr;
 	FRotator RotateOffset = FRotator::ZeroRotator;
-
+	FName SocketName = TEXT("");
 	if (HandFoucsing == RightFocusingActor)
 	{
-		WeaponSocket = RightHand->GetSocketByName("WeaponSocket");
+		SocketName = TEXT("WeaponSocketRight");
+		WeaponSocket = RightHand->GetSocketByName(SocketName);
 		Hand = RightHand;
+		//MotionController = MotionControllerRight;
 		EquippedWeapon = RightEquippedWeapon;
 		RotateOffset = FRotator(90, 0, 180);
 	}
 	else if (HandFoucsing == LeftFocusingActor)
 	{
-		WeaponSocket = LeftHand->GetSocketByName("WeaponSocket");
+		SocketName = TEXT("WeaponSocketLeft");
+		WeaponSocket = LeftHand->GetSocketByName(SocketName);
 		Hand = LeftHand;
+		//MotionController = MotionControllerLeft;
 		EquippedWeapon = LeftEquippedWeapon;
 		RotateOffset = FRotator(-90, 180, 180);
 	}
@@ -273,20 +302,16 @@ void AVRCharacter::Equip(AActor * HandFoucsing)
 		EquippedWeapon = Cast<AWeapon>(HandFoucsing);
 
 		UStaticMeshComponent* WeaponMesh = HandFoucsing->GetComponentByClass<UStaticMeshComponent>();
-		WeaponMesh->AttachToComponent(Hand, FAttachmentTransformRules::KeepWorldTransform, TEXT("WeaponSocket"));
+
+		
+		WeaponMesh->SetRelativeRotation(EquippedWeapon->GetWeaponGrip()->GetRelativeRotation());
+
+		WeaponMesh->AttachToComponent(Hand, FAttachmentTransformRules::KeepRelativeTransform, SocketName);
+
+		//왼손이면 웨폰소켓의 로테이션을 180해줘야함
+
 		WeaponMesh->SetRelativeLocation(FVector::Zero());
-
-		WeaponMesh->SetRelativeRotation(EquippedWeapon->GetWeaponGrip()->GetRelativeRotation()/*+FRotator(90, 0, 180)*/); //무기별 그립의 로테이션이 다른 것 때문에 문제
-
-		//FocusingActor->AttachToComponent(WeaponScene,FAttachmentTransformRules::KeepWorldTransform,)
-
-		/*bool bResult = WeaponSocket->AttachActor(FocusingActor, GetMesh());
-		check(bResult);*/
 	}
-}
-
-void AVRCharacter::UnEquip()
-{
 }
 
 void AVRCharacter::Interact(AActor* HandFoucsing)

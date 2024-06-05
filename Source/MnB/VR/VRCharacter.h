@@ -64,7 +64,10 @@ private:
 	class AWeapon* RightEquippedWeapon = nullptr;
 
 	void HandRayCast(UVRHandSkeletalMeshComponent * Hand);
-	void UnEquip();
+
+	//UFUNCTION()
+	void UnEquip(bool bLeft);
+
 	void Interact(AActor* HandFoucsing);
 
 public:
