@@ -85,8 +85,12 @@ bool AWeapon::HitDitect()
 	FVector HitEnd = StaticMeshComponent->GetSocketLocation(TEXT("HitEnd"));
 
 	FHitResult HitResult;
-	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, HitStart, HitEnd, ECollisionChannel::ECC_GameTraceChannel4);
-	DrawDebugLine(GetWorld(), HitStart, HitEnd, FColor::Green, false, 2.f);
+	//Ä¸½¶ ½Ãµµ Áß
+	float CapsuleRadius = 50.0f;
+	float CapsuleHalfHeight = 100.0f;
+	bool bHit = GetWorld()->SweepSingleByChannel(HitResult, HitStart, HitEnd, FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel4, FCollisionShape::MakeCapsule(CapsuleRadius, CapsuleHalfHeight));
+	DrawDebugCapsule(GetWorld(), HitResult.Location, CapsuleHalfHeight, CapsuleRadius, FQuat::Identity, FColor::Green, false, 2.f);
+	//DrawDebugLine(GetWorld(), HitStart, HitEnd, FColor::Green, false, 2.f);
 	if (bHit)
 	{
 		if (ACharacter* Character = Cast<ACharacter>(HitResult.GetActor()))

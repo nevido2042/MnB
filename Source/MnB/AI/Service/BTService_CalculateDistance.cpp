@@ -7,7 +7,6 @@
 #include "MnB/AI/MnBAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-#include "Kismet/KismetMathLibrary.h"
 
 UBTService_CalculateDistance::UBTService_CalculateDistance()
 {
@@ -24,13 +23,4 @@ void UBTService_CalculateDistance::OnBecomeRelevant(UBehaviorTreeComponent& Owne
 
 	OwnerComp.GetBlackboardComponent()->SetValueAsBool(
 		GetSelectedBlackboardKey(), AICharacter->GetDistanceTo(Player) <= WantDistacne);
-
-	
-	//UE_LOG(LogTemp, Display, TEXT("%d"), AICharacter->GetDistanceTo(Player));
-
-	const FVector MyLocation = Cont->GetPawn()->GetActorLocation();
-	const FVector TargetLocation = Player->GetActorLocation(); //나중에 플레이어말고 타겟으로 바꿔보자
-
-	FRotator NewControlRotation = UKismetMathLibrary::MakeRotFromX((TargetLocation - MyLocation).GetSafeNormal());
-	Cont->GetPawn()->SetActorRotation(NewControlRotation);
 }

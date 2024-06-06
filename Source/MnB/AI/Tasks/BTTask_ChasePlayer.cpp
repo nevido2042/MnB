@@ -21,7 +21,7 @@ EBTNodeResult::Type UBTTask_ChasePlayer::ExecuteTask(UBehaviorTreeComponent& Own
 
 		// move to palyer location
 		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(Cont, PlayerLocation);
-		Cont->MoveToLocation(PlayerLocation);
+		Cont->MoveToLocation(PlayerLocation, 100.f); //wantDistace 와 똑같이 맞춰야한다
 
 		//finish with succes
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);

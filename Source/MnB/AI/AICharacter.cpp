@@ -25,16 +25,24 @@ void AAICharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	auto const* const Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	{
+		auto const* const Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 
-	auto* const Cont = GetController();
+		auto* const Cont = GetController();
+		auto* const Pawn = Cont->GetPawn();
 
-	const FVector MyLocation = Cont->GetPawn()->GetActorLocation();
-	const FVector TargetLocation = Player->GetActorLocation(); //나중에 플레이어말고 타겟으로 바꿔보자
+		const FVector MyLocation = Cont->GetPawn()->GetActorLocation();
+		const FVector TargetLocation = Player->GetActorLocation(); //나중에 플레이어말고 타겟으로 바꿔보자
 
-	FRotator NewControlRotation = UKismetMathLibrary::MakeRotFromX((TargetLocation - MyLocation).GetSafeNormal());
+		FRotator NewControlRotation = UKismetMathLibrary::MakeRotFromX((TargetLocation - MyLocation).GetSafeNormal());
+		//FRotator New = FRotator(Pawn->GetActorRotation().Pitch, NewControlRotation.Yaw, Pawn->GetActorRotation().Roll);
+		FRotator NewRotation = FRotator(0.f, NewControlRotation.Yaw, NewControlRotation.Roll);
 
-	Cont->GetPawn()->SetActorRotation(NewControlRotation);
+		Cont->GetPawn()->SetActorRotation(NewRotation);
+
+		//UE_LOG(LogTemp, Display, TEXT("Pitch:%f Yaw:%f Roll:%f"), NewControlRotation.Pitch, NewControlRotation.Yaw, NewControlRotation.Roll);
+		//Cont->SetControlRotation(New);
+	}
 }
 
 // Called to bind functionality to input
