@@ -25,6 +25,4 @@ void UBTService_IsPlayerInMeleeRange::OnBecomeRelevant(UBehaviorTreeComponent& O
 
 	OwnerComp.GetBlackboardComponent()->SetValueAsBool(
 		GetSelectedBlackboardKey(), AICharacter->GetDistanceTo(Player) <= MeleeRange);
-
-	UE_LOG(LogTemp, Display, TEXT("%d"), AICharacter->GetDistanceTo(Player));
 }

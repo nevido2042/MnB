@@ -20,8 +20,7 @@ EBTNodeResult::Type UBTTask_ChasePlayer::ExecuteTask(UBehaviorTreeComponent& Own
 		auto const PlayerLocation = OwnerComp.GetBlackboardComponent()->GetValueAsVector(GetSelectedBlackboardKey());
 
 		// move to palyer location
-		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(Cont, PlayerLocation);
-		Cont->MoveToLocation(PlayerLocation);
+		UAIBlueprintHelperLibrary::SimpleMoveToLocation(Cont, PlayerLocation);
 
 		//finish with succes
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);

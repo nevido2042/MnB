@@ -18,23 +18,11 @@ void AAICharacter::BeginPlay()
 	
 }
 
-#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
-#include "Kismet/KismetMathLibrary.h"
 // Called every frame
 void AAICharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	auto const* const Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-
-	auto* const Cont = GetController();
-
-	const FVector MyLocation = Cont->GetPawn()->GetActorLocation();
-	const FVector TargetLocation = Player->GetActorLocation(); //나중에 플레이어말고 타겟으로 바꿔보자
-
-	FRotator NewControlRotation = UKismetMathLibrary::MakeRotFromX((TargetLocation - MyLocation).GetSafeNormal());
-
-	Cont->GetPawn()->SetActorRotation(NewControlRotation);
 }
 
 // Called to bind functionality to input
