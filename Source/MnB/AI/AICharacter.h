@@ -37,6 +37,8 @@ public:
 	UAnimMontage* GetMontage() const;
 
 	int MeleeAttack_Implementation() override;
+
+	class AWeapon* GetCurrentWeapon() { return CurWeapon; }
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	UBehaviorTree* Tree;
@@ -47,7 +49,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* Montage;
 
-	class TSubclassOf<AWeapon> CurWeapon = nullptr;
+	TSubclassOf<class AWeapon> WeaponAsset = nullptr;
+
+	class AWeapon* CurWeapon = nullptr;
 
 	void EquipWeapon();
 };

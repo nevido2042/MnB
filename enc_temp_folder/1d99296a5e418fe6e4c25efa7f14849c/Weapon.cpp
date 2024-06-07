@@ -103,7 +103,6 @@ bool AWeapon::HitDitect()
 	float CapsuleHalfHeight = 100.0f;
 
 	TArray<AActor*> IgnoreActors;
-	IgnoreActors.Add(Owner->GetPawn());
 	
 	//UKismetSystemLibrary::SphereTraceSingleByProfile(GetWorld(), HitStart, HitEnd, 5.f, TEXT("Hitable"), false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green);
 	//UKismetSystemLibrary::CapsuleTraceSingle(GetWorld(), HitStart, HitEnd, 5.f, 5.f,ETraceTypeQuery::TraceTypeQuery4, false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green);
@@ -142,9 +141,10 @@ bool AWeapon::HitDitect()
 			false, 10.0f
 		);
 		
-		Owner->GetCharacter()->StopAnimMontage();
 		if (Cast<AShield>(HitResult.GetActor()))
 		{
+			Owner->GetCharacter()->StopAnimMontage();
+
 			AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Owner->GetCharacter());
 			if (MnBCharacter)
 			{
@@ -198,11 +198,10 @@ bool AWeapon::ObstacleDitect()
 		);
 
 		//test
-		Owner->GetCharacter()->StopAnimMontage();
 		AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Owner->GetCharacter());
 		if (MnBCharacter)
 		{
-			
+			Owner->GetCharacter()->StopAnimMontage();
 			MnBCharacter->Blocked();
 		}
 

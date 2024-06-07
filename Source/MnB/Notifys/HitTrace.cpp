@@ -4,14 +4,22 @@
 #include "Notifys/HitTrace.h"
 #include "Weapons/Weapon.h"
 #include "MnBCharacter.h"
+#include "AI/AICharacter.h"
 
 void UHitTrace::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
 	AActor* const Actor = MeshComp->GetOwner();
+
 	AMnBCharacter* const MnBCharacter = Cast<AMnBCharacter>(Actor);
 	if (MnBCharacter)
 	{
 		Weapon = MnBCharacter->GetEquippedWeapon();
+	}
+
+	AAICharacter* const AICharacter = Cast<AAICharacter>(Actor);
+	if (AICharacter)
+	{
+		Weapon = AICharacter->GetCurrentWeapon();
 	}
 
 	bHit = false;

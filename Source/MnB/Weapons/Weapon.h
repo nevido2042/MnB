@@ -43,12 +43,16 @@ protected:
 
 	virtual void Interact() override;
 
-	void Equipped();
+
 
 public:
 	USceneComponent* GetWeaponGrip() { return WeaponGrip; }
 
 	void Unequipped();
+
+	void Equipped();
+
+	void Equipped(AController* Controller);
 
 	bool HitDitect();
 

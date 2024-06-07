@@ -14,9 +14,10 @@ AAICharacter::AAICharacter()
 		ConstructorHelpers::FClassFinder<AWeapon>Finder(TEXT("/Script/Engine.Blueprint'/Game/MyAssets/Weapons/BP_Sword.BP_Sword_C'"));
 		if (Finder.Class)
 		{
-			CurWeapon = Finder.Class;
+			WeaponAsset = Finder.Class;
 		}
 	}
+
 
 }
 
@@ -25,6 +26,7 @@ void AAICharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	EquipWeapon();
 }
 
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
@@ -88,5 +90,23 @@ int AAICharacter::MeleeAttack_Implementation()
 
 void AAICharacter::EquipWeapon()
 {
+	AWeapon* NewWeapon = Cast<AWeapon>(GetWorld()->SpawnActor(WeaponAsset));
+	if (NewWeapon == nullptr) return;
+
+	NewWeapon->Equipped(GetController());
+
+	UStaticMeshComponent* WeaponMesh = NewWeapon->GetComponentByClass<UStaticMeshComponent>();
+	if (WeaponMesh == nullptr) return;
+	
+	bool result = false;
+	auto mesh = GetMesh();
+	result = WeaponMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform, TEXT("WeaponSocket"));
+
+	if (result == false) return;
+
+	WeaponMesh->SetRelativeLocation(FVector::Zero());
+	WeaponMesh->SetRelativeRotation(NewWeapon->GetWeaponGrip()->GetRelativeRotation());
+
+	CurWeapon = NewWeapon;
 }
 
