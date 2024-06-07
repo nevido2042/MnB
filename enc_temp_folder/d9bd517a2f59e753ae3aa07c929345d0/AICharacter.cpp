@@ -2,21 +2,12 @@
 
 
 #include "AI/AICharacter.h"
-#include "Weapons/Weapon.h"
 
 // Sets default values
 AAICharacter::AAICharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	{
-		ConstructorHelpers::FClassFinder<AWeapon>Finder(TEXT("/Script/Engine.Blueprint'/Game/MyAssets/Weapons/BP_Sword.BP_Sword_C'"));
-		if (Finder.Class)
-		{
-			CurWeapon = Finder.Class;
-		}
-	}
 
 }
 
@@ -84,9 +75,5 @@ int AAICharacter::MeleeAttack_Implementation()
 	}
 
 	return 0;
-}
-
-void AAICharacter::EquipWeapon()
-{
 }
 
