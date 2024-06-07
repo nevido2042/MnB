@@ -29,6 +29,29 @@ void AMnBAIController::OnPossess(APawn* InPawn)
 	}
 }
 
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+void AMnBAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	{
+		if (TargetCharacter == nullptr) return;
+
+		const FVector MyLocation = GetPawn()->GetActorLocation();
+		const FVector TargetLocation = TargetCharacter->GetActorLocation(); //���߿� �÷��̾�� Ÿ������ �ٲ㺸��
+
+		FRotator NewControlRotation = UKismetMathLibrary::MakeRotFromX((TargetLocation - MyLocation).GetSafeNormal());
+		//FRotator New = FRotator(Pawn->GetActorRotation().Pitch, NewControlRotation.Yaw, Pawn->GetActorRotation().Roll);
+		FRotator NewRotation = FRotator(0.f, NewControlRotation.Yaw, NewControlRotation.Roll);
+
+		GetPawn()->SetActorRotation(NewRotation);
+
+		//UE_LOG(LogTemp, Display, TEXT("Pitch:%f Yaw:%f Roll:%f"), NewControlRotation.Pitch, NewControlRotation.Yaw, NewControlRotation.Roll);
+		//Cont->SetControlRotation(New);
+	}
+}
+
 void AMnBAIController::SetupPerceptionSystem()
 {
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight Config"));
@@ -52,8 +75,10 @@ void AMnBAIController::SetupPerceptionSystem()
 
 void AMnBAIController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
 {
-	if (auto* const ch = Cast<AMnBCharacter>(Actor))
+	TargetCharacter = Cast<ACharacter>(Actor);
+	if (TargetCharacter)
 	{
-		GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed());
+		//GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed());
+		GetBlackboardComponent()->SetValueAsObject("TargetCharacter", TargetCharacter);
 	}
 }

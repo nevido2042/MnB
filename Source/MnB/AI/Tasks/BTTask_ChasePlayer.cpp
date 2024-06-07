@@ -5,7 +5,6 @@
 
 #include "AI/MnBAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Blueprint/AIBlueprintHelperLibrary.h"
 
 UBTTask_ChasePlayer::UBTTask_ChasePlayer(FObjectInitializer const& ObjectInitializer)
 	: UBTTask_BlackboardBase{ ObjectInitializer }
@@ -21,7 +20,7 @@ EBTNodeResult::Type UBTTask_ChasePlayer::ExecuteTask(UBehaviorTreeComponent& Own
 
 		// move to palyer location
 		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(Cont, PlayerLocation);
-		Cont->MoveToLocation(PlayerLocation, 100.f); //wantDistace ¿Í ¶È°°ÀÌ ¸ÂÃç¾ßÇÑ´Ù
+		Cont->MoveToLocation(PlayerLocation, 100.f); //wantDistace ï¿½ï¿½ ï¿½È°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½
 
 		//finish with succes
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);

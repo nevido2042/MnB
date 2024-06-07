@@ -17,9 +17,12 @@ class MNB_API AMnBAIController : public AAIController
 	
 public:
 	explicit AMnBAIController(FObjectInitializer const& ObjectInitializer);
+	ACharacter* GetTarget() const { return TargetCharacter; }
 
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
+
+	virtual void Tick(float DeltaTime) override;
 
 private:
 	class UAISenseConfig_Sight* SightConfig;
@@ -28,4 +31,6 @@ private:
 
 	UFUNCTION()
 	void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
+
+	ACharacter* TargetCharacter = nullptr;
 };

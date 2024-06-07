@@ -25,24 +25,24 @@ void AAICharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	{
-		auto const* const Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	//{
+	//	auto const* const Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 
-		auto* const Cont = GetController();
-		auto* const Pawn = Cont->GetPawn();
+	//	auto* const Cont = GetController();
+	//	auto* const Pawn = Cont->GetPawn();
 
-		const FVector MyLocation = Cont->GetPawn()->GetActorLocation();
-		const FVector TargetLocation = Player->GetActorLocation(); //³ªÁß¿¡ ÇÃ·¹ÀÌ¾î¸»°í Å¸°ÙÀ¸·Î ¹Ù²ãº¸ÀÚ
+	//	const FVector MyLocation = Cont->GetPawn()->GetActorLocation();
+	//	const FVector TargetLocation = Player->GetActorLocation(); //ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¸»ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ãº¸ï¿½ï¿½
 
-		FRotator NewControlRotation = UKismetMathLibrary::MakeRotFromX((TargetLocation - MyLocation).GetSafeNormal());
-		//FRotator New = FRotator(Pawn->GetActorRotation().Pitch, NewControlRotation.Yaw, Pawn->GetActorRotation().Roll);
-		FRotator NewRotation = FRotator(0.f, NewControlRotation.Yaw, NewControlRotation.Roll);
+	//	FRotator NewControlRotation = UKismetMathLibrary::MakeRotFromX((TargetLocation - MyLocation).GetSafeNormal());
+	//	//FRotator New = FRotator(Pawn->GetActorRotation().Pitch, NewControlRotation.Yaw, Pawn->GetActorRotation().Roll);
+	//	FRotator NewRotation = FRotator(0.f, NewControlRotation.Yaw, NewControlRotation.Roll);
 
-		Cont->GetPawn()->SetActorRotation(NewRotation);
+	//	Cont->GetPawn()->SetActorRotation(NewRotation);
 
-		//UE_LOG(LogTemp, Display, TEXT("Pitch:%f Yaw:%f Roll:%f"), NewControlRotation.Pitch, NewControlRotation.Yaw, NewControlRotation.Roll);
-		//Cont->SetControlRotation(New);
-	}
+	//	//UE_LOG(LogTemp, Display, TEXT("Pitch:%f Yaw:%f Roll:%f"), NewControlRotation.Pitch, NewControlRotation.Yaw, NewControlRotation.Roll);
+	//	//Cont->SetControlRotation(New);
+	//}
 }
 
 // Called to bind functionality to input
