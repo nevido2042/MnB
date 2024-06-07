@@ -9,6 +9,7 @@
 #include "Weapons/Shield.h"
 #include "Kismet/GameplayStatics.h"
 #include "VR/VRCharacter.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -85,12 +86,20 @@ bool AWeapon::HitDitect()
 	FVector HitEnd = StaticMeshComponent->GetSocketLocation(TEXT("HitEnd"));
 
 	FHitResult HitResult;
-	//Ä¸½¶ ½Ãµµ Áß
+	//Ä¸ï¿½ï¿½ ï¿½Ãµï¿½ ï¿½ï¿½
 	float CapsuleRadius = 50.0f;
 	float CapsuleHalfHeight = 100.0f;
-	bool bHit = GetWorld()->SweepSingleByChannel(HitResult, HitStart, HitEnd, FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel4, FCollisionShape::MakeCapsule(CapsuleRadius, CapsuleHalfHeight));
-	DrawDebugCapsule(GetWorld(), HitResult.Location, CapsuleHalfHeight, CapsuleRadius, FQuat::Identity, FColor::Green, false, 2.f);
+
+	TArray<AActor*> IgnoreActors;
+	
+	//UKismetSystemLibrary::SphereTraceSingleByProfile(GetWorld(), HitStart, HitEnd, 5.f, TEXT("Hitable"), false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green);
+	//UKismetSystemLibrary::CapsuleTraceSingle(GetWorld(), HitStart, HitEnd, 5.f, 5.f,ETraceTypeQuery::TraceTypeQuery4, false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green);
+	//GetWorld()->SweepSingleByChannel(HitResult, HitStart, HitEnd, FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel4, FCollisionShape::MakeCapsule(CapsuleRadius, CapsuleHalfHeight));
+	//DrawDebugCapsule(GetWorld(), HitResult.Location, CapsuleHalfHeight, CapsuleRadius, FQuat::Identity, FColor::Green, false, 2.f);
+	//DrawDebugCylinder(GetWorld(), HitStart, HitEnd, 5.f, 1, FColor::Green,false, 2.f);
 	//DrawDebugLine(GetWorld(), HitStart, HitEnd, FColor::Green, false, 2.f);
+	bool bHit = UKismetSystemLibrary::SphereTraceSingle(GetWorld(), HitStart, HitEnd, 5.f, TraceTypeQuery4, false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green);
+
 	if (bHit)
 	{
 		if (ACharacter* Character = Cast<ACharacter>(HitResult.GetActor()))
