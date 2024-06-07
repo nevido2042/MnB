@@ -42,6 +42,9 @@ protected:
 	float MoveDirection;
 
 	UPROPERTY(BlueprintReadOnly)
+	TEnumAsByte<EGaurdDirection> GaurdDir = EGaurdDirection::GaurdNone;
+
+	UPROPERTY(BlueprintReadOnly)
 	TEnumAsByte<EBlockedDirection> BlockedDir = EBlockedDirection::None;
 
 protected:
@@ -55,4 +58,6 @@ private:
 
 public:
 	void SetBlockedDirection(TEnumAsByte<EBlockedDirection> value) { BlockedDir = value; }
+
+	void SetGaurdDirection(TEnumAsByte<EGaurdDirection> value) { GaurdDir = value; }
 };
