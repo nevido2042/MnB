@@ -8,6 +8,36 @@
 
 void UHitTrace::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
+	AWeapon* Weapon = GetWeaponInfo(MeshComp);
+	if (Weapon == nullptr) { return; }
+}
+
+void UHitTrace::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
+{
+	AWeapon* Weapon = GetWeaponInfo(MeshComp);
+	if (Weapon == nullptr) { return; }
+	Weapon->HitDitect();
+}
+
+void UHitTrace::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
+{
+	AWeapon* Weapon = GetWeaponInfo(MeshComp);
+	if (Weapon == nullptr) { return; }
+
+	Weapon->SetIsApplyDamage(false);
+
+	AActor* const Actor = MeshComp->GetOwner();
+	AMnBCharacter* const MnBCharacter = Cast<AMnBCharacter>(Actor);
+	if (MnBCharacter)
+	{
+		MnBCharacter->SetCurrentAttackDirection(EAttackDirection::AttackNone);
+	}
+}
+
+AWeapon* UHitTrace::GetWeaponInfo(USkeletalMeshComponent* MeshComp)
+{
+	AWeapon* Weapon = nullptr;
+
 	AActor* const Actor = MeshComp->GetOwner();
 
 	AMnBCharacter* const MnBCharacter = Cast<AMnBCharacter>(Actor);
@@ -21,32 +51,5 @@ void UHitTrace::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase*
 	{
 		Weapon = AICharacter->GetCurrentWeapon();
 	}
-
-	bHit = false;
-}
-
-void UHitTrace::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
-{
-	if (Weapon == nullptr) { return; }
-
-	if (bHit == true) { return; } // 한 번만 데미지 줌
-
-	bHit = Weapon->HitDitect();
-
-	if (bHit == false)
-	{
-		Weapon->ObstacleDitect();
-	}
-}
-
-void UHitTrace::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
-{
-	Weapon = nullptr;
-
-	AActor* const Actor = MeshComp->GetOwner();
-	AMnBCharacter* const MnBCharacter = Cast<AMnBCharacter>(Actor);
-	if (MnBCharacter)
-	{
-		MnBCharacter->SetCurrentAttackDirection(EAttackDirection::AttackNone);
-	}
+	return Weapon;
 }

@@ -92,8 +92,10 @@ void AWeapon::Equipped(AController* Controller)
 	}
 }
 
-bool AWeapon::HitDitect()
+void AWeapon::HitDitect()
 {
+	if (bApplyDamage) return; //데미지 한번 만 줄수 있게
+
 	FVector HitStart = StaticMeshComponent->GetSocketLocation(TEXT("HitStart"));
 	FVector HitEnd = StaticMeshComponent->GetSocketLocation(TEXT("HitEnd"));
 
@@ -120,7 +122,7 @@ bool AWeapon::HitDitect()
 			if (Character->GetController() == Owner)
 			{
 				bHit = false;
-				return bHit;
+				return;
 			}
 		}
 
@@ -155,9 +157,14 @@ bool AWeapon::HitDitect()
 
 		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 1, Owner, this, nullptr);
 
+		bApplyDamage = true;
+
 	}
 
-	return bHit;
+	if (bApplyDamage == false)
+	{
+		ObstacleDitect();
+	}
 }
 
 bool AWeapon::ObstacleDitect()

@@ -39,6 +39,8 @@ protected:
 
 	AController* Owner;
 
+	bool bApplyDamage = false;
+
 protected:
 
 	virtual void Interact() override;
@@ -54,7 +56,9 @@ public:
 
 	void Equipped(AController* Controller);
 
-	bool HitDitect();
+	void HitDitect();
 
 	bool ObstacleDitect();
+	
+	void SetIsApplyDamage(bool value) { bApplyDamage = value; }
 };

@@ -19,7 +19,7 @@ class MNB_API UHitTrace : public UAnimNotifyState
 	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference);
 	
 private:
-	class AWeapon* GetWeaponInfo(USkeletalMeshComponent* MeshComp);
-//private:
-//	class AWeapon* Weapon = nullptr;
+	class AWeapon* Weapon = nullptr;
+
+	bool bHit = false;
 };
