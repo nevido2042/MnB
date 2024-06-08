@@ -65,7 +65,5 @@ void UPCWidget::UpdateDirection(AMnBCharacter* MnBCharacter)
 
 void UPCWidget::UpdateHealthBar(UHealth* Health)
 {
-	UI_HealthBar->SetPercent(Health->GetCurrentHP() / Health->GetMaxHP());
-	//UI_HealthBar->Percent = Health->GetCurrentHP() / Health->GetMaxHP();
-	//if not use SetPercent Not Running
+	UI_HealthBar->Percent = Health->GetCurrentHP() / Health->GetMaxHP();
 }
