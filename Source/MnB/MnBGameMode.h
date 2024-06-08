@@ -17,13 +17,11 @@ public:
 	virtual void BeginPlay();
 
 protected:
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class UUserWidget> UserWidget;
-
-	class UUserWidget* CurrentWidget;
-
 	TSubclassOf<APawn> VRPawnClass = nullptr;
 	TSubclassOf<APlayerController> VRPlayerControllerClass = nullptr;
+
+	TSubclassOf<APawn> PCPawnClass = nullptr;
+	TSubclassOf<APlayerController> PCPlayerControllerClass = nullptr;
 
 	virtual APlayerController* Login(UPlayer* NewPlayer, ENetRole InRemoteRole, const FString& Portal, const FString& Options, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage) override;
 };

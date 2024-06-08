@@ -33,15 +33,28 @@ AMnBGameMode::AMnBGameMode()
 
 	}
 
+	{
+		ConstructorHelpers::FClassFinder<APawn>Finder(TEXT("/Script/Engine.Blueprint'/Game/MyAssets/Character/BP_MnBCharacter.BP_MnBCharacter_C'"));
+		if (Finder.Class)
+		{
+			PCPawnClass = Finder.Class;
+		}
+	}
+
+	{
+		ConstructorHelpers::FClassFinder<APlayerController>Finder(TEXT("/Script/Engine.Blueprint'/Game/MyAssets/Controller/BPC_PC.BPC_PC_C'"));
+		if (Finder.Class)
+		{
+			PCPlayerControllerClass = Finder.Class;
+		}
+
+	}
+
 }
 
 void AMnBGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
-	CurrentWidget = CreateWidget(GetWorld(), UserWidget);
-
-	CurrentWidget->AddToViewport();
 }
 
 APlayerController* AMnBGameMode::Login(UPlayer* NewPlayer, ENetRole InRemoteRole, const FString& Portal, const FString& Options, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage)
@@ -51,6 +64,11 @@ APlayerController* AMnBGameMode::Login(UPlayer* NewPlayer, ENetRole InRemoteRole
 	{
 		DefaultPawnClass = VRPawnClass;
 		PlayerControllerClass = VRPlayerControllerClass;
+	}
+	else
+	{
+		DefaultPawnClass = PCPawnClass;
+		PlayerControllerClass = PCPlayerControllerClass;
 	}
 
 	
