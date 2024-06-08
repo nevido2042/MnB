@@ -134,6 +134,8 @@ protected:
 
 	EAttackDirection CurAttackDir = EAttackDirection::AttackNone;
 
+	class UHealth* Health = nullptr;
+
 protected:
 	void ReadyToAttack();
 	void Attack();
@@ -150,5 +152,8 @@ private:
 	class UAIPerceptionStimuliSourceComponent* StimulusSource;
 
 	void SetupStimulusSource();
+
+private:
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 };
 

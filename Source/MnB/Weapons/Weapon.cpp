@@ -142,12 +142,13 @@ bool AWeapon::HitDitect()
 			false, 10.0f
 		);
 		
-		Owner->GetCharacter()->StopAnimMontage();
+
 		if (Cast<AShield>(HitResult.GetActor()))
 		{
 			AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Owner->GetCharacter());
 			if (MnBCharacter)
 			{
+				Owner->GetCharacter()->StopAnimMontage();
 				MnBCharacter->Blocked();
 			}
 		}

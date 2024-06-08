@@ -7,7 +7,7 @@
 AControllerPC::AControllerPC()
 {
 	{
-		ConstructorHelpers::FClassFinder<UUserWidget>Finder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/UI/BP_UserWidget.BP_UserWidget_C'"));
+		ConstructorHelpers::FClassFinder<UUserWidget>Finder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/UI/BP_PCWidget.BP_PCWidget_C'"));
 		ensure(Finder.Class);
 		if (Finder.Class)
 		{

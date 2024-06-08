@@ -18,6 +18,7 @@
 #include "MnB/Interface/InteractableActor.h"
 #include "MnB/Weapons/Weapon.h"
 #include "MnB/AnimInstance/MnBCharacterAnimInstance.h"
+#include "Components/Health.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -63,6 +64,8 @@ AMnBCharacter::AMnBCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
 	SetupStimulusSource();
+
+	Health = CreateDefaultSubobject<UHealth>(TEXT("Health"));
 }
 
 void AMnBCharacter::BeginPlay()
@@ -244,6 +247,18 @@ void AMnBCharacter::SetupStimulusSource()
 		StimulusSource->RegisterForSense(TSubclassOf<UAISense_Sight>());
 		StimulusSource->RegisterWithPerceptionSystem();
 	}
+}
+
+float AMnBCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	Health->AddCurrentHP(-Damage);
+
+	if (FMath::IsNearlyZero(Health->GetCurrentHP()))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Die"));
+	}
+
+	return Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 }
 
 //////////////////////////////////////////////////////////////////////////

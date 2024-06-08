@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "UserWidget/LeftRightUserWidget.h"
+#include "UserWidget/PCWidget.h"
 #include "Components/Image.h"
 #include "MnBCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
-void ULeftRightUserWidget::NativeOnInitialized()
+void UPCWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
@@ -15,7 +15,7 @@ void ULeftRightUserWidget::NativeOnInitialized()
 	RightImage = Cast<UImage>(GetWidgetFromName(TEXT("ImageRight")));
 }
 
-void ULeftRightUserWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+void UPCWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
 	Super::NativeTick(MyGeometry, InDeltaTime);
 

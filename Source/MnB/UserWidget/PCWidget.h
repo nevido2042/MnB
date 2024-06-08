@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "LeftRightUserWidget.generated.h"
+#include "PCWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MNB_API ULeftRightUserWidget : public UUserWidget
+class MNB_API UPCWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
