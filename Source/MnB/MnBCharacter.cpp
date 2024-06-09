@@ -205,23 +205,23 @@ void AMnBCharacter::RecoverBlockedState()
 	Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance())->SetBlockedDirection(EBlockedDirection::None);
 }
 
-void AMnBCharacter::Gaurd()
+void AMnBCharacter::Guard()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Garud()"));
 	if (LookAxisVector.X < 0)
 	{
-		Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance())->SetGaurdDirection(EGaurdDirection::GaurdLeft);
+		Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance())->SetGuardDirection(EGuardDirection::GuardLeft);
 	}
 	else
 	{
-		Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance())->SetGaurdDirection(EGaurdDirection::GarudRight);
+		Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance())->SetGuardDirection(EGuardDirection::GarudRight);
 	}
 }
 
-void AMnBCharacter::GaurdEnd()
+void AMnBCharacter::GuardEnd()
 {
 	UE_LOG(LogTemp, Warning, TEXT("GarudEnd()"));
-	Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance())->SetGaurdDirection(EGaurdDirection::GaurdNone);
+	Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance())->SetGuardDirection(EGuardDirection::GuardNone);
 }
 
 void AMnBCharacter::Blocked()
@@ -286,9 +286,9 @@ void AMnBCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		// Interact
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AMnBCharacter::Interact);
 
-		// Gaurd
-		EnhancedInputComponent->BindAction(GaurdAction, ETriggerEvent::Started, this, &AMnBCharacter::Gaurd);
-		EnhancedInputComponent->BindAction(GaurdAction, ETriggerEvent::Completed, this, &AMnBCharacter::GaurdEnd);
+		// Guard
+		EnhancedInputComponent->BindAction(GuardAction, ETriggerEvent::Started, this, &AMnBCharacter::Guard);
+		EnhancedInputComponent->BindAction(GuardAction, ETriggerEvent::Completed, this, &AMnBCharacter::GuardEnd);
 
 	}
 	else

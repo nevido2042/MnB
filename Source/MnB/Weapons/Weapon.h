@@ -41,6 +41,8 @@ protected:
 
 	bool bApplyDamage = false;
 
+	/*class UCapsuleComponent* GarudCollision*/
+
 protected:
 
 	virtual void Interact() override;

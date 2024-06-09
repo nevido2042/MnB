@@ -32,10 +32,10 @@ enum EAttackDirection
 };
 
 UENUM(BlueprintType)
-enum EGaurdDirection
+enum EGuardDirection
 {
-	GaurdLeft = -1,
-	GaurdNone = 0,
+	GuardLeft = -1,
+	GuardNone = 0,
 	GarudRight = 1
 };
 
@@ -76,9 +76,9 @@ class AMnBCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* InteractAction;
 
-	/** Gaurd Input Action */
+	/** Guard Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* GaurdAction;
+	UInputAction* GuardAction;
 
 public:
 	AMnBCharacter();
@@ -142,8 +142,8 @@ protected:
 	void CameraRaycast();
 	void Interact();
 	void RecoverBlockedState();
-	void Gaurd();
-	void GaurdEnd();
+	void Guard();
+	void GuardEnd();
 
 public:
 	void Blocked();
