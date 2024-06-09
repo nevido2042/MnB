@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "VR/VRCharacter.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AWeapon::AWeapon()
@@ -31,6 +32,10 @@ AWeapon::AWeapon()
 
 	WeaponGrip->SetupAttachment(RootComponent);
 	Arrow->SetupAttachment(WeaponGrip);
+
+	GuardCollider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("GuardCollider"));
+	GuardCollider->SetupAttachment(StaticMeshComponent);
+	GuardCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 }
 
@@ -106,6 +111,7 @@ void AWeapon::HitDitect()
 
 	TArray<AActor*> IgnoreActors;
 	IgnoreActors.Add(Owner->GetPawn());
+	IgnoreActors.Add(this);
 	
 	//UKismetSystemLibrary::SphereTraceSingleByProfile(GetWorld(), HitStart, HitEnd, 5.f, TEXT("Hitable"), false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green);
 	//UKismetSystemLibrary::CapsuleTraceSingle(GetWorld(), HitStart, HitEnd, 5.f, 5.f,ETraceTypeQuery::TraceTypeQuery4, false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green);
@@ -117,6 +123,7 @@ void AWeapon::HitDitect()
 
 	if (bHit)
 	{
+
 		if (ACharacter* Character = Cast<ACharacter>(HitResult.GetActor()))
 		{
 			if (Character->GetController() == Owner)
@@ -143,6 +150,12 @@ void AWeapon::HitDitect()
 			FColor::Red,
 			false, 10.0f
 		);
+
+		if (Cast<AWeapon>(HitResult.GetActor()))
+		{
+			Owner->GetCharacter()->StopAnimMontage();
+			//MnBCharacter->Blocked();
+		}
 		
 
 		if (Cast<AShield>(HitResult.GetActor()))

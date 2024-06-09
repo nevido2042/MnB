@@ -217,7 +217,6 @@ void AMnBCharacter::Guard()
 		Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance())->SetGuardDirection(EGuardDirection::GarudRight);
 	}
 
-	if (EquippedWeapon == nullptr) return;
 	EquippedWeapon->GetGuardCollider()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 }
 
@@ -226,7 +225,6 @@ void AMnBCharacter::GuardEnd()
 	UE_LOG(LogTemp, Warning, TEXT("GarudEnd()"));
 	Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance())->SetGuardDirection(EGuardDirection::GuardNone);
 
-	if (EquippedWeapon == nullptr) return;
 	EquippedWeapon->GetGuardCollider()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 

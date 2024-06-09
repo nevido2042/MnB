@@ -41,7 +41,8 @@ protected:
 
 	bool bApplyDamage = false;
 
-	/*class UCapsuleComponent* GarudCollision*/
+	UPROPERTY(EditAnywhere)
+	class UCapsuleComponent* GuardCollider = nullptr;
 
 protected:
 
@@ -50,6 +51,8 @@ protected:
 
 
 public:
+	class UCapsuleComponent* GetGuardCollider() { return GuardCollider; }
+
 	USceneComponent* GetWeaponGrip() { return WeaponGrip; }
 
 	void Unequipped();
