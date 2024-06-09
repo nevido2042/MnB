@@ -18,6 +18,23 @@ AAICharacter::AAICharacter()
 		}
 	}
 
+	
+	{
+		ConstructorHelpers::FObjectFinder<UAnimMontage>Finder(TEXT("/Script/Engine.AnimMontage'/Game/MyAssets/Animations/Korea/Outward_Montage.Outward_Montage'"));
+		if (Finder.Object)
+		{
+			LeftAttack = Finder.Object;
+		}
+	}
+
+	{
+		ConstructorHelpers::FObjectFinder<UAnimMontage>Finder(TEXT("/Script/Engine.AnimMontage'/Game/MyAssets/Animations/Korea/Stable_Sword_Inward_Slash_Montage.Stable_Sword_Inward_Slash_Montage'"));
+		if (Finder.Object)
+		{
+			RightAttack = Finder.Object;
+		}
+	}
+
 
 }
 
@@ -108,5 +125,17 @@ void AAICharacter::EquipWeapon()
 	WeaponMesh->SetRelativeRotation(NewWeapon->GetWeaponGrip()->GetRelativeRotation());
 
 	CurWeapon = NewWeapon;
+}
+
+void AAICharacter::PlayAttack(bool bLeft)
+{
+	if (bLeft)
+	{
+		GetMesh()->GetAnimInstance()->Montage_Play(LeftAttack);
+	}
+	else
+	{
+		GetMesh()->GetAnimInstance()->Montage_Play(RightAttack);
+	}
 }
 

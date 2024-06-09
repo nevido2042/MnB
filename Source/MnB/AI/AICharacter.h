@@ -54,4 +54,10 @@ protected:
 	class AWeapon* CurWeapon = nullptr;
 
 	void EquipWeapon();
+
+	UAnimMontage* LeftAttack = nullptr;
+	UAnimMontage* RightAttack = nullptr;
+
+public:
+	void PlayAttack(bool bLeft);
 };

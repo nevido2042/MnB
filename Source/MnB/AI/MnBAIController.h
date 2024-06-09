@@ -10,6 +10,17 @@
 /**
  * 
  */
+
+UENUM(BlueprintType)
+enum class EAIState : uint8
+{
+	LeftAttack UMETA(DisplayName = "LeftAttack"),
+	RightAttack UMETA(DisplayName = "RightAttack"),
+
+	LeftGuard UMETA(DisplayName = "LeftGuard"),
+	RightGuard UMETA(DisplayName = "RightGuard")
+};
+
 UCLASS()
 class MNB_API AMnBAIController : public AAIController
 {
