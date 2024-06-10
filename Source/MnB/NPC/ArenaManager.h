@@ -41,4 +41,11 @@ protected:
 	UPROPERTY(EditAnywhere, meta = (MakeEditWidget = "true"))
 	FVector EnterPosition = FVector::ZeroVector;
 
+	UPROPERTY(EditAnywhere, meta = (MakeEditWidget = "true"))
+	FVector ReturnPosion = FVector::ZeroVector;
+
+	AActor* CachedActor = nullptr;
+public:
+	void RecoveryAndReturn();
+
 };

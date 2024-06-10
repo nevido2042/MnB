@@ -27,6 +27,7 @@ public:
 	void AddCurrentHP(float value) { CurHP += value; }
 	float GetCurrentHP(){ return CurHP; }
 	float GetMaxHP() { return MaxHP; }
+	void SetCurrentHP(float Value) { CurHP = Value; }
 protected:
 	float MaxHP = 3.f;
 	float CurHP = MaxHP;

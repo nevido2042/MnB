@@ -19,6 +19,7 @@
 #include "MnB/Weapons/Weapon.h"
 #include "MnB/AnimInstance/MnBCharacterAnimInstance.h"
 #include "Components/Health.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -264,6 +265,7 @@ void AMnBCharacter::SetupStimulusSource()
 	}
 }
 
+#include "NPC/ArenaManager.h"
 float AMnBCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Health->AddCurrentHP(-Damage);
@@ -274,6 +276,19 @@ float AMnBCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, A
 	if (FMath::IsNearlyZero(Health->GetCurrentHP()))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Die"));
+		
+		TArray<AActor*> OutActors;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AArenaManager::StaticClass(), OutActors);
+
+		if (OutActors[0])
+		{
+			if (AArenaManager * ArenaManager = Cast<AArenaManager>(OutActors[0]))
+			{
+				ArenaManager->RecoveryAndReturn();
+			}
+
+		}
+
 	}
 
 	return Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);

@@ -67,6 +67,7 @@ void AArenaManager::Interact(AActor* InActor)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Arena"));
 	EnterArena(InActor);
+	CachedActor = InActor;
 }
 
 void AArenaManager::EnterArena(AActor* InActor)
@@ -74,5 +75,19 @@ void AArenaManager::EnterArena(AActor* InActor)
 	FVector const GlobalPoint = GetActorTransform().TransformPosition(EnterPosition);
 	InActor->SetActorLocation(GlobalPoint);
 
+}
+
+#include "Components/Health.h"
+
+void AArenaManager::RecoveryAndReturn()
+{
+	if (CachedActor)
+	{
+		FVector const GlobalPoint = GetActorTransform().TransformPosition(ReturnPosion);
+		CachedActor->SetActorLocation(GlobalPoint);
+
+		UHealth* Health = CachedActor->GetComponentByClass<UHealth>();
+		Health->SetCurrentHP(Health->GetMaxHP());
+	}
 }
 
