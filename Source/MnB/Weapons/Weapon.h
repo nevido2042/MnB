@@ -46,7 +46,7 @@ protected:
 
 protected:
 
-	virtual void Interact() override;
+	virtual void Interact(AActor* InActor) override;
 
 
 

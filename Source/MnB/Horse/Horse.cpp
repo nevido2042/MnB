@@ -35,7 +35,7 @@ void AHorse::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void AHorse::Interact()
+void AHorse::Interact(AActor* InActor)
 {
 }
 

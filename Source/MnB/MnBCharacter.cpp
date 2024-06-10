@@ -205,7 +205,7 @@ void AMnBCharacter::Interact()
 	IInteractableActor* InteractableActor = Cast<IInteractableActor>(FocusingActor);
 	if (InteractableActor)
 	{
-		InteractableActor->Interact();
+		InteractableActor->Interact(this);
 	}
 }
 

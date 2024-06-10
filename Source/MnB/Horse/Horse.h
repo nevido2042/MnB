@@ -27,7 +27,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	virtual void Interact() override;
+	virtual void Interact(AActor* InActor) override;
 
 protected:
 	class UHealth* Health = nullptr;

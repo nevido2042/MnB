@@ -13,5 +13,5 @@ class IInteractableActor
     GENERATED_BODY()
 
 public:
-    virtual void Interact() = 0;
+    virtual void Interact(AActor* InActor = nullptr) = 0;
 };

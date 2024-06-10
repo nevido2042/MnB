@@ -32,13 +32,10 @@ protected:
 
 	class UCapsuleComponent* CapsuleComponent = nullptr;
 
-	TSubclassOf<UAnimInstance> AnimClass = nullptr;
+	TSubclassOf<UAnimBlueprintGeneratedClass> AnimClass = nullptr;
 
 	virtual void Interact(AActor* InActor) override;
 
 	void EnterArena(AActor* InActor);
-
-	UPROPERTY(EditAnywhere, meta = (MakeEditWidget = "true"))
-	FVector EnterPosition = FVector::ZeroVector;
 
 };

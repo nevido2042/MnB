@@ -26,7 +26,7 @@ AArenaManager::AArenaManager()
 		}
 	}
 	{
-		ConstructorHelpers::FClassFinder<UAnimInstance>Finder(TEXT("/ Script / Engine.AnimBlueprint'/Game/MyAssets/Character/ABP_Korea.ABP_Korea_C'"));
+		ConstructorHelpers::FClassFinder<UAnimBlueprintGeneratedClass>Finder(TEXT("/ Script / Engine.AnimBlueprint'/Game/MyAssets/Character/ABP_Korea.ABP_Korea_C'"));
 		if (Finder.Class)
 		{
 			AnimClass = Finder.Class;
@@ -71,8 +71,9 @@ void AArenaManager::Interact(AActor* InActor)
 
 void AArenaManager::EnterArena(AActor* InActor)
 {
-	FVector const GlobalPoint = GetActorTransform().TransformPosition(EnterPosition);
-	InActor->SetActorLocation(GlobalPoint);
+	//(X=-416.562125,Y=328.136677,Z=119.542686)
+	FVector NewLocation = FVector(-400.f, 300.f, 100.f);
+	InActor->SetActorLocation(NewLocation);
 
 }
 

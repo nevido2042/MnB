@@ -54,7 +54,7 @@ void AWeapon::Tick(float DeltaTime)
 	//HitDitect();
 }
 
-void AWeapon::Interact()
+void AWeapon::Interact(AActor* InActor)
 {
 	UE_LOG(LogTemp, Warning, TEXT(__FUNCTION__));
 	Equipped();
