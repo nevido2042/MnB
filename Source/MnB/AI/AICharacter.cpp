@@ -35,6 +35,13 @@ AAICharacter::AAICharacter()
 		}
 	}
 
+	{
+		ConstructorHelpers::FObjectFinder<UAnimMontage>Finder(TEXT("/Script/Engine.AnimMontage'/Game/MyAssets/Animations/Korea/Standing_React_Large_From_Right_Montage.Standing_React_Large_From_Right_Montage'"));
+		if (Finder.Object)
+		{
+			DamagedMontage = Finder.Object;
+		}
+	}
 
 }
 
@@ -137,5 +144,12 @@ void AAICharacter::PlayAttack(bool bLeft)
 	{
 		GetMesh()->GetAnimInstance()->Montage_Play(RightAttack);
 	}
+}
+
+float AAICharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	StopAnimMontage();
+	GetMesh()->GetAnimInstance()->Montage_Play(DamagedMontage);
+	return 0.0f;
 }
 

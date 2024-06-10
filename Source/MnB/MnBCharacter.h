@@ -136,6 +136,8 @@ protected:
 
 	class UHealth* Health = nullptr;
 
+	UAnimMontage* DamagedMontage = nullptr;
+
 protected:
 	void ReadyToAttack();
 	void Attack();

@@ -66,6 +66,15 @@ AMnBCharacter::AMnBCharacter()
 	SetupStimulusSource();
 
 	Health = CreateDefaultSubobject<UHealth>(TEXT("Health"));
+
+	{
+		ConstructorHelpers::FObjectFinder<UAnimMontage>Finder(TEXT("/Script/Engine.AnimMontage'/Game/MyAssets/Animations/Korea/Standing_React_Large_From_Right_Montage.Standing_React_Large_From_Right_Montage'"));
+		ensure(Finder.Object);
+		if (Finder.Object)
+		{
+			DamagedMontage = Finder.Object;
+		}
+	}
 }
 
 void AMnBCharacter::BeginPlay()
@@ -258,6 +267,9 @@ void AMnBCharacter::SetupStimulusSource()
 float AMnBCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Health->AddCurrentHP(-Damage);
+
+	StopAnimMontage();
+	GetMesh()->GetAnimInstance()->Montage_Play(DamagedMontage);
 
 	if (FMath::IsNearlyZero(Health->GetCurrentHP()))
 	{

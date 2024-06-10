@@ -21,7 +21,7 @@ void UPCWidget::NativeOnInitialized()
 
 void UPCWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
-	Super::NativeTick(MyGeometry, InDeltaTime);
+	//Super::NativeTick(MyGeometry, InDeltaTime);
 
 	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (PlayerController)
