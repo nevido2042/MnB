@@ -120,7 +120,10 @@ void AAICharacter::EquipWeapon()
 	AWeapon* NewWeapon = Cast<AWeapon>(GetWorld()->SpawnActor(WeaponAsset));
 	if (NewWeapon == nullptr) return;
 
-	NewWeapon->Equipped(GetController());
+	if (GetController())
+	{
+		NewWeapon->Equipped(GetController());
+	}
 
 	UStaticMeshComponent* WeaponMesh = NewWeapon->GetComponentByClass<UStaticMeshComponent>();
 	if (WeaponMesh == nullptr) return;
