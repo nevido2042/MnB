@@ -44,4 +44,8 @@ private:
 	void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
 
 	ACharacter* TargetCharacter = nullptr;
+
+	void CheckTargetIsDie();
+
+	void RotateToTarget();
 };

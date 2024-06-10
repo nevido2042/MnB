@@ -60,9 +60,19 @@ protected:
 
 	UAnimMontage* DamagedMontage = nullptr;
 
+	class UHealth* Health = nullptr;
+
 public:
 	void PlayAttack(bool bLeft);
 
 private:
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	bool bDie = false;
+	void Die();
+public:
+	bool IsDie() { return bDie; }
+
+private:
+	void MyDestroy();
 };

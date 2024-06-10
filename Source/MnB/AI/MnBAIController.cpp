@@ -35,21 +35,9 @@ void AMnBAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	{
-		if (TargetCharacter == nullptr) return;
+	CheckTargetIsDie();
 
-		const FVector MyLocation = GetPawn()->GetActorLocation();
-		const FVector TargetLocation = TargetCharacter->GetActorLocation(); //���߿� �÷��̾�� Ÿ������ �ٲ㺸��
-
-		FRotator NewControlRotation = UKismetMathLibrary::MakeRotFromX((TargetLocation - MyLocation).GetSafeNormal());
-		//FRotator New = FRotator(Pawn->GetActorRotation().Pitch, NewControlRotation.Yaw, Pawn->GetActorRotation().Roll);
-		FRotator NewRotation = FRotator(0.f, NewControlRotation.Yaw, NewControlRotation.Roll);
-
-		GetPawn()->SetActorRotation(NewRotation);
-
-		//UE_LOG(LogTemp, Display, TEXT("Pitch:%f Yaw:%f Roll:%f"), NewControlRotation.Pitch, NewControlRotation.Yaw, NewControlRotation.Roll);
-		//Cont->SetControlRotation(New);
-	}
+	RotateToTarget();
 }
 
 void AMnBAIController::SetupPerceptionSystem()
@@ -75,10 +63,48 @@ void AMnBAIController::SetupPerceptionSystem()
 
 void AMnBAIController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus)
 {
+	if (TargetCharacter) return; //if already Set Target return
+
 	TargetCharacter = Cast<ACharacter>(Actor);
 	if (TargetCharacter)
 	{
 		//GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed());
-		GetBlackboardComponent()->SetValueAsObject("TargetCharacter", TargetCharacter);
+		if (GetBlackboardComponent())
+		{
+			GetBlackboardComponent()->SetValueAsObject("TargetCharacter", TargetCharacter);
+		}
 	}
+}
+
+void AMnBAIController::CheckTargetIsDie()
+{
+	if (AAICharacter* Char = Cast<AAICharacter>(TargetCharacter))
+	{
+		if (Char->IsDie())
+		{
+			TargetCharacter = nullptr;
+			GetBlackboardComponent()->SetValueAsObject("TargetCharacter", TargetCharacter);
+		}
+	}
+}
+
+void AMnBAIController::RotateToTarget()
+{
+
+	if (TargetCharacter == nullptr) return;
+
+	if (GetPawn() == nullptr) return; //when die can't find pawn
+
+	const FVector MyLocation = GetPawn()->GetActorLocation();
+	const FVector TargetLocation = TargetCharacter->GetActorLocation(); //���߿� �÷��̾�� Ÿ������ �ٲ㺸��
+
+	FRotator NewControlRotation = UKismetMathLibrary::MakeRotFromX((TargetLocation - MyLocation).GetSafeNormal());
+	//FRotator New = FRotator(Pawn->GetActorRotation().Pitch, NewControlRotation.Yaw, Pawn->GetActorRotation().Roll);
+	FRotator NewRotation = FRotator(0.f, NewControlRotation.Yaw, NewControlRotation.Roll);
+
+	GetPawn()->SetActorRotation(NewRotation);
+
+	//UE_LOG(LogTemp, Display, TEXT("Pitch:%f Yaw:%f Roll:%f"), NewControlRotation.Pitch, NewControlRotation.Yaw, NewControlRotation.Roll);
+	//Cont->SetControlRotation(New);
+
 }

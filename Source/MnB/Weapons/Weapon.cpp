@@ -110,7 +110,11 @@ void AWeapon::HitDitect()
 	float CapsuleHalfHeight = 100.0f;
 
 	TArray<AActor*> IgnoreActors;
-	IgnoreActors.Add(Owner->GetPawn());
+
+	if (Owner)
+	{
+		IgnoreActors.Add(Owner->GetPawn()); //when die can't find pawn
+	}
 	IgnoreActors.Add(this);
 	
 	//UKismetSystemLibrary::SphereTraceSingleByProfile(GetWorld(), HitStart, HitEnd, 5.f, TEXT("Hitable"), false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green);
@@ -234,6 +238,10 @@ bool AWeapon::ObstacleDitect()
 
 void AWeapon::Unequipped()
 {
+	Owner = nullptr;
+	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	StaticMeshComponent->SetAllPhysicsLinearVelocity(FVector::ZeroVector);
+	StaticMeshComponent->SetPhysicsLinearVelocity(FVector::ZeroVector);
 	StaticMeshComponent->SetSimulatePhysics(true);
 	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 }

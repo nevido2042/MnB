@@ -3,6 +3,8 @@
 
 #include "AI/AICharacter.h"
 #include "Weapons/Weapon.h"
+#include "Components/Health.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AAICharacter::AAICharacter()
@@ -43,6 +45,7 @@ AAICharacter::AAICharacter()
 		}
 	}
 
+	Health = CreateDefaultSubobject<UHealth>(TEXT("Health"));
 }
 
 // Called when the game starts or when spawned
@@ -148,8 +151,49 @@ void AAICharacter::PlayAttack(bool bLeft)
 
 float AAICharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	Health->AddCurrentHP(-Damage);
+
 	StopAnimMontage();
 	GetMesh()->GetAnimInstance()->Montage_Play(DamagedMontage);
-	return 0.0f;
+
+	if (FMath::IsNearlyZero(Health->GetCurrentHP()))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Die"));
+		Die();
+	}
+
+	return Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+}
+
+#include "AI/MnBAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
+void AAICharacter::Die()
+{
+
+	CurWeapon->Unequipped();
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	if (UBlackboardComponent* BB = Cast<AMnBAIController>(GetController())->GetBlackboardComponent())
+	{
+		BB->SetValueAsBool("IsDie", true);
+	}
+
+	UnPossessed();
+	Controller = nullptr;
+	Tree = nullptr;
+
+	bDie = true;
+
+	FTimerHandle Timer;
+	GetWorldTimerManager().SetTimer(Timer, this, &AAICharacter::MyDestroy, 3.0f, false);
+
+	GetMesh()->SetCollisionProfileName("Dead");
+	GetMesh()->SetSimulatePhysics(true);
+}
+
+void AAICharacter::MyDestroy()
+{
+	Destroy(); 
 }
 
