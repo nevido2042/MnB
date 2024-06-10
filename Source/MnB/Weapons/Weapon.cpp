@@ -157,7 +157,10 @@ void AWeapon::HitDitect()
 
 		if (Cast<AWeapon>(HitResult.GetActor()))
 		{
-			Owner->GetCharacter()->StopAnimMontage();
+			if (Owner)
+			{
+				Owner->GetCharacter()->StopAnimMontage();
+			}
 			//MnBCharacter->Blocked();
 		}
 		
@@ -167,7 +170,10 @@ void AWeapon::HitDitect()
 			AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Owner->GetCharacter());
 			if (MnBCharacter)
 			{
-				Owner->GetCharacter()->StopAnimMontage();
+				if (Owner)
+				{
+					Owner->GetCharacter()->StopAnimMontage();
+				}
 				MnBCharacter->Blocked();
 			}
 		}
@@ -223,13 +229,18 @@ bool AWeapon::ObstacleDitect()
 		);
 
 		//test
-		Owner->GetCharacter()->StopAnimMontage();
-		AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Owner->GetCharacter());
-		if (MnBCharacter)
+		if (Owner)
 		{
-			
-			MnBCharacter->Blocked();
+			Owner->GetCharacter()->StopAnimMontage();
+
+			AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Owner->GetCharacter());
+			if (MnBCharacter)
+			{
+
+				MnBCharacter->Blocked();
+			}
 		}
+
 
 	}
 	
