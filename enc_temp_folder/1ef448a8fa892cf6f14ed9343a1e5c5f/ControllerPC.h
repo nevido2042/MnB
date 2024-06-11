@@ -24,7 +24,4 @@ protected:
 
 	UUserWidget* CurrentWidget = nullptr;
 	
-public:
-	UUserWidget* GetCurrentWidget() { return CurrentWidget; }
-
 };

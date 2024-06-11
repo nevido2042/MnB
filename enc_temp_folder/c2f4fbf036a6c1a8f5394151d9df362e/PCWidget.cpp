@@ -7,8 +7,6 @@
 #include "Kismet/GameplayStatics.h"
 #include "Components/ProgressBar.h"
 #include "Components/Health.h"
-#include "MnB/UserWidget/VRInfoWidget.h"
-#include "Components/TextBlock.h"
 
 void UPCWidget::NativeOnInitialized()
 {
@@ -19,11 +17,6 @@ void UPCWidget::NativeOnInitialized()
 	RightImage = Cast<UImage>(GetWidgetFromName(TEXT("ImageRight")));
 
 	UI_HealthBar = Cast<UProgressBar>(GetWidgetFromName(TEXT("HealthBar")));
-
-	UI_InfoPanel = Cast<UImage>(GetWidgetFromName(TEXT("InfoPanel")));
-
-	UI_InfoText = Cast<UTextBlock>(GetWidgetFromName(TEXT("InfoText")));
-
 }
 
 void UPCWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -74,24 +67,4 @@ void UPCWidget::UpdateHealthBar(UHealth* Health)
 	UI_HealthBar->SetPercent(Health->GetCurrentHP() / Health->GetMaxHP());
 	//UI_HealthBar->Percent = Health->GetCurrentHP() / Health->GetMaxHP();
 	//if not use SetPercent Not Running
-}
-
-void UPCWidget::HideInfo(bool b)
-{
-	if (b)
-	{
-		UI_InfoPanel->SetVisibility(ESlateVisibility::Hidden);
-		UI_InfoText->SetVisibility(ESlateVisibility::Hidden);
-	}
-	else
-	{
-		UI_InfoPanel->SetVisibility(ESlateVisibility::Visible);
-		UI_InfoText->SetVisibility(ESlateVisibility::Visible);
-	}
-
-}
-
-void UPCWidget::SetActorInfo(FText Info)
-{
-	UI_InfoText->SetText(Info);
 }

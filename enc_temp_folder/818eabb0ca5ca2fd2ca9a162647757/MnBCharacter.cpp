@@ -93,13 +93,10 @@ void AMnBCharacter::BeginPlay()
 	}
 }
 
-#include "Controller/ControllerPC.h"
-#include "MnB/UserWidget/PCWidget.h"
 void AMnBCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	CameraRaycast();
-	UpdateActorInfo();
 }
 
 void AMnBCharacter::Equip()
@@ -295,29 +292,6 @@ float AMnBCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, A
 	}
 
 	return Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
-}
-
-void AMnBCharacter::UpdateActorInfo()
-{
-	if (AControllerPC* Cont = Cast<AControllerPC>(GetController()))
-	{
-		if (UPCWidget* PCWidget = Cast<UPCWidget>(Cont->GetCurrentWidget()))
-		{
-			if (FocusingActor)
-			{
-				PCWidget->HideInfo(false);
-
-				if (IInteractableActor* InteractableActor = Cast<IInteractableActor>(FocusingActor))
-				{
-					PCWidget->SetActorInfo(InteractableActor->GetInfo());
-				}
-			}
-			else
-			{
-				PCWidget->HideInfo(true);
-			}
-		}
-	}
 }
 
 //////////////////////////////////////////////////////////////////////////

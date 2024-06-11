@@ -24,12 +24,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UProgressBar* UI_HealthBar;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	class UImage* UI_InfoPanel;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	class UTextBlock* UI_InfoText;
-
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
@@ -37,8 +31,4 @@ protected:
 private:
 	void UpdateDirection(class AMnBCharacter* MnBCharacter);
 	void UpdateHealthBar(class UHealth * Health);
-
-public:
-	void HideInfo(bool b);
-	void SetActorInfo(FText Info);
 };
