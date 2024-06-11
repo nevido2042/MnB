@@ -40,6 +40,9 @@ void UBTTask_RamdomAction::ExecuteAction(UBehaviorTreeComponent& OwnerComp)
 	auto* const AICharacter = Cast<AAICharacter>(Cont->GetPawn());
 	auto* const Mesh = AICharacter->GetMesh();
 	UMnBCharacterAnimInstance * Anim = Cast< UMnBCharacterAnimInstance>(Mesh->GetAnimInstance());
+
+	if (Anim == nullptr) return;
+
 	switch (RandomAction)
 	{
 	case UBTTask_RamdomAction::Action::LeftAttack:

@@ -44,16 +44,6 @@ protected:
 	void OnGrabRightCompleted(const FInputActionValue& InputActionValue) { OnGrabCompleted(MotionControllerRight, false, InputActionValue); }
 	void OnGrabCompleted(UMotionControllerComponent* MotionControllerComponent, const bool bLeft, const FInputActionValue& InputActionValue);
 
-	void OnPointLeftStarted(const FInputActionValue& InputActionValue) { OnPointStarted(MotionControllerLeft, true, InputActionValue); }
-	void OnPointRightStarted(const FInputActionValue& InputActionValue) { OnPointStarted(MotionControllerRight, false, InputActionValue); }
-	void OnPointStarted(UMotionControllerComponent* MotionControllerComponent, const bool bLeft, const FInputActionValue& InputActionValue);
-
-	void OnPointLeftCompleted(const FInputActionValue& InputActionValue) { OnPointCompleted(MotionControllerLeft, true, InputActionValue); }
-	void OnPointRightCompleted(const FInputActionValue& InputActionValue) { OnPointCompleted(MotionControllerRight, false, InputActionValue); }
-	void OnPointCompleted(UMotionControllerComponent* MotionControllerComponent, const bool bLeft, const FInputActionValue& InputActionValue);
-
-
-
 private:
 	class UCameraComponent* VRCamera = nullptr;
 

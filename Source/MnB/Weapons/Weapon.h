@@ -48,7 +48,10 @@ protected:
 
 	virtual void Interact(AActor* InActor) override;
 
+	UFUNCTION()
+	void SetWeaponHitable();
 
+	FTimerHandle Timer;
 
 public:
 	class UCapsuleComponent* GetGuardCollider() { return GuardCollider; }

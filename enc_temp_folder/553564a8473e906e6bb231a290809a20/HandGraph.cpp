@@ -27,18 +27,6 @@ UVRHandsInputDataConfig::UVRHandsInputDataConfig()
 		check(Asset.Object);
 		IA_Grab_Right = Asset.Object;
 	}
-	{
-		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
-		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/HandsInput/IA_Point_Left_Input.IA_Point_Left_Input'") };
-		check(Asset.Object);
-		IA_Point_Left = Asset.Object;
-	}
-	{
-		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
-		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/HandsInput/IA_Point_Right_Input.IA_Point_Right_Input'") };
-		check(Asset.Object);
-		IA_Point_Right = Asset.Object;
-	}
 }
 
 UVRHandsAnimationInputDataConfig::UVRHandsAnimationInputDataConfig()

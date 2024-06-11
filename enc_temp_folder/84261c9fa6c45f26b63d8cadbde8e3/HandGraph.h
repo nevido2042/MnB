@@ -49,10 +49,10 @@ public:
 	UInputAction* IA_Grab_Left = nullptr;
 	UInputAction* IA_Grab_Right = nullptr;
 
-	UInputAction* IA_Point_Left = nullptr;
+	/*UInputAction* IA_Point_Left = nullptr;
 	UInputAction* IA_Point_Right = nullptr;
 
-	/*UInputAction* IA_IndexCurl_Left = nullptr;
+	UInputAction* IA_IndexCurl_Left = nullptr;
 	UInputAction* IA_IndexCurl_Right = nullptr;
 
 	UInputAction* IA_Thumb_Left = nullptr;

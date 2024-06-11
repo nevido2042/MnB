@@ -52,13 +52,24 @@ void AWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//HitDitect();
+	if (Owner == nullptr) return;
+
+	if (Cast<AVRCharacter>(Owner->GetPawn()))
+	{
+		HitDitect();
+	}
 }
 
 void AWeapon::Interact(AActor* InActor)
 {
 	UE_LOG(LogTemp, Warning, TEXT(__FUNCTION__));
 	Equipped();
+}
+
+void AWeapon::SetWeaponHitable()
+{
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("SetWeaponHitable"));
+	bApplyDamage = false;
 }
 
 void AWeapon::Equipped()
@@ -95,6 +106,17 @@ void AWeapon::Equipped(AController* Controller)
 		StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
 		Owner = Controller;
+	}
+
+
+
+	if (Owner == nullptr) return;
+
+	if (Cast<AVRCharacter>(Owner->GetPawn()))
+	{
+		GetWorldTimerManager().SetTimer(Timer, this, &AWeapon::SetWeaponHitable, 1.f, true); //왜 반복 안하는가`
+
+		GuardCollider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	}
 }
 
@@ -256,4 +278,6 @@ void AWeapon::Unequipped()
 	StaticMeshComponent->SetPhysicsLinearVelocity(FVector::ZeroVector);
 	StaticMeshComponent->SetSimulatePhysics(true);
 	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	GetWorldTimerManager().ClearTimer(Timer);
 }

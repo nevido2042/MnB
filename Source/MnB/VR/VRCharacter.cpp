@@ -14,6 +14,7 @@
 #include "InputActionValue.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Weapons/Weapon.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AVRCharacter::AVRCharacter()
@@ -69,6 +70,8 @@ AVRCharacter::AVRCharacter()
 			LeftHand->SetAnimClass(Finder.Class);
 		}
 	}
+
+	GetCapsuleComponent()->SetCapsuleHalfHeight(10.f);
 
 }	 
 
@@ -130,6 +133,12 @@ void AVRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 			EnhancedInputComponent->BindAction(VRHandsInputDataConfig->IA_Grab_Right, ETriggerEvent::Started, this, &ThisClass::OnGrabRightStarted);
 			EnhancedInputComponent->BindAction(VRHandsInputDataConfig->IA_Grab_Right, ETriggerEvent::Completed, this, &ThisClass::OnGrabRightCompleted);
+
+			EnhancedInputComponent->BindAction(VRHandsInputDataConfig->IA_Point_Left, ETriggerEvent::Started, this, &ThisClass::OnPointLeftStarted);
+			EnhancedInputComponent->BindAction(VRHandsInputDataConfig->IA_Point_Left, ETriggerEvent::Completed, this, &ThisClass::OnPointLeftCompleted);
+
+			EnhancedInputComponent->BindAction(VRHandsInputDataConfig->IA_Point_Right, ETriggerEvent::Started, this, &ThisClass::OnPointRightStarted);
+			EnhancedInputComponent->BindAction(VRHandsInputDataConfig->IA_Point_Right, ETriggerEvent::Completed, this, &ThisClass::OnPointRightCompleted);
 		}
 
 	}
@@ -191,6 +200,26 @@ void AVRCharacter::OnGrabCompleted(UMotionControllerComponent* MotionControllerC
 
 	UnEquip(bLeft); //이거 왜 실행 안하고 넘어감?
 
+
+}
+
+void AVRCharacter::OnPointStarted(UMotionControllerComponent* MotionControllerComponent, const bool bLeft, const FInputActionValue& InputActionValue)
+{
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("OnPointStarted"));
+
+	if (bLeft)
+	{
+		Interact(LeftFocusingActor);
+	}
+	else
+	{
+		Interact(RightFocusingActor);
+	}
+}
+
+void AVRCharacter::OnPointCompleted(UMotionControllerComponent* MotionControllerComponent, const bool bLeft, const FInputActionValue& InputActionValue)
+{
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("OnPointCompleted"));
 
 }
 
@@ -313,6 +342,8 @@ void AVRCharacter::Equip(AActor * HandFoucsing, bool bLeft)
 		WeaponMesh->AttachToComponent(Hand, FAttachmentTransformRules::KeepRelativeTransform, SocketName);
 
 		WeaponMesh->SetRelativeLocation(FVector::Zero());
+
+		HandFoucsingWeapon->Equipped(GetController());
 
 		if (bLeft)
 		{
