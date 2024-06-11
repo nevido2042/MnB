@@ -53,7 +53,7 @@ protected:
 
 	FTimerHandle Timer;
 
-	TArray<UParticleSystem*> Particles; //blood 0 , default 1
+	TArray<UParticleSystem*> Particles;
 	UParticleSystemComponent* ParticleComponent = nullptr;
 
 public:

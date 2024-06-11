@@ -180,7 +180,7 @@ void AMnBCharacter::CameraRaycast()
 			LineStart,
 			HitResult.Location,
 			FColor::Red,
-			false, 0.5f, 0, 1.0f
+			false, 5.0f, 0, 1.0f
 		);
 
 		
@@ -190,7 +190,7 @@ void AMnBCharacter::CameraRaycast()
 			12.0f,
 			24,
 			FColor::Red,
-			false, 0.5f
+			false, 5.0f
 		);
 	}
 	else
