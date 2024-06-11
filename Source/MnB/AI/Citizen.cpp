@@ -2,7 +2,7 @@
 
 
 #include "AI/Citizen.h"
-#include "MnB/AI/MnBAIController.h"
+#include "MnB/AI/CitizenController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 ACitizen::ACitizen()
@@ -25,6 +25,13 @@ ACitizen::ACitizen()
 	GetMesh()->SetSkeletalMesh(Mesh);
 	GetMesh()->AddRelativeLocation(FVector(0, 0, -90.f));
 	GetMesh()->SetAnimClass(AnimClass);
+	FTransform NewTransform = FTransform
+	(
+		FRotator(0.0, -90.0, 0.0),
+		FVector(0.0, 0.0, -90.0),
+		FVector(1.0, 1.0, 1.0)
+	);
+	GetMesh()->SetRelativeTransform(NewTransform);
 
 
 	{
@@ -35,11 +42,13 @@ ACitizen::ACitizen()
 		}
 	}
 
-	AIControllerClass = AMnBAIController::StaticClass();
+	AIControllerClass = ACitizenController::StaticClass();
 
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	GetCharacterMovement()->MaxWalkSpeed = 200.f;
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
 void ACitizen::BeginPlay()
