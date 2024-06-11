@@ -140,7 +140,6 @@ void AVRCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 		{
 			const UBasicInputDataConfig* BasicInputDataConfig = GetDefault<UBasicInputDataConfig>();
 			EnhancedInputComponent->BindAction(BasicInputDataConfig->Move, ETriggerEvent::Triggered, this, &ThisClass::OnMove);
-			EnhancedInputComponent->BindAction(BasicInputDataConfig->Look, ETriggerEvent::Triggered, this, &ThisClass::OnLook);
 		}
 
 		{
@@ -177,26 +176,15 @@ void AVRCharacter::OnMove(const FInputActionValue& InputActionValue)
 
 	if (!FMath::IsNearlyZero(ActionValue.Y))
 	{
-		const FVector ForwardVector = GetActorForwardVector();//UKismetMathLibrary::GetForwardVector(CameraYawRotator);
+		const FVector ForwardVector = UKismetMathLibrary::GetForwardVector(CameraYawRotator);
 		AddMovementInput(ForwardVector, ActionValue.Y);
 	}
 
 	if (!FMath::IsNearlyZero(ActionValue.X))
 	{
-		const FVector RightVector = GetActorRightVector(); //UKismetMathLibrary::GetRightVector(CameraYawRotator);
+		const FVector RightVector = UKismetMathLibrary::GetRightVector(CameraYawRotator);
 		AddMovementInput(RightVector, ActionValue.X);
 	}
-}
-
-void AVRCharacter::OnLook(const FInputActionValue& InputActionValue)
-{
-	const float ActionValue = InputActionValue.Get<float>();
-
-	//FVector NewVector = FVector(0.f, ActionValue, 0.f);
-	//NewVector.ToOrientationQuat();
-
-	AddControllerYawInput(ActionValue);
-	//AddActorLocalRotation(NewVector.ToOrientationQuat());
 }
 
 void AVRCharacter::OnGrabStarted(UMotionControllerComponent* MotionControllerComponent, const bool bLeft, const FInputActionValue& InputActionValue)

@@ -19,7 +19,7 @@ UBasicInputDataConfig::UBasicInputDataConfig()
 	}
 	{
 		static ConstructorHelpers::FObjectFinder<UInputAction> Asset
-		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/BaseInput/IA_VRLook.IA_VRLook'") };
+		{ TEXT("/Script/EnhancedInput.InputAction'/Game/MyAssets/VR/Input/BaseInput/IA_LookMouse.IA_LookMouse'") };
 		check(Asset.Succeeded());
 		Look = Asset.Object;
 	}

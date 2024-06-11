@@ -35,8 +35,6 @@ public:
 
 protected:
 	void OnMove(const FInputActionValue& InputActionValue);
-	void OnLook(const FInputActionValue& InputActionValue);
-
 
 	void OnGrabLeftStarted(const FInputActionValue& InputActionValue) { OnGrabStarted(MotionControllerLeft, true, InputActionValue); }
 	void OnGrabRightStarted(const FInputActionValue& InputActionValue) { OnGrabStarted(MotionControllerRight,false, InputActionValue); }
