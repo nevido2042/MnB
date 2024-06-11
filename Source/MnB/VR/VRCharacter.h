@@ -65,11 +65,11 @@ private:
 
 	void HandRayCast(UVRHandSkeletalMeshComponent * Hand);
 
-	//UFUNCTION()
+protected:
 	void UnEquip(bool bLeft);
 
 	void Interact(AActor* HandFoucsing);
 
 public:
-	void Equip(AActor* HandFoucsing);
+	void Equip(AActor* HandFoucsing, bool bLeft);
 };

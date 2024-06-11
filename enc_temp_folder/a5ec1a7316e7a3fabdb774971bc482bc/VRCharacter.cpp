@@ -265,7 +265,6 @@ void AVRCharacter::UnEquip(bool bLeft)
 	
 	UStaticMeshComponent* WeaponMesh = EquippedWeapon->GetComponentByClass<UStaticMeshComponent>();
 	WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-	WeaponMesh->DetachFromParent();
 	
 	EquippedWeapon->Unequipped();
 	EquippedWeapon = nullptr;
@@ -277,6 +276,8 @@ void AVRCharacter::Equip(AActor * HandFoucsing, bool bLeft)
 
 	const USkeletalMeshSocket* WeaponSocket = nullptr;
 	UVRHandSkeletalMeshComponent* Hand = nullptr;
+	//UMotionControllerComponent* MotionController = nullptr;
+	AWeapon* EquippedWeapon = nullptr;
 	FRotator RotateOffset = FRotator::ZeroRotator;
 	FName SocketName = TEXT("");
 
@@ -285,6 +286,8 @@ void AVRCharacter::Equip(AActor * HandFoucsing, bool bLeft)
 		SocketName = TEXT("WeaponSocketLeft");
 		WeaponSocket = LeftHand->GetSocketByName(SocketName);
 		Hand = LeftHand;
+		//MotionController = MotionControllerLeft;
+		EquippedWeapon = LeftEquippedWeapon;
 		RotateOffset = FRotator(-90, 180, 180);
 
 	}
@@ -293,34 +296,45 @@ void AVRCharacter::Equip(AActor * HandFoucsing, bool bLeft)
 		SocketName = TEXT("WeaponSocketRight");
 		WeaponSocket = RightHand->GetSocketByName(SocketName);
 		Hand = RightHand;
+		//MotionController = MotionControllerRight;
+		EquippedWeapon = RightEquippedWeapon;
 		RotateOffset = FRotator(90, 0, 180);
 	}
 	
 	if (WeaponSocket)
 	{
 	
-		AWeapon * HandFoucsingWeapon = Cast<AWeapon>(HandFoucsing);
+		if (EquippedWeapon != nullptr)
+		{
+			//EquippedWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+			UStaticMeshComponent* WeaponMesh = EquippedWeapon->GetComponentByClass<UStaticMeshComponent>();
+			WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 
-		if (HandFoucsingWeapon == nullptr) return;
+			EquippedWeapon->Unequipped();// 왼/ 오른 구분해야함
+		}
+
+		EquippedWeapon = Cast<AWeapon>(HandFoucsing);
+
+		if (EquippedWeapon == nullptr) return;
 
 		UStaticMeshComponent* WeaponMesh = HandFoucsing->GetComponentByClass<UStaticMeshComponent>();
 
 		
-		WeaponMesh->SetRelativeRotation(HandFoucsingWeapon->GetWeaponGrip()->GetRelativeRotation());
-
-		USkeletalMeshSocket const*  temp = Hand->GetSocketByName(SocketName);
+		WeaponMesh->SetRelativeRotation(EquippedWeapon->GetWeaponGrip()->GetRelativeRotation());
 
 		WeaponMesh->AttachToComponent(Hand, FAttachmentTransformRules::KeepRelativeTransform, SocketName);
+
+		//왼손이면 웨폰소켓의 로테이션을 180해줘야함
 
 		WeaponMesh->SetRelativeLocation(FVector::Zero());
 
 		if (bLeft)
 		{
-			LeftEquippedWeapon = HandFoucsingWeapon;
+			LeftEquippedWeapon = EquippedWeapon;
 		}
 		else
 		{
-			RightEquippedWeapon = HandFoucsingWeapon;
+			RightEquippedWeapon = EquippedWeapon;
 		}
 	}
 }

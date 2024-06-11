@@ -36,6 +36,7 @@ AWeapon::AWeapon()
 	GuardCollider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("GuardCollider"));
 	GuardCollider->SetupAttachment(StaticMeshComponent);
 	GuardCollider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GuardCollider->SetCollisionProfileName(TEXT("Gaurd"));
 
 }
 
