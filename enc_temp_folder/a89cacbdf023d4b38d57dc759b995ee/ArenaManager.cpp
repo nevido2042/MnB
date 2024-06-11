@@ -54,7 +54,6 @@ void AArenaManager::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	SetInfo(FText::FromString("Arena Manager\nEnter Arena"));
 }
 
 // Called every frame

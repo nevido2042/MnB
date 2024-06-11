@@ -16,8 +16,7 @@ public:
     virtual void Interact(AActor* InActor = nullptr) = 0;
 
 protected:
-    	FText Info = FText::FromString("Hello World");
+    	FText Info = FText::FromString("Pick Up Weapon");
 public:
     	FText& GetInfo() { return Info; }
-        void SetInfo(FText InInfo) { Info = InInfo; }
 };

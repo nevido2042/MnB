@@ -72,4 +72,9 @@ public:
 	bool ObstacleDitect();
 	
 	void SetIsApplyDamage(bool value) { bApplyDamage = value; }
+
+//private:
+//	FText Info = FText::FromString("Pick Up Weapon");
+//public:
+//	FText* GetInfo() { return &Info; }
 };

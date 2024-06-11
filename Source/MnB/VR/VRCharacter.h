@@ -52,8 +52,6 @@ protected:
 	void OnPointRightCompleted(const FInputActionValue& InputActionValue) { OnPointCompleted(MotionControllerRight, false, InputActionValue); }
 	void OnPointCompleted(UMotionControllerComponent* MotionControllerComponent, const bool bLeft, const FInputActionValue& InputActionValue);
 
-
-
 private:
 	class UCameraComponent* VRCamera = nullptr;
 
@@ -82,4 +80,14 @@ protected:
 
 public:
 	void Equip(AActor* HandFoucsing, bool bLeft);
+
+protected:
+	
+	TSubclassOf<UUserWidget> Widget = nullptr;
+	class UWidgetComponent* WidgetComponentRight = nullptr;
+	class UWidgetComponent* WidgetComponentLeft = nullptr;
+
+private:
+	void SetHandWidget();
+	void UpdateWidget(class UWidgetComponent* InWidget, AActor* InFocusingActor);
 };

@@ -15,6 +15,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Weapons/Weapon.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values
 AVRCharacter::AVRCharacter()
@@ -73,6 +74,21 @@ AVRCharacter::AVRCharacter()
 
 	GetCapsuleComponent()->SetCapsuleHalfHeight(10.f);
 
+	{
+		ConstructorHelpers::FClassFinder<UUserWidget>Finder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/VR/UI/BP_Info.BP_Info_C'"));
+		ensure(Finder.Class);
+		if (Finder.Class)
+		{
+			Widget = Finder.Class;
+		}
+	}
+
+	//CurWidget = CreateWidget(GetWorld(), Widget);
+	WidgetComponentRight = CreateDefaultSubobject< UWidgetComponent>(TEXT("WidgetRight"));
+	WidgetComponentRight->SetupAttachment(MotionControllerRight);
+
+	WidgetComponentLeft = CreateDefaultSubobject< UWidgetComponent>(TEXT("WidgetLeft"));
+	WidgetComponentLeft->SetupAttachment(MotionControllerLeft);
 }	 
 
 // Called when the game starts or when spawned
@@ -96,6 +112,9 @@ void AVRCharacter::BeginPlay()
 			Subsystem->AddMappingContext(VRHandsAnimationInputDataConfig->InputMappingContext, 1);
 		}
 	}
+
+	SetHandWidget();
+
 }
 
 // Called every frame
@@ -106,6 +125,8 @@ void AVRCharacter::Tick(float DeltaTime)
 	HandRayCast(LeftHand);
 	HandRayCast(RightHand);
 
+	UpdateWidget(WidgetComponentRight, RightFocusingActor);
+	UpdateWidget(WidgetComponentLeft, LeftFocusingActor);
 }
 
 // Called to bind functionality to input
@@ -210,10 +231,12 @@ void AVRCharacter::OnPointStarted(UMotionControllerComponent* MotionControllerCo
 	if (bLeft)
 	{
 		Interact(LeftFocusingActor);
+		Equip(LeftFocusingActor, bLeft); //없앨까 말까
 	}
 	else
 	{
 		Interact(RightFocusingActor);
+		Equip(RightFocusingActor, bLeft);//없앨까 말까
 	}
 }
 
@@ -250,7 +273,7 @@ void AVRCharacter::HandRayCast(UVRHandSkeletalMeshComponent* Hand)
 			LineStart,
 			HitResult.Location,
 			FColor::Red,
-			false, 5.0f, 0, 1.0f
+			false, 0.2f, 0, 1.0f
 		);
 
 
@@ -260,7 +283,7 @@ void AVRCharacter::HandRayCast(UVRHandSkeletalMeshComponent* Hand)
 			12.0f,
 			24,
 			FColor::Red,
-			false, 5.0f
+			false, 0.2f
 		);
 	}
 	else
@@ -353,6 +376,42 @@ void AVRCharacter::Equip(AActor * HandFoucsing, bool bLeft)
 		{
 			RightEquippedWeapon = HandFoucsingWeapon;
 		}
+	}
+}
+
+void AVRCharacter::SetHandWidget()
+{
+	WidgetComponentRight->SetWidgetClass(Widget);
+	WidgetComponentLeft->SetWidgetClass(Widget);
+
+	FTransform Transform = FTransform(
+		FRotator(58.7, 180.0, 0.0),
+		FVector(30.0, 0.0, -1.8),
+		FVector(0.2, 0.2, 0.2));
+
+	WidgetComponentRight->SetRelativeTransform(Transform);
+	WidgetComponentLeft->SetRelativeTransform(Transform);
+}
+
+#include "MnB/UserWidget/VRInfoWidget.h"
+#include "MnB/Interface/InteractableActor.h"
+void AVRCharacter::UpdateWidget(class UWidgetComponent* InWidget, AActor* InFocusingActor)
+{
+	if (InFocusingActor)
+	{
+		InWidget->SetHiddenInGame(false);
+
+		if (UVRInfoWidget* InfoWidget = Cast<UVRInfoWidget>(InWidget->GetWidget()))
+		{
+			if (IInteractableActor* InteractableActor = Cast<IInteractableActor>(InFocusingActor))
+			{
+				InfoWidget->SetActorInfoText(InteractableActor->GetInfo());
+			}
+		}
+	}
+	else
+	{
+		InWidget->SetHiddenInGame(true);
 	}
 }
 

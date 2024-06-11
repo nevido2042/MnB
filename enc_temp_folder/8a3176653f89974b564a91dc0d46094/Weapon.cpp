@@ -46,8 +46,17 @@ AWeapon::AWeapon()
 			Particles.Add(Finder.Object);
 		}
 	}
+	{
+		ConstructorHelpers::FObjectFinder<UParticleSystem>Finder(TEXT("	/ Script / Engine.ParticleSystem'/Game/Realistic_Starter_VFX_Pack_Vol2/Particles/Hit/P_Default.P_Default'"));
+		ensure(Finder.Object);
+		if (Finder.Object)
+		{
+			Particles.Add(Finder.Object);
+		}
+	}
 	ParticleComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle"));
-	ParticleComponent->SetTemplate(Particles[0]); //blood
+	ParticleComponent->SetTemplate(Particles[0]); //blood 0
+	ParticleComponent->SetAutoActivate(false);
 }
 
 // Called when the game starts or when spawned
@@ -193,8 +202,14 @@ void AWeapon::HitDitect()
 			if (Owner)
 			{
 				Owner->GetCharacter()->StopAnimMontage();
+
+				ParticleComponent->SetTemplate(Particles[1]);
+				ParticleComponent->SetWorldLocation(HitResult.ImpactPoint);
+				ParticleComponent->ActivateSystem();
+
+				return;
 			}
-			//MnBCharacter->Blocked();
+			//MnBCharacter->Blocked();	
 		}
 		
 
@@ -206,10 +221,21 @@ void AWeapon::HitDitect()
 				if (Owner)
 				{
 					Owner->GetCharacter()->StopAnimMontage();
+					MnBCharacter->Blocked();
+
+					ParticleComponent->SetTemplate(Particles[1]);
+					ParticleComponent->SetWorldLocation(HitResult.ImpactPoint);
+					ParticleComponent->ActivateSystem();
+
+					return;
 				}
-				MnBCharacter->Blocked();
+
 			}
 		}
+
+		ParticleComponent->SetTemplate(Particles[0]);
+		ParticleComponent->SetWorldLocation(HitResult.ImpactPoint);
+		ParticleComponent->ActivateSystem();
 
 		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 1, Owner, this, nullptr);
 
@@ -274,6 +300,9 @@ bool AWeapon::ObstacleDitect()
 			}
 		}
 
+		ParticleComponent->SetTemplate(Particles[1]);
+		ParticleComponent->SetWorldLocation(HitResult.ImpactPoint);
+		ParticleComponent->ActivateSystem();
 
 	}
 	
