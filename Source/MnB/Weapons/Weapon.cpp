@@ -312,6 +312,8 @@ bool AWeapon::ObstacleDitect()
 
 void AWeapon::Unequipped()
 {
+	if (Owner == nullptr) return;
+
 	Owner = nullptr;
 	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	StaticMeshComponent->SetAllPhysicsLinearVelocity(FVector::ZeroVector);

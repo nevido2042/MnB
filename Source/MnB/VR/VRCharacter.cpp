@@ -329,7 +329,7 @@ void AVRCharacter::UnEquip(bool bLeft)
 	
 	UStaticMeshComponent* WeaponMesh = EquippedWeapon->GetComponentByClass<UStaticMeshComponent>();
 	WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-	WeaponMesh->DetachFromParent();
+	//WeaponMesh->DetachFromParent();
 	
 	EquippedWeapon->Unequipped();
 	EquippedWeapon = nullptr;

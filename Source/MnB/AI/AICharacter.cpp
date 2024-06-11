@@ -172,8 +172,10 @@ float AAICharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 #include "BehaviorTree/BlackboardComponent.h"
 void AAICharacter::Die()
 {
-
-	CurWeapon->Unequipped();
+	if (CurWeapon)
+	{
+		CurWeapon->Unequipped();
+	}
 
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
