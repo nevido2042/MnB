@@ -49,6 +49,15 @@ ACitizen::ACitizen()
 	GetCharacterMovement()->MaxWalkSpeed = 200.f;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	{
+		ConstructorHelpers::FObjectFinder<UMaterial>Finder(TEXT("/Script/Engine.Material'/Game/MyAssets/Materials/MT_Yellow.MT_Yellow'"));
+		ensure(Finder.Object);
+		if (Finder.Object)
+		{
+			Cloth = Finder.Object;
+		}
+	}
 }
 
 void ACitizen::BeginPlay()
@@ -58,12 +67,19 @@ void ACitizen::BeginPlay()
 	//if (Tree)
 	//{
 	//	GetBehaviorTree();
-	//	// ºí·¢º¸µå ÃÊ±âÈ­
+	//	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
 	//	BlackboardComp->InitializeBlackboard(*Tree->BlackboardAsset);
 
-	//	// Çàµ¿ Æ®¸® ½ÃÀÛ
+	//	// ï¿½àµ¿ Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	//	BehaviorComp->StartTree(*Tree);
 	//}
+}
+
+void ACitizen::OnConstruction(const FTransform& Transform)
+{
+	Super::OnConstruction(Transform);
+
+	GetMesh()->SetMaterial(7, Cloth);
 }
 
 void ACitizen::Tick(float DeltaTime)

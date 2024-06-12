@@ -5,6 +5,8 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
+#include "GeneralProjectSettings.h"
+#include "MnB/Engine/MyEngine.h"
 
 AMnBGameMode::AMnBGameMode()
 {
@@ -49,7 +51,6 @@ AMnBGameMode::AMnBGameMode()
 		}
 
 	}
-
 }
 
 void AMnBGameMode::BeginPlay()
@@ -70,7 +71,21 @@ APlayerController* AMnBGameMode::Login(UPlayer* NewPlayer, ENetRole InRemoteRole
 		DefaultPawnClass = PCPawnClass;
 		PlayerControllerClass = PCPlayerControllerClass;
 	}
-
 	
 	return Super::Login(NewPlayer, InRemoteRole, Portal, Options, UniqueId, ErrorMessage);
 }
+
+//void AMnBGameMode::SetStartInVR(bool bValue)
+//{
+//
+//	// Get the project settings
+//	UGeneralProjectSettings* ProjectSettings = GetMutableDefault<UGeneralProjectSettings>();
+//	if (ProjectSettings)
+//	{
+//		// Change the value
+//		ProjectSettings->bStartInVR = bValue;
+//		// Save the settings
+//		ProjectSettings->SaveConfig(CPF_Config, TEXT("DefaultGame.ini"));
+//	}
+//
+//}

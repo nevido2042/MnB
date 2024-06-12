@@ -20,6 +20,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	virtual void OnConstruction(const FTransform& Transform) override;
+
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -28,5 +30,5 @@ public:
 
 	TSubclassOf<UAnimInstance> AnimClass = nullptr;
 	
-	
+	UMaterial* Cloth = nullptr;
 };

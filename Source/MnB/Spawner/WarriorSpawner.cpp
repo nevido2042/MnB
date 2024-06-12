@@ -51,6 +51,8 @@ void AWarriorSpawner::SpawnRandomPosition()
 {
 	AActor* Actor = GetWorld()->SpawnActor(Warrior);
 
+	if (Actor == nullptr) return;
+
 	int RandomNum = UKismetMathLibrary::RandomInteger(SpawnPositions.Num());
 	FVector WorldPosition = GetActorTransform().TransformPosition(SpawnPositions[RandomNum]);
 

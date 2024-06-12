@@ -1,5 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
+using UnrealBuildBase;
 using UnrealBuildTool;
 using UnrealBuildTool.Rules;
 
@@ -17,7 +18,8 @@ public class MnB : ModuleRules
 			"HeadMountedDisplay",
             "XRBase",
             "AnimGraphRuntime",
-
+			"Settings",
+            "EngineSettings",
         });
 
 		if(Target.Type == TargetType.Editor)
