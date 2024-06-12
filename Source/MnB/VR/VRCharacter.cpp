@@ -16,6 +16,7 @@
 #include "Weapons/Weapon.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
+#include "Components/Health.h"
 
 // Sets default values
 AVRCharacter::AVRCharacter()
@@ -42,6 +43,9 @@ AVRCharacter::AVRCharacter()
 
 	LeftHand = CreateDefaultSubobject<UVRHandSkeletalMeshComponent>(TEXT("LeftHand"));
 	RightHand = CreateDefaultSubobject<UVRHandSkeletalMeshComponent>(TEXT("RightHand"));
+
+	LeftHand->SetCollisionProfileName("Hitable");
+	RightHand->SetCollisionProfileName("Hitable");
 
 	LeftHand->SetupAttachment(MotionControllerLeft);
 	RightHand->SetupAttachment(MotionControllerRight);
@@ -79,7 +83,7 @@ AVRCharacter::AVRCharacter()
 		ensure(Finder.Class);
 		if (Finder.Class)
 		{
-			Widget = Finder.Class;
+			ActorInfoWidget = Finder.Class;
 		}
 	}
 
@@ -89,6 +93,23 @@ AVRCharacter::AVRCharacter()
 
 	WidgetComponentLeft = CreateDefaultSubobject< UWidgetComponent>(TEXT("WidgetLeft"));
 	WidgetComponentLeft->SetupAttachment(MotionControllerLeft);
+
+	Health = CreateDefaultSubobject<UHealth>(TEXT("Health"));
+
+	HitCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("HitCapsule"));
+	HitCapsule->SetupAttachment(GetCapsuleComponent());
+	HitCapsule->SetCollisionProfileName("Hitable");
+
+	{
+		ConstructorHelpers::FClassFinder<UUserWidget>Finder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/VR/UI/BP_HealthBar.BP_HealthBar_C'"));
+		ensure(Finder.Class);
+		if (Finder.Class)
+		{
+			HealthWidget = Finder.Class;
+		}
+	}
+	WidgetComponent = CreateDefaultSubobject< UWidgetComponent>(TEXT("HealthBar"));
+	WidgetComponent->SetupAttachment(RootComponent);
 }	 
 
 // Called when the game starts or when spawned
@@ -114,6 +135,7 @@ void AVRCharacter::BeginPlay()
 	}
 
 	SetHandWidget();
+	//SetHealthWidget();
 
 }
 
@@ -127,6 +149,8 @@ void AVRCharacter::Tick(float DeltaTime)
 
 	UpdateWidget(WidgetComponentRight, RightFocusingActor);
 	UpdateWidget(WidgetComponentLeft, LeftFocusingActor);
+
+	UpdateHealthWidget();
 }
 
 // Called to bind functionality to input
@@ -393,8 +417,8 @@ void AVRCharacter::Equip(AActor * HandFoucsing, bool bLeft)
 
 void AVRCharacter::SetHandWidget()
 {
-	WidgetComponentRight->SetWidgetClass(Widget);
-	WidgetComponentLeft->SetWidgetClass(Widget);
+	WidgetComponentRight->SetWidgetClass(ActorInfoWidget);
+	WidgetComponentLeft->SetWidgetClass(ActorInfoWidget);
 
 	FTransform Transform = FTransform(
 		FRotator(58.7, 180.0, 0.0),
@@ -404,6 +428,18 @@ void AVRCharacter::SetHandWidget()
 	WidgetComponentRight->SetRelativeTransform(Transform);
 	WidgetComponentLeft->SetRelativeTransform(Transform);
 }
+
+//void AVRCharacter::SetHealthWidget()
+//{
+//	WidgetComponent->SetWidgetClass(HealthWidget);
+//
+//	/*FTransform Transform = FTransform(
+//		FRotator(60.0, 180.0, -90.0),
+//		FVector(0.0, 0.0, 0.0),
+//		FVector(0.2, 0.2, 0.2));
+//
+//	WidgetComponent->SetRelativeTransform(Transform);*/
+//}
 
 #include "MnB/UserWidget/VRInfoWidget.h"
 #include "MnB/Interface/InteractableActor.h"
@@ -425,6 +461,46 @@ void AVRCharacter::UpdateWidget(class UWidgetComponent* InWidget, AActor* InFocu
 	{
 		InWidget->SetHiddenInGame(true);
 	}
+}
+
+#include "NPC/ArenaManager.h"
+#include "Kismet/GameplayStatics.h"
+#include "UserWidget/VRHealthWidget.h"
+void AVRCharacter::UpdateHealthWidget()
+{
+	UVRHealthWidget* Widget = Cast<UVRHealthWidget>(WidgetComponent->GetWidget());
+	if (Widget)
+	{
+		Widget->SetHealthBar(Health->GetCurrentHP() / Health->GetMaxHP());
+	}
+}
+
+float AVRCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	Health->AddCurrentHP(-Damage);
+
+	//StopAnimMontage();
+	//GetMesh()->GetAnimInstance()->Montage_Play(DamagedMontage);
+
+	if (FMath::IsNearlyZero(Health->GetCurrentHP()))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Die"));
+
+		TArray<AActor*> OutActors;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AArenaManager::StaticClass(), OutActors);
+
+		if (OutActors[0])
+		{
+			if (AArenaManager* ArenaManager = Cast<AArenaManager>(OutActors[0]))
+			{
+				ArenaManager->RecoveryAndReturn();
+			}
+
+		}
+
+	}
+
+	return Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 }
 
 void AVRCharacter::Interact(AActor* HandFoucsing)

@@ -85,11 +85,27 @@ public:
 
 protected:
 	
-	TSubclassOf<UUserWidget> Widget = nullptr;
+	TSubclassOf<UUserWidget> ActorInfoWidget = nullptr;
 	class UWidgetComponent* WidgetComponentRight = nullptr;
 	class UWidgetComponent* WidgetComponentLeft = nullptr;
+
+	TSubclassOf<UUserWidget> HealthWidget = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	class UWidgetComponent* WidgetComponent = nullptr;
 
 private:
 	void SetHandWidget();
 	void UpdateWidget(class UWidgetComponent* InWidget, AActor* InFocusingActor);
+
+	/*void SetHealthWidget();*/
+	void UpdateHealthWidget();
+
+protected:
+	class UHealth* Health = nullptr;
+
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	UPROPERTY(EditAnyWhere)
+	class UCapsuleComponent* HitCapsule = nullptr;
 };
