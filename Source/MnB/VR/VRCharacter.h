@@ -108,4 +108,14 @@ protected:
 
 	UPROPERTY(EditAnyWhere)
 	class UCapsuleComponent* HitCapsule = nullptr;
+
+protected:
+	UPROPERTY(EditAnyWhere)
+	UChildActorComponent* ChildHorse = nullptr;
+
+private:
+	class AHorse* CurHorse = nullptr;
+
+public:
+	void StartSitOnHorse();
 };

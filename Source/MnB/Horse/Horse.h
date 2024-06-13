@@ -34,4 +34,14 @@ protected:
 
 private:
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+protected:
+	void OnMove(/*const FInputActionValue& InputActionValue*/);
+
+protected:
+	UPROPERTY(EditAnywhere)
+	class UCapsuleComponent* BodyCollsion = nullptr;
+
+public:
+	UCapsuleComponent* GetBodyCollision() { return BodyCollsion; }
 };

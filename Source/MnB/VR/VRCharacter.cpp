@@ -110,6 +110,9 @@ AVRCharacter::AVRCharacter()
 	}
 	WidgetComponent = CreateDefaultSubobject< UWidgetComponent>(TEXT("HealthBar"));
 	WidgetComponent->SetupAttachment(RootComponent);
+
+	ChildHorse = CreateDefaultSubobject<UChildActorComponent>(TEXT("Horse"));
+	ChildHorse->SetupAttachment(RootComponent);
 }	 
 
 // Called when the game starts or when spawned
@@ -136,7 +139,7 @@ void AVRCharacter::BeginPlay()
 
 	SetHandWidget();
 	//SetHealthWidget();
-
+	ChildHorse->SetHiddenInGame(true);
 }
 
 // Called every frame
@@ -196,18 +199,15 @@ void AVRCharacter::OnMove(const FInputActionValue& InputActionValue)
 {
 	const FVector2D ActionValue = InputActionValue.Get<FVector2D>();
 
-	const FRotator CameraRotator = VRCamera->GetRelativeRotation();
-	const FRotator CameraYawRotator = FRotator(0., CameraRotator.Yaw, 0.);
-
 	if (!FMath::IsNearlyZero(ActionValue.Y))
 	{
-		const FVector ForwardVector = GetActorForwardVector();//UKismetMathLibrary::GetForwardVector(CameraYawRotator);
+		const FVector ForwardVector = GetActorForwardVector();
 		AddMovementInput(ForwardVector, ActionValue.Y);
 	}
 
 	if (!FMath::IsNearlyZero(ActionValue.X))
 	{
-		const FVector RightVector = GetActorRightVector(); //UKismetMathLibrary::GetRightVector(CameraYawRotator);
+		const FVector RightVector = GetActorRightVector();
 		AddMovementInput(RightVector, ActionValue.X);
 	}
 }
@@ -216,11 +216,7 @@ void AVRCharacter::OnLook(const FInputActionValue& InputActionValue)
 {
 	const float ActionValue = InputActionValue.Get<float>();
 
-	//FVector NewVector = FVector(0.f, ActionValue, 0.f);
-	//NewVector.ToOrientationQuat();
-
 	AddControllerYawInput(ActionValue);
-	//AddActorLocalRotation(NewVector.ToOrientationQuat());
 }
 
 void AVRCharacter::OnGrabStarted(UMotionControllerComponent* MotionControllerComponent, const bool bLeft, const FInputActionValue& InputActionValue)
@@ -503,14 +499,38 @@ float AVRCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 	return Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 }
 
+void AVRCharacter::StartSitOnHorse()
+{
+	//anim
+}
+
+#include "Horse/Horse.h"
 void AVRCharacter::Interact(AActor* HandFoucsing)
 {
 	if (HandFoucsing == nullptr) { return; }
 
 	IInteractableActor* InteractableActor = Cast<IInteractableActor>(HandFoucsing);
-	if (InteractableActor)
+	if (InteractableActor == nullptr) return;
+	
+	InteractableActor->Interact(this);
+
+	if (AHorse* Horse = Cast<AHorse>(HandFoucsing))
 	{
-		InteractableActor->Interact(this);
+		CurHorse = Horse;
+		GetCapsuleComponent()->SetCapsuleHalfHeight(220.f);
+		GetCapsuleComponent()->SetCapsuleRadius(100.f);
+
+		SetActorLocationAndRotation(CurHorse->GetActorLocation(), CurHorse->GetActorRotation());
+
+		ChildHorse->SetHiddenInGame(false);
+		CurHorse->SetActorHiddenInGame(true);
+
+		if (AHorse* RidingHorse = Cast<AHorse>(ChildHorse->GetChildActor()))
+		{
+			RidingHorse->GetCapsuleComponent()->SetCollisionProfileName("Horse");
+			RidingHorse->GetBodyCollision()->SetCollisionProfileName("Horse");
+		}
 	}
+
 }
 
