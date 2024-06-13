@@ -5,6 +5,8 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
+#include "GeneralProjectSettings.h"
+#include "MnB/Engine/MyEngine.h"
 
 AMnBGameMode::AMnBGameMode()
 {
