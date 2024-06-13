@@ -3,6 +3,7 @@
 
 #include "UserWidget/InventoryUserWidget.h"
 #include "Components/UniformGridPanel.h"
+#include "UserWidget/ItemSlotUserWidget.h"
 
 void UInventoryUserWidget::NativeConstruct()
 {
@@ -10,7 +11,7 @@ void UInventoryUserWidget::NativeConstruct()
 
 	LoadClass<UClass>(ANY_PACKAGE, TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/UI/BP_ItemSlot.BP_ItemSlot_C'"),
 		nullptr, LOAD_None, nullptr);
-	UClass* ItemSlot = FindObject<UClass>(ANY_PACKAGE, TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/UI/BP_ItemSlot.BP_ItemSlot_C'"));
+	UClass* ItemSlotAsset = FindObject<UClass>(ANY_PACKAGE, TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/UI/BP_ItemSlot.BP_ItemSlot_C'"));
 
 	Panel = Cast<UUniformGridPanel>(GetWidgetFromName(TEXT("InventoryPanel")));
 
@@ -18,10 +19,12 @@ void UInventoryUserWidget::NativeConstruct()
 	{
 		for (int k = 0; k < 10; k++)
 		{
-			UUserWidget* Widget = Cast<UUserWidget>(CreateWidget(this, ItemSlot));
-			ensure(Widget);
+			UItemSlotUserWidget* ItemSlot = Cast<UItemSlotUserWidget>(CreateWidget(this, ItemSlotAsset));
+			ensure(ItemSlot);
 
-			Panel->AddChildToUniformGrid(Widget, i, k);
+			ItemSlot->SetImage(nullptr);
+
+			Panel->AddChildToUniformGrid(ItemSlot, i, k);
 
 		}
 	}
