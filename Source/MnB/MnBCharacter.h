@@ -160,5 +160,13 @@ private:
 
 private:
 	void UpdateActorInfo(); 
+
+protected:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> InventoryWidgetAsset = nullptr;
+
+	UUserWidget* InventoryWidget = nullptr;
+
+	void CreateInventoryWidget();
 };
 
