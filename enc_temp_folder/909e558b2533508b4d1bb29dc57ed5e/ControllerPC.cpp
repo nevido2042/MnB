@@ -29,6 +29,4 @@ void AControllerPC::OnPossess(APawn* aPawn)
 
 	UInventorySubsystem* InventorySubsystem = ULocalPlayer::GetSubsystem<UInventorySubsystem>(GetLocalPlayer());
 	InventorySubsystem->MakeInventory();
-
-	InventorySubsystem->AddItem("Chest");
 }

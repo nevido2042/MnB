@@ -27,4 +27,7 @@ protected:
 public:
 	UUserWidget* GetCurrentWidget() { return CurrentWidget; }
 
+protected:
+	virtual void OnPossess(APawn* aPawn) override;
+
 };

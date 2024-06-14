@@ -4,6 +4,10 @@
 #include "UserWidget/InventoryUserWidget.h"
 #include "Components/UniformGridPanel.h"
 #include "UserWidget/ItemSlotUserWidget.h"
+#include "Subsystem/InventorySubsystem.h"
+#include "ItemSlotUserWidget.h"
+#include "Components/Image.h"
+#include "Data/Item/ItemData.h"
 
 void UInventoryUserWidget::NativeConstruct()
 {
@@ -15,12 +19,25 @@ void UInventoryUserWidget::NativeConstruct()
 
 	Panel = Cast<UUniformGridPanel>(GetWidgetFromName(TEXT("InventoryPanel")));
 
-	for (int i = 0; i < 5; i++)
+
+	ULocalPlayer* LocalPlayer = GetOwningLocalPlayer();
+	InventorySubsystem = ULocalPlayer::GetSubsystem<UInventorySubsystem>(LocalPlayer);
+	InvenSize = InventorySubsystem->Inventory.Num();
+	Slots.Reserve(InvenSize);
+
+	int32 Col = 5;
+	int32 Row = InvenSize / Col;
+
+	for (int i = 0; i < Row; i++)
 	{
-		for (int k = 0; k < 10; k++)
+		for (int k = 0; k < Col; k++)
 		{
 			UItemSlotUserWidget* ItemSlot = Cast<UItemSlotUserWidget>(CreateWidget(this, ItemSlotAsset));
 			ensure(ItemSlot);
+
+			ItemSlot->ItemIndex = k + i * Col;
+
+			Slots.Add(ItemSlot);
 
 			ItemSlot->SetImage(nullptr);
 
@@ -28,6 +45,8 @@ void UInventoryUserWidget::NativeConstruct()
 
 		}
 	}
+
+	FlushInven();
 }
 
 void UInventoryUserWidget::NativeOnInitialized()
@@ -36,4 +55,19 @@ void UInventoryUserWidget::NativeOnInitialized()
 
 	//LeftImage = Cast<UImage>(GetWidgetFromName(TEXT("ImageLeft")));
 
+}
+
+void UInventoryUserWidget::FlushInven()
+{
+	for (int32 i = 0; i < InvenSize; ++i)
+	{
+		if (InventorySubsystem->Inventory[i] == nullptr)
+		{
+			Slots[i]->Image->SetBrushFromTexture(nullptr, false);
+			continue;
+		}
+
+		UTexture2D* Texture = InventorySubsystem->Inventory[i]->ItemImage;
+		Slots[i]->Image->SetBrushFromTexture(Texture, false);
+	}
 }

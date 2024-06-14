@@ -5,6 +5,11 @@
 #include "Data/Item/ItemData.h"
 #include "DataSubsystem.h"
 
+void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
+{
+	Super::Initialize(Collection);
+}
+
 void UInventorySubsystem::MakeInventory()
 {
 	DataSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UDataSubsystem>();

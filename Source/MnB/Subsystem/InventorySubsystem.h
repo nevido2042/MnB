@@ -17,7 +17,12 @@ class MNB_API UInventorySubsystem : public ULocalPlayerSubsystem
 {
 	GENERATED_BODY()
 
+	friend class UInventoryUserWidget;
+	friend class AControllerPC;
 protected:
+	/** Implement this for initialization of instances of the system */
+	virtual void Initialize(FSubsystemCollectionBase& Collection);
+
 	void MakeInventory();
 	void ClearInventory();
 
@@ -25,7 +30,7 @@ protected:
 	bool MoveItemToInventory(TSharedPtr<FItemData>& InItem);
 
 protected:
-	const uint32 MaxInvenSize = 60;
+	const uint32 MaxInvenSize = 20;
 	TArray<TSharedPtr<FItemData>> Inventory;
 
 	class UDataSubsystem* DataSubsystem;
