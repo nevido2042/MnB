@@ -29,8 +29,6 @@ protected:
 	bool AddItem(const FName& InKey);
 	bool MoveItemToInventory(TSharedPtr<FItemData>& InItem);
 
-	void UseItem(class UInventoryUserWidget* Widget, uint32 InIndex);
-
 protected:
 	const uint32 MaxInvenSize = 20;
 	TArray<TSharedPtr<FItemData>> Inventory;

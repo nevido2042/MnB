@@ -59,35 +59,3 @@ bool UInventorySubsystem::MoveItemToInventory(TSharedPtr<FItemData>& InItem)
 
 	return bAdded;
 }
-
-void UInventorySubsystem::UseItem(UInventoryUserWidget* Widget, uint32 InIndex)
-{
-	//TWeakPtr<FItemData> ItemData = Inventory[InIndex];
-	//if (!ItemData.IsValid()) { return; }
-
-	//ARPGPlayerController* RPGPlayerController = Cast<ARPGPlayerController>(Widget->GetOwningPlayer());
-	//ensure(RPGPlayerController);
-
-	//UItem* Item = ItemData.Pin()->ItemFunctionClass->GetDefaultObject<UItem>();
-
-	//// interface로 번들 가능한 것에 대해서만 처리해도 되겠네요
-	//UItem_Weapon* ItemWeapon = Cast<UItem_Weapon>(Item);
-	//if (ItemWeapon)
-	//{
-	//	Weapon = Inventory[InIndex];
-	//	Item->UseItem(RPGPlayerController, *ItemData.Pin());
-	//	Inventory[InIndex] = nullptr;
-	//}
-	//else
-	//{
-	//	Item->UseItem(RPGPlayerController, *ItemData.Pin());
-	//	--ItemData.Pin()->CurrentBundleCount;
-	//}
-
-	//if (ItemData.Pin()->CurrentBundleCount == 0)
-	//{
-	//	Inventory[InIndex] = nullptr;
-	//}
-
-	//Widget->FlushInven();
-}

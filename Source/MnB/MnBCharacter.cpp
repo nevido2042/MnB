@@ -248,13 +248,25 @@ void AMnBCharacter::InventoryOnOFF()
 {
 	if (UInventoryUserWidget* InvenWidget = Cast<AControllerPC>(GetController())->GetInventoryWidget())
 	{
+		APlayerController* PC = Cast<APlayerController>(GetController());
+
 		if (InvenWidget->GetVisibility() == ESlateVisibility::Visible)
 		{
 			InvenWidget->SetVisibility(ESlateVisibility::Hidden);
+
+			PC->SetShowMouseCursor(false);
+
+			FInputModeGameOnly Mode;
+			PC->SetInputMode(Mode);
 		}
 		else
 		{
 			InvenWidget->SetVisibility(ESlateVisibility::Visible);
+
+			PC->SetShowMouseCursor(true);
+
+			FInputModeGameAndUI Mode;
+			PC->SetInputMode(Mode);
 		}
 	}
 }
