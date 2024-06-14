@@ -30,4 +30,15 @@ public:
 protected:
 	virtual void OnPossess(APawn* aPawn) override;
 
+public:
+	void PickUpItem(const FName& InKey);
+
+protected:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UInventoryUserWidget> InventoryWidgetAsset = nullptr;
+
+	UInventoryUserWidget* InventoryWidget = nullptr;
+
+	void CreateInventoryWidget();
+
 };

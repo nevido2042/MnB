@@ -34,6 +34,7 @@ protected:
 
 	virtual void NativeConstruct() override;
 	virtual void NativeOnInitialized() override;
+public:
 	void FlushInven();
 	//virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	

@@ -91,8 +91,6 @@ void AMnBCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
-
-	CreateInventoryWidget();
 }
 
 #include "Controller/ControllerPC.h"
@@ -320,12 +318,6 @@ void AMnBCharacter::UpdateActorInfo()
 			}
 		}
 	}
-}
-
-void AMnBCharacter::CreateInventoryWidget()
-{
-	InventoryWidget = CreateWidget(GetWorld(), InventoryWidgetAsset);
-	InventoryWidget->AddToViewport();
 }
 
 //////////////////////////////////////////////////////////////////////////
