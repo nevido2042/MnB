@@ -12,7 +12,6 @@ void UItemSlotUserWidget::NativeConstruct()
 	Button->OnHovered.AddDynamic(this, &ThisClass::OnItemBtnHovered);
 	Button->OnClicked.AddDynamic(this, &ThisClass::OnItemBtnClicked);
 	Button->OnReleased.AddDynamic(this, &ThisClass::OnItemBtnReleased);
-	Button->OnPressed.AddDynamic(this, &ThisClass::OnItemBtnPressed);
 }
 
 void UItemSlotUserWidget::NativeOnInitialized()
@@ -43,14 +42,6 @@ void UItemSlotUserWidget::OnItemBtnReleased()
 	if (ItemBtnReleased.IsBound())
 	{
 		ItemBtnReleased.Execute(this);
-	}
-}
-
-void UItemSlotUserWidget::OnItemBtnPressed()
-{
-	if (ItemBtnPressed.IsBound())
-	{
-		ItemBtnPressed.Execute(this);
 	}
 }
 

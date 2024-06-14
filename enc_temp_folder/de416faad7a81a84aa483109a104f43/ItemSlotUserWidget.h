@@ -35,8 +35,6 @@ protected:
 	void OnItemBtnClicked();
 	UFUNCTION()
 	void OnItemBtnReleased();
-	UFUNCTION()
-	void OnItemBtnPressed();
 
 public:
 	void SetImage(UTexture2D* InImage);
@@ -44,5 +42,4 @@ public:
 	FOnInvenButtonEvent ItemBtnHovered;
 	FOnInvenButtonEvent ItemBtnClicked;
 	FOnInvenButtonEvent ItemBtnReleased;
-	FOnInvenButtonEvent ItemBtnPressed;
 };

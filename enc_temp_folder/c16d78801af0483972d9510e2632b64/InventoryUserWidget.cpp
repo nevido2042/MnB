@@ -38,33 +38,18 @@ void UInventoryUserWidget::NativeConstruct()
 			ItemSlot->ItemBtnHovered.BindLambda([this](UItemSlotUserWidget* InSlot) 
 				{
 					LastHoveredIndex = InSlot->ItemIndex;
-					UE_LOG(LogTemp, Warning, TEXT("Hovered %d"), LastHoveredIndex);
-
-					if (bHoldItem)
-					{
-						TSharedPtr<FItemData> Temp = InventorySubsystem->Inventory[PressedIndex];
-						InventorySubsystem->Inventory[PressedIndex] = InventorySubsystem->Inventory[LastHoveredIndex];
-						InventorySubsystem->Inventory[LastHoveredIndex] = Temp;
-
-						bHoldItem = false;
-						FlushInven();
-					}
 				});
 
-			ItemSlot->ItemBtnPressed.BindLambda([this](UItemSlotUserWidget* InSlot)
+			ItemSlot->ItemBtnClicked.BindLambda([this](UItemSlotUserWidget* InSlot)
 				{
-					PressedIndex = InSlot->ItemIndex;
-					UE_LOG(LogTemp, Warning, TEXT("Pressed %d"), PressedIndex);
-
-					bHoldItem = true;
+					ClickedIndex = InSlot->ItemIndex;
 				});
 
 			ItemSlot->ItemBtnReleased.BindLambda([this](UItemSlotUserWidget* InSlot) 
 				{
-					UE_LOG(LogTemp, Warning, TEXT("Released %d"), InSlot->ItemIndex);
-
-					/*InventorySubsystem->Inventory[10] = InventorySubsystem->Inventory[0];*/
-					//FlushInven();
+					/*Slots[LastHoveredIndex]->ItemIndex = ClickedIndex;
+					Slots[ClickedIndex]->ItemIndex = LastHoveredIndex;*/
+					FlushInven();
 				});
 
 			ItemSlot->ItemIndex = k + i * Col;

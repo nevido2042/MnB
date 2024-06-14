@@ -29,9 +29,7 @@ protected:
 
 	int32 LastHoveredIndex = -1;
 
-	int32 PressedIndex = -1;
-
-	bool bHoldItem = false;
+	int32 ClickedIndex = -1;
 	
 	UPROPERTY()
 	TArray<class UItemSlotUserWidget*> Slots;
