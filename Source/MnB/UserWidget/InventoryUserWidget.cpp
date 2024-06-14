@@ -19,6 +19,9 @@ void UInventoryUserWidget::NativeConstruct()
 
 	Panel = Cast<UUniformGridPanel>(GetWidgetFromName(TEXT("InventoryPanel")));
 
+	ChestSlot = Cast<UItemSlotUserWidget>(GetWidgetFromName(TEXT("UI_ChestSlot")));
+	ChestSlot->SetImage(nullptr);
+
 
 	ULocalPlayer* LocalPlayer = GetOwningLocalPlayer();
 	InventorySubsystem = ULocalPlayer::GetSubsystem<UInventorySubsystem>(LocalPlayer);
@@ -35,37 +38,7 @@ void UInventoryUserWidget::NativeConstruct()
 			UItemSlotUserWidget* ItemSlot = Cast<UItemSlotUserWidget>(CreateWidget(this, ItemSlotAsset));
 			ensure(ItemSlot);
 
-			ItemSlot->ItemBtnHovered.BindLambda([this](UItemSlotUserWidget* InSlot) 
-				{
-					LastHoveredIndex = InSlot->ItemIndex;
-					UE_LOG(LogTemp, Warning, TEXT("Hovered %d"), LastHoveredIndex);
-
-					if (bHoldItem)
-					{
-						TSharedPtr<FItemData> Temp = InventorySubsystem->Inventory[PressedIndex];
-						InventorySubsystem->Inventory[PressedIndex] = InventorySubsystem->Inventory[LastHoveredIndex];
-						InventorySubsystem->Inventory[LastHoveredIndex] = Temp;
-
-						bHoldItem = false;
-						FlushInven();
-					}
-				});
-
-			ItemSlot->ItemBtnPressed.BindLambda([this](UItemSlotUserWidget* InSlot)
-				{
-					PressedIndex = InSlot->ItemIndex;
-					UE_LOG(LogTemp, Warning, TEXT("Pressed %d"), PressedIndex);
-
-					bHoldItem = true;
-				});
-
-			ItemSlot->ItemBtnReleased.BindLambda([this](UItemSlotUserWidget* InSlot) 
-				{
-					UE_LOG(LogTemp, Warning, TEXT("Released %d"), InSlot->ItemIndex);
-
-					/*InventorySubsystem->Inventory[10] = InventorySubsystem->Inventory[0];*/
-					//FlushInven();
-				});
+			BindEvent(ItemSlot);
 
 			ItemSlot->ItemIndex = k + i * Col;
 
@@ -85,6 +58,7 @@ void UInventoryUserWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
+	SetVisibility(ESlateVisibility::Hidden);
 	//LeftImage = Cast<UImage>(GetWidgetFromName(TEXT("ImageLeft")));
 
 }
@@ -102,4 +76,48 @@ void UInventoryUserWidget::FlushInven()
 		UTexture2D* Texture = InventorySubsystem->Inventory[i]->ItemImage;
 		Slots[i]->Image->SetBrushFromTexture(Texture, false);
 	}
+}
+
+void UInventoryUserWidget::BindEvent(UItemSlotUserWidget* ItemSlot)
+{
+	ItemSlot->ItemBtnHovered.BindLambda([this](UItemSlotUserWidget* InSlot)
+		{
+			LastHoveredIndex = InSlot->ItemIndex;
+
+			UE_LOG(LogTemp, Warning, TEXT("Hovered %d"), LastHoveredIndex);
+
+			if (bHoldItem)
+			{
+				TSharedPtr<FItemData> Temp = InventorySubsystem->Inventory[PressedIndex];
+				InventorySubsystem->Inventory[PressedIndex] = InventorySubsystem->Inventory[LastHoveredIndex];
+				InventorySubsystem->Inventory[LastHoveredIndex] = Temp;
+
+				bHoldItem = false;
+				FlushInven();
+			}
+		});
+
+	ItemSlot->ItemBtnPressed.BindLambda([this](UItemSlotUserWidget* InSlot)
+		{
+			PressedIndex = InSlot->ItemIndex;
+			UE_LOG(LogTemp, Warning, TEXT("Pressed %d"), PressedIndex);
+
+			bHoldItem = true;
+		});
+
+	//test
+	ItemSlot->ItemBtnClicked.BindLambda([this](UItemSlotUserWidget* InSlot)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Clicked %d"), InSlot->ItemIndex);
+			bHoldItem = false;
+
+			if (InventorySubsystem->Inventory[InSlot->ItemIndex] == nullptr) return;
+
+			//InventorySubsystem->Inventory[InSlot->ItemIndex]->UseItem();
+			ChestSlot->SetImage(InventorySubsystem->Inventory[InSlot->ItemIndex]->ItemImage);
+
+
+			InventorySubsystem->Inventory[InSlot->ItemIndex] = nullptr;
+			FlushInven();
+		});
 }

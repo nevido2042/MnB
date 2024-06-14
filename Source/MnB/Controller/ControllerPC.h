@@ -33,6 +33,8 @@ protected:
 public:
 	void PickUpItem(const FName& InKey);
 
+	class UInventoryUserWidget* GetInventoryWidget() { return InventoryWidget; }
+
 protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UInventoryUserWidget> InventoryWidgetAsset = nullptr;

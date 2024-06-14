@@ -80,6 +80,10 @@ class AMnBCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* GuardAction;
 
+	/** Inventory Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InventoryAction;
+
 public:
 	AMnBCharacter();
 	
@@ -146,6 +150,7 @@ protected:
 	void RecoverBlockedState();
 	void Guard();
 	void GuardEnd();
+	void InventoryOnOFF();
 
 public:
 	void Blocked();

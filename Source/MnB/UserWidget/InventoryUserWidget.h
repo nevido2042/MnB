@@ -9,6 +9,8 @@
 /**
  * 
  */
+//class UItemSlotUserWidget
+
 UCLASS()
 class MNB_API UInventoryUserWidget : public UUserWidget
 {
@@ -23,6 +25,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UUniformGridPanel* Panel = nullptr;
 
+	class UItemSlotUserWidget* ChestSlot = nullptr;
+
+
+
 	UInventorySubsystem* InventorySubsystem;
 
 	int32 InvenSize = 0;
@@ -34,7 +40,7 @@ protected:
 	bool bHoldItem = false;
 	
 	UPROPERTY()
-	TArray<class UItemSlotUserWidget*> Slots;
+	TArray<UItemSlotUserWidget*> Slots;
 
 protected:
 
@@ -44,4 +50,6 @@ public:
 	void FlushInven();
 	//virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	
+private:
+	void BindEvent(UItemSlotUserWidget* Slot);
 };

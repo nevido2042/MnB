@@ -20,7 +20,10 @@ void UBTService_IsTargetInMelee::OnBecomeRelevant(UBehaviorTreeComponent& OwnerC
 
 	auto const* const Target = Cont->GetTarget();
 
-	OwnerComp.GetBlackboardComponent()->SetValueAsBool(
-		GetSelectedBlackboardKey(), Cont->GetPawn()->GetDistanceTo(Target) <= MeleeRange);
+	if (Cont->GetPawn())
+	{
+		OwnerComp.GetBlackboardComponent()->SetValueAsBool(
+			GetSelectedBlackboardKey(), Cont->GetPawn()->GetDistanceTo(Target) <= MeleeRange);
+	}
 
 }
