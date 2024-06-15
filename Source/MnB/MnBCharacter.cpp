@@ -20,6 +20,7 @@
 #include "MnB/AnimInstance/MnBCharacterAnimInstance.h"
 #include "Components/Health.h"
 #include "Kismet/GameplayStatics.h"
+#include "Components/AudioComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -76,6 +77,9 @@ AMnBCharacter::AMnBCharacter()
 			DamagedMontage = Finder.Object;
 		}
 	}
+
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+	AudioComponent->SetupAttachment(RootComponent);
 }
 
 void AMnBCharacter::BeginPlay()
@@ -300,6 +304,8 @@ void AMnBCharacter::SetupStimulusSource()
 float AMnBCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Health->AddCurrentHP(-Damage);
+
+	AudioComponent->Play();
 
 	StopAnimMontage();
 	GetMesh()->GetAnimInstance()->Montage_Play(DamagedMontage);

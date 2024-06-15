@@ -64,7 +64,8 @@ void AWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetInfo(FText::FromString("WeaponName\nPick Up Weapon"));
+	//SetInfo(FText::FromString("WeaponName\nPick Up Weapon"));
+	SetInfo(FText::Format(FTextFormat::FromString("{0}\n Pick Up"), WeaponName));
 }
 
 // Called every frame

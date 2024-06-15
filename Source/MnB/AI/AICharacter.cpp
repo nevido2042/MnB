@@ -5,6 +5,7 @@
 #include "Weapons/Weapon.h"
 #include "Components/Health.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/AudioComponent.h"
 
 // Sets default values
 AAICharacter::AAICharacter()
@@ -46,6 +47,9 @@ AAICharacter::AAICharacter()
 	}
 
 	Health = CreateDefaultSubobject<UHealth>(TEXT("Health"));
+
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+	AudioComponent->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -155,6 +159,8 @@ void AAICharacter::PlayAttack(bool bLeft)
 float AAICharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Health->AddCurrentHP(-Damage);
+
+	AudioComponent->Play();
 
 	StopAnimMontage();
 	GetMesh()->GetAnimInstance()->Montage_Play(DamagedMontage);

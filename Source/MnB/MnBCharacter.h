@@ -142,6 +142,9 @@ protected:
 
 	UAnimMontage* DamagedMontage = nullptr;
 
+	UPROPERTY(EditAnywhere)
+	class UAudioComponent* AudioComponent = nullptr;
+
 protected:
 	void ReadyToAttack();
 	void Attack();

@@ -73,6 +73,9 @@ public:
 	
 	void SetIsApplyDamage(bool value) { bApplyDamage = value; }
 
+	UPROPERTY(EditAnywhere)
+	FText WeaponName = FText::FromString("Axe");
+
 //private:
 //	FText Info = FText::FromString("Pick Up Weapon");
 //public:
