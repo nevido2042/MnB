@@ -75,4 +75,8 @@ public:
 
 private:
 	void MyDestroy();
+
+protected:
+	UPROPERTY(EditAnywhere)
+	class UAudioComponent* Audio = nullptr;
 };

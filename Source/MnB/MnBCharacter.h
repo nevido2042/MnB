@@ -160,5 +160,9 @@ private:
 
 private:
 	void UpdateActorInfo(); 
+
+protected:
+	UPROPERTY(EditAnywhere)
+	class UAudioComponent * Audio = nullptr;
 };
 
