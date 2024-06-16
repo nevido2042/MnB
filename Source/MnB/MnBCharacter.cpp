@@ -277,7 +277,7 @@ float AMnBCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, A
 {
 	Health->AddCurrentHP(-Damage);
 
-	Audio->Play();
+	SetRandomSoundAndPlay();
 
 	StopAnimMontage();
 	GetMesh()->GetAnimInstance()->Montage_Play(DamagedMontage);
@@ -324,6 +324,15 @@ void AMnBCharacter::UpdateActorInfo()
 			}
 		}
 	}
+}
+
+#include "Kismet/KismetMathLibrary.h"
+void AMnBCharacter::SetRandomSoundAndPlay()
+{
+	int rand = UKismetMathLibrary::RandomInteger(HitSounds.Num());
+
+	Audio->SetSound(HitSounds[rand]);
+	Audio->Play();
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -246,6 +246,8 @@ void AWeapon::HitDitect()
 		ParticleComponent->SetWorldLocation(HitResult.ImpactPoint);
 		ParticleComponent->ActivateSystem();
 
+		SetRandomSoundAndPlay();
+
 		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 1, Owner, this, nullptr);
 
 		bApplyDamage = true;

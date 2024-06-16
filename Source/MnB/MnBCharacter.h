@@ -164,5 +164,13 @@ private:
 protected:
 	UPROPERTY(EditAnywhere)
 	class UAudioComponent * Audio = nullptr;
+
+	UPROPERTY(EditAnywhere)
+
+	TArray<class USoundBase*> HitSounds;
+
+private:
+	void SetRandomSoundAndPlay();
+
 };
 

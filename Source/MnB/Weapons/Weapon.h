@@ -73,6 +73,16 @@ public:
 	
 	void SetIsApplyDamage(bool value) { bApplyDamage = value; }
 
+protected:
+	UPROPERTY(EditAnywhere)
+	class UAudioComponent* Audio = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	TArray<class USoundBase*> MetalSounds;\
+
+private:
+	void SetRandomSoundAndPlay();
+
 //private:
 //	FText Info = FText::FromString("Pick Up Weapon");
 //public:

@@ -211,8 +211,6 @@ void AAICharacter::MyDestroy()
 
 void AAICharacter::SetRandomSoundAndPlay()
 {
-	if (HitSounds.Num() == 0) return;
-
 	int rand = UKismetMathLibrary::RandomInteger(HitSounds.Num());
 
 	Audio->SetSound(HitSounds[rand]);
