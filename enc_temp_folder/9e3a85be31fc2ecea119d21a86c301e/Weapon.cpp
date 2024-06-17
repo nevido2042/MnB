@@ -184,15 +184,6 @@ void AWeapon::HitDitect()
 			}
 		}
 
-		if (AWeapon* HitWeapon = Cast<AWeapon>(HitResult.GetActor()))
-		{
-			if (HitWeapon->Owner == Owner)
-			{
-				bHit = false;
-				return;
-			}
-		}
-
 		DrawDebugLine(
 			GetWorld(),
 			HitStart,
@@ -211,7 +202,7 @@ void AWeapon::HitDitect()
 			false, 10.0f
 		);
 
-		if (AWeapon* HitWeapon = Cast<AWeapon>(HitResult.GetActor()))
+		if (Cast<AWeapon>(HitResult.GetActor()))
 		{
 			if (Owner)
 			{
@@ -225,29 +216,33 @@ void AWeapon::HitDitect()
 
 				return;
 			}
+			//MnBCharacter->Blocked();	
 		}
 		
 
 		if (AShield* HitShield = Cast<AShield>(HitResult.GetActor()))
 		{
-			AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Owner->GetCharacter());
-			if (MnBCharacter)
+			if (HitShield->Owner != Owner)
 			{
-				if (Owner)
+				AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Owner->GetCharacter());
+				if (MnBCharacter)
 				{
-					Owner->GetCharacter()->StopAnimMontage();
-					MnBCharacter->Blocked();
+					if (Owner)
+					{
+						Owner->GetCharacter()->StopAnimMontage();
+						MnBCharacter->Blocked();
 
-					ParticleComponent->SetTemplate(Particles[1]);
-					ParticleComponent->SetWorldLocation(HitResult.ImpactPoint);
-					ParticleComponent->ActivateSystem();
+						ParticleComponent->SetTemplate(Particles[1]);
+						ParticleComponent->SetWorldLocation(HitResult.ImpactPoint);
+						ParticleComponent->ActivateSystem();
 
-					SetRandomSoundAndPlay();
+						SetRandomSoundAndPlay();
 
-					return;
+						return;
+					}
+
 				}
-
-			}
+			}	
 		}
 
 		ParticleComponent->SetTemplate(Particles[0]);
