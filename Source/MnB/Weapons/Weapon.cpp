@@ -331,6 +331,8 @@ bool AWeapon::ObstacleDitect()
 #include "Kismet/KismetMathLibrary.h"
 void AWeapon::SetRandomSoundAndPlay()
 {
+	if (MetalSounds.Num() == 0) return;
+
 	int rand = UKismetMathLibrary::RandomInteger(MetalSounds.Num());
 
 	Audio->SetSound(MetalSounds[rand]);

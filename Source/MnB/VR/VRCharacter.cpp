@@ -359,6 +359,7 @@ void AVRCharacter::UnEquip(bool bLeft)
 	EquippedWeapon = nullptr;
 }
 
+#include "Weapons/Shield.h"
 void AVRCharacter::Equip(AActor * HandFoucsing, bool bLeft)
 {
 	if (HandFoucsing == nullptr) { return; }
@@ -370,7 +371,15 @@ void AVRCharacter::Equip(AActor * HandFoucsing, bool bLeft)
 
 	if (bLeft)
 	{
-		SocketName = TEXT("WeaponSocketLeft");
+		if (Cast<AShield>(HandFoucsing))
+		{
+			SocketName = TEXT("ShieldSocketLeft");
+		}
+		else
+		{
+			SocketName = TEXT("WeaponSocketLeft");
+		}
+
 		WeaponSocket = LeftHand->GetSocketByName(SocketName);
 		Hand = LeftHand;
 		RotateOffset = FRotator(-90, 180, 180);
@@ -378,7 +387,15 @@ void AVRCharacter::Equip(AActor * HandFoucsing, bool bLeft)
 	}
 	else
 	{
-		SocketName = TEXT("WeaponSocketRight");
+		if (Cast<AShield>(HandFoucsing))
+		{
+			SocketName = TEXT("ShieldSocketRight");
+		}
+		else
+		{
+			SocketName = TEXT("WeaponSocketRight");
+		}
+
 		WeaponSocket = RightHand->GetSocketByName(SocketName);
 		Hand = RightHand;
 		RotateOffset = FRotator(90, 0, 180);

@@ -32,7 +32,4 @@ protected:
 
 	void SpawnRandomPosition();
 
-	UPROPERTY(EditAnywhere)
-	bool bTick = false;
-
 };
