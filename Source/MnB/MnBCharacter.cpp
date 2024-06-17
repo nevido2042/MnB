@@ -106,33 +106,50 @@ void AMnBCharacter::Tick(float DeltaSeconds)
 	UpdateActorInfo();
 }
 
+#include "Weapons/Shield.h"
 void AMnBCharacter::Equip()
 {
-	const USkeletalMeshSocket* WeaponSocket = GetMesh()->GetSocketByName("WeaponSocket");
-	if (WeaponSocket)
-	{
-		if (FocusingActor == nullptr) { return; }
+	if (FocusingActor == nullptr) { return; }
 
+	if (Cast<AShield>(FocusingActor))
+	{
+		if (EquippedShield != nullptr)
+		{
+
+			UStaticMeshComponent* WeaponMesh = EquippedShield->GetComponentByClass<UStaticMeshComponent>();
+			WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+
+			EquippedShield->Unequipped();
+		}
+
+		UStaticMeshComponent* WeaponMesh = FocusingActor->GetComponentByClass<UStaticMeshComponent>();
+
+		WeaponMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform, TEXT("ShieldSocket"));
+		EquippedShield = Cast<AShield>(FocusingActor);
+
+		WeaponMesh->SetRelativeLocation(FVector::Zero());
+		WeaponMesh->SetRelativeRotation(EquippedShield->GetWeaponGrip()->GetRelativeRotation());
+	}
+	else
+	{
 		if (EquippedWeapon != nullptr)
 		{
-			//EquippedWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 			UStaticMeshComponent* WeaponMesh = EquippedWeapon->GetComponentByClass<UStaticMeshComponent>();
 			WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 
 			EquippedWeapon->Unequipped();
 		}
 
+		UStaticMeshComponent* WeaponMesh = FocusingActor->GetComponentByClass<UStaticMeshComponent>();
+
+		WeaponMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform, TEXT("WeaponSocket"));
 		EquippedWeapon = Cast<AWeapon>(FocusingActor);
 
-		UStaticMeshComponent* WeaponMesh = FocusingActor->GetComponentByClass<UStaticMeshComponent>();
-		WeaponMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform, TEXT("WeaponSocket"));
 		WeaponMesh->SetRelativeLocation(FVector::Zero());
-		WeaponMesh->SetRelativeRotation(EquippedWeapon->GetWeaponGrip()->GetRelativeRotation()); //무기별 로테이터 바꿔줘야함
-		//FocusingActor->AttachToComponent(WeaponScene,FAttachmentTransformRules::KeepWorldTransform,)
-
-		/*bool bResult = WeaponSocket->AttachActor(FocusingActor, GetMesh());
-		check(bResult);*/
+		WeaponMesh->SetRelativeRotation(EquippedWeapon->GetWeaponGrip()->GetRelativeRotation());
 	}
+
+
 
 }
 

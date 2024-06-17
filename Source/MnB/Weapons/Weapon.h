@@ -78,7 +78,7 @@ protected:
 	class UAudioComponent* Audio = nullptr;
 
 	UPROPERTY(EditAnywhere)
-	TArray<class USoundBase*> MetalSounds;\
+	TArray<class USoundBase*> MetalSounds;
 
 private:
 	void SetRandomSoundAndPlay();

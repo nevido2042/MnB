@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Weapon.h"
 #include "Shield.generated.h"
 
 UCLASS()
-class MNB_API AShield : public AActor
+class MNB_API AShield : public AWeapon
 {
 	GENERATED_BODY()
 	
@@ -23,8 +24,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-protected:
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* Mesh = nullptr;
 
 };

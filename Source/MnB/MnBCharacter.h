@@ -132,6 +132,8 @@ protected:
 
 	class AWeapon* EquippedWeapon = nullptr;
 
+	class AShield* EquippedShield = nullptr;
+
 	EAttackDirection CurAttackDir = EAttackDirection::AttackNone;
 
 	class UHealth* Health = nullptr;
