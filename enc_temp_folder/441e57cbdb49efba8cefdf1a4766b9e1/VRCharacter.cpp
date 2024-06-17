@@ -139,7 +139,6 @@ void AVRCharacter::BeginPlay()
 
 	SetHandWidget();
 	//SetHealthWidget();
-	GetOffHorse();
 
 }
 
@@ -211,15 +210,8 @@ void AVRCharacter::OnMove(const FInputActionValue& InputActionValue)
 
 	if (!FMath::IsNearlyZero(ActionValue.X))
 	{
-		if (bRiddingHorse)
-		{
-			AddControllerYawInput(ActionValue.X);
-		}
-		else
-		{
-			const FVector RightVector = GetActorRightVector(); //UKismetMathLibrary::GetRightVector(CameraYawRotator);
-			AddMovementInput(RightVector, ActionValue.X);
-		}
+		const FVector RightVector = GetActorRightVector(); //UKismetMathLibrary::GetRightVector(CameraYawRotator);
+		AddMovementInput(RightVector, ActionValue.X);
 	}
 }
 
@@ -531,19 +523,6 @@ float AVRCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 	return Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 }
 
-void AVRCharacter::RideHorse()
-{
-	GetCapsuleComponent()->SetCapsuleHalfHeight(150.f);
-	Horse->SetHiddenInGame(false);
-}
-
-void AVRCharacter::GetOffHorse()
-{
-	GetCapsuleComponent()->SetCapsuleHalfHeight(34.f);
-	Horse->SetHiddenInGame(true);
-}
-
-#include "Horse/Horse.h"
 void AVRCharacter::Interact(AActor* HandFoucsing)
 {
 	if (HandFoucsing == nullptr) { return; }
@@ -552,30 +531,6 @@ void AVRCharacter::Interact(AActor* HandFoucsing)
 	if (InteractableActor)
 	{
 		InteractableActor->Interact(this);
-	}
-
-	if (AHorse* FocusHorse = Cast<AHorse>(HandFoucsing))
-	{
-		if (bRiddingHorse)
-		{
-			GetOffHorse();
-			bRiddingHorse = false;
-
-			CurHorse->SetActorHiddenInGame(false);
-			CurHorse->SetActorLocationAndRotation(GetActorLocation(), GetActorRotation());
-
-		}
-		else
-		{
-			RideHorse();
-			bRiddingHorse = true;
-
-			SetActorLocationAndRotation(FocusHorse->GetActorLocation(), FocusHorse->GetActorRotation());
-
-			CurHorse = FocusHorse;
-
-			CurHorse->SetActorHiddenInGame(true);
-		}
 	}
 }
 

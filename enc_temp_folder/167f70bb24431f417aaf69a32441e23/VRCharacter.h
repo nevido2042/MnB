@@ -111,12 +111,4 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	class UChildActorComponent* Horse = nullptr;
-
-	bool bRiddingHorse = false;
-
-	class AHorse* CurHorse = nullptr;
-
-private:
-	void RideHorse();
-	void GetOffHorse();
 };
