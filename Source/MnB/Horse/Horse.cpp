@@ -19,6 +19,8 @@ AHorse::AHorse()
 void AHorse::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SetInfo(FText::FromString("Horse\nGet On"));
 }
 
 // Called every frame

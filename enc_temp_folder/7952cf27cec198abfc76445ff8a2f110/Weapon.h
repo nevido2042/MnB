@@ -87,7 +87,4 @@ private:
 //	FText Info = FText::FromString("Pick Up Weapon");
 //public:
 //	FText* GetInfo() { return &Info; }
-
-	UPROPERTY(EditAnywhere)
-	FText WeaponName;
 };
