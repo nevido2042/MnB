@@ -119,10 +119,4 @@ protected:
 private:
 	void RideHorse();
 	void GetOffHorse();
-
-private:
-	UPROPERTY(EditAnywhere)
-	float WalkSpped = 200.f;
-	UPROPERTY(EditAnywhere)
-	float HorseSpeed = 600.f;
 };

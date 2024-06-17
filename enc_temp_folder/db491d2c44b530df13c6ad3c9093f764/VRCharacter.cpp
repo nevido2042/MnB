@@ -531,20 +531,16 @@ float AVRCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 	return Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 }
 
-#include "GameFramework/CharacterMovementComponent.h"
 void AVRCharacter::RideHorse()
 {
 	GetCapsuleComponent()->SetCapsuleHalfHeight(150.f);
 	Horse->SetHiddenInGame(false);
-	GetCharacterMovement()->MaxWalkSpeed = HorseSpeed;
 }
 
 void AVRCharacter::GetOffHorse()
 {
 	GetCapsuleComponent()->SetCapsuleHalfHeight(34.f);
 	Horse->SetHiddenInGame(true);
-	GetCharacterMovement()->MaxWalkSpeed = WalkSpped;
-
 }
 
 #include "Horse/Horse.h"

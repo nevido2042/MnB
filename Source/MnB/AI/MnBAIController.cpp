@@ -78,6 +78,8 @@ void AMnBAIController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulu
 
 void AMnBAIController::CheckTargetIsDie()
 {
+	if (IsValid(TargetCharacter) == false) return;
+
 	if (AAICharacter* Char = Cast<AAICharacter>(TargetCharacter))
 	{
 		if (Char->IsDie())
