@@ -43,10 +43,10 @@ float AHorse::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AControl
 {
 	Health->AddCurrentHP(-Damage);
 
-	/*if (FMath::IsNearlyZero(Health->GetCurrentHP()))
+	if (FMath::IsNearlyZero(Health->GetCurrentHP()))
 	{
 		Destroy();
-	}*/
+	}
 
 	return Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 }
