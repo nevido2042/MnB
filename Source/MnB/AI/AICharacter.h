@@ -49,6 +49,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation, meta = (AllowPrivateAccess = "true"))
 	UAnimMontage* Montage;
 
+	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AWeapon> WeaponAsset = nullptr;
 
 	class AWeapon* CurWeapon = nullptr;

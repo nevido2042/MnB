@@ -19,8 +19,10 @@ void UBTService_CalculateDistance::OnBecomeRelevant(UBehaviorTreeComponent& Owne
 	auto const* const Cont = Cast<AMnBAIController>(OwnerComp.GetAIOwner());
 	auto const* const AICharacter = Cast<AAICharacter>(Cont->GetPawn());
 
-	auto const* const Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	auto const* const Target = Cont->GetTarget();
+
+	//auto const* const Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 
 	OwnerComp.GetBlackboardComponent()->SetValueAsBool(
-		GetSelectedBlackboardKey(), AICharacter->GetDistanceTo(Player) <= WantDistacne);
+		GetSelectedBlackboardKey(), AICharacter->GetDistanceTo(Target) <= WantDistacne);
 }
