@@ -38,4 +38,6 @@ protected:
 
 	TSubclassOf<class AAICharacter> RandomWarrior();
 
+	FTimerHandle Timer;
+
 };

@@ -17,4 +17,6 @@ class MNB_API UBTTask_ChaseTarget : public UBTTask_BlackboardBase
 	explicit UBTTask_ChaseTarget(FObjectInitializer const& ObjectInitializer);
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	
+	UPROPERTY(EditAnywhere)
+	float CompleteDistance = 100.f;
 };

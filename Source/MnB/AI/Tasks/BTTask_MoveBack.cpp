@@ -33,7 +33,7 @@ EBTNodeResult::Type UBTTask_MoveBack::ExecuteTask(UBehaviorTreeComponent& OwnerC
 		auto const* const Player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 
 		const FVector MyLocation = Cont->GetPawn()->GetActorLocation();
-		const FVector TargetLocation = Player->GetActorLocation(); //³ªÁß¿¡ ÇÃ·¹ÀÌ¾î¸»°í Å¸°ÙÀ¸·Î ¹Ù²ãº¸ÀÚ
+		const FVector TargetLocation = Cont->GetTarget()->GetActorLocation();//ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¸»ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ãº¸ï¿½ï¿½
 
 		FVector Direction = (MyLocation - TargetLocation).GetSafeNormal();
 

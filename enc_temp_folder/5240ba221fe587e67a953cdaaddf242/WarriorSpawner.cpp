@@ -30,8 +30,6 @@ void AWarriorSpawner::BeginPlay()
 	Super::BeginPlay();
 	
 	//SpawnRandomPosition();
-
-	GetWorldTimerManager().SetTimer(Timer, this, &AWarriorSpawner::SpawnRandomPosition, 5.f, true);
 }
 
 // Called every frame
@@ -46,7 +44,7 @@ void AWarriorSpawner::Tick(float DeltaTime)
 	//{
 	//	SpawnRandomPosition();
 	//}
-
+	GetWorldTimerManager().SetTimer(Timer, this, &AWarriorSpawner::SpawnRandomPosition, 5.f, true);
 }
 
 void AWarriorSpawner::SpawnRandomPosition()

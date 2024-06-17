@@ -19,7 +19,7 @@ EBTNodeResult::Type UBTTask_ChaseTarget::ExecuteTask(UBehaviorTreeComponent& Own
 
 		// move to palyer location
 		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(Cont, PlayerLocation);
-		Cont->MoveToLocation(TargetLocation, 100.f); //wantDistace �� �Ȱ��� ������Ѵ�
+		Cont->MoveToLocation(TargetLocation, CompleteDistance); //wantDistace �� �Ȱ��� ������Ѵ�
 
 		//finish with succes
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
