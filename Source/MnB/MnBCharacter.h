@@ -120,7 +120,7 @@ public:
 	void Equip();
 
 protected:
-	bool bReadyToAttack = false;
+	//bool bReadyToAttack = false;
 	bool bReadyToRightAttack = false;
 	bool bReadyToLeftAttack = false;
 

@@ -104,21 +104,6 @@ void AMnBCharacter::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	CameraRaycast();
 	UpdateActorInfo();
-
-	if (bReadyToAttack)
-	{
-		bReadyToLeftAttack = false;
-		bReadyToRightAttack = false;
-
-		if (LookAxisVector.X < 0)
-		{
-			bReadyToLeftAttack = true;
-		}
-		else
-		{
-			bReadyToRightAttack = true;
-		}
-	}
 }
 
 #include "Weapons/Shield.h"
@@ -170,26 +155,42 @@ void AMnBCharacter::Equip()
 
 void AMnBCharacter::ReadyToAttack()
 {
-	bReadyToAttack = true;
+	//bReadyToAttack = true;
+
+	bReadyToLeftAttack = false;
+	bReadyToRightAttack = false;
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance->IsAnyMontagePlaying()) { return; }
+
+	if (LookAxisVector.X < 0)
+	{
+		bReadyToLeftAttack = true;
+	}
+	else
+	{
+		bReadyToRightAttack = true;
+	}
 
 }
 
 void AMnBCharacter::Attack()
 {
-	bReadyToAttack = false;
+	//bReadyToAttack = false;
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
 	if (AnimInstance->IsAnyMontagePlaying()) { return; }
 	if (bReadyToRightAttack)
 	{
-		bReadyToRightAttack = false;
 		SetCurrentAttackDirection(EAttackDirection::AttackRight);
 		PlayAnimMontage(AttackRightAnimMontage, 1.5f);
+		bReadyToRightAttack = false;
 	}
 	else if (bReadyToLeftAttack)
 	{
-		bReadyToLeftAttack = false;
 		SetCurrentAttackDirection(EAttackDirection::AttackLeft);
 		PlayAnimMontage(AttackLeftAnimMontage, 1.5f);
+		bReadyToLeftAttack = false;
 	}
 }
 
@@ -407,14 +408,14 @@ void AMnBCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AMnBCharacter::Look);
 
 		// Attacking
-		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Started, this, &AMnBCharacter::ReadyToAttack);
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AMnBCharacter::ReadyToAttack);
 		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &AMnBCharacter::Attack);
 
 		// Interact
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &AMnBCharacter::Interact);
 
 		// Guard
-		EnhancedInputComponent->BindAction(GuardAction, ETriggerEvent::Started, this, &AMnBCharacter::Guard);
+		EnhancedInputComponent->BindAction(GuardAction, ETriggerEvent::Triggered, this, &AMnBCharacter::Guard);
 		EnhancedInputComponent->BindAction(GuardAction, ETriggerEvent::Completed, this, &AMnBCharacter::GuardEnd);
 
 		// Inventory

@@ -61,7 +61,7 @@ AWeapon::AWeapon()
 	ParticleComponent->SetAutoActivate(false);
 
 	Audio = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
-	Audio->SetupAttachment(RootComponent);
+	Audio->SetupAttachment(StaticMeshComponent);
 }
 
 // Called when the game starts or when spawned
@@ -212,7 +212,7 @@ void AWeapon::HitDetect()
 		HitDetectImpl(HitResult);
 	}
 
-	if (bApplyDamage == false)
+	if (bApplyDamage == false && !bHit)
 	{
 		ObstacleDitect();
 	}
@@ -223,21 +223,21 @@ void AWeapon::HitDetectImpl(FHitResult& InHitResult)
 	FVector HitStart = StaticMeshComponent->GetSocketLocation(TEXT("HitStart"));
 	FVector HitEnd = StaticMeshComponent->GetSocketLocation(TEXT("HitEnd"));
 
-	if (ACharacter* Character = Cast<ACharacter>(InHitResult.GetActor()))
+	/*if (ACharacter* Character = Cast<ACharacter>(InHitResult.GetActor()))
 	{
 		if (Character->GetController() == Owner)
 		{
 			return;
 		}
-	}
+	}*/
 
-	if (AWeapon* HitWeapon = Cast<AWeapon>(InHitResult.GetActor()))
+	/*if (AWeapon* HitWeapon = Cast<AWeapon>(InHitResult.GetActor()))
 	{
 		if (HitWeapon->Owner == Owner)
 		{
 			return;
 		}
-	}
+	}*/
 
 	DrawDebugLine(
 		GetWorld(),
@@ -262,15 +262,14 @@ void AWeapon::HitDetectImpl(FHitResult& InHitResult)
 		if (Owner)
 		{
 			Owner->GetCharacter()->StopAnimMontage();
-
-			ParticleComponent->SetTemplate(Particles[1]);
-			ParticleComponent->SetWorldLocation(InHitResult.ImpactPoint);
-			ParticleComponent->ActivateSystem();
-
-			SetRandomSoundAndPlay();
-
-			return;
 		}
+		ParticleComponent->SetTemplate(Particles[1]);
+		ParticleComponent->SetWorldLocation(InHitResult.ImpactPoint);
+		ParticleComponent->ActivateSystem();
+
+		SetRandomSoundAndPlay();
+
+		return;
 	}
 
 
