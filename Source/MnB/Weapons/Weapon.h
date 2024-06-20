@@ -67,7 +67,9 @@ public:
 
 	void Equipped(AController* Controller);
 
-	void HitDitect();
+	void HitDetectStart();
+	void HitDetect();
+	void HitDetectImpl(FHitResult& InHitResult);
 
 	bool ObstacleDitect();
 	
@@ -90,4 +92,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	FText WeaponName;
+
+	friend class FLastCache;
+	FVector LastHitStart;
+	FVector LastHitEnd;
 };

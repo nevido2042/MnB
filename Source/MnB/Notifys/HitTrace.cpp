@@ -10,13 +10,14 @@ void UHitTrace::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase*
 {
 	AWeapon* Weapon = GetWeaponInfo(MeshComp);
 	if (Weapon == nullptr) { return; }
+	Weapon->HitDetectStart();
 }
 
 void UHitTrace::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
 {
 	AWeapon* Weapon = GetWeaponInfo(MeshComp);
 	if (Weapon == nullptr) { return; }
-	Weapon->HitDitect();
+	Weapon->HitDetect();
 }
 
 void UHitTrace::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)

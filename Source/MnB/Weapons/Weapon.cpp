@@ -10,6 +10,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "VR/VRCharacter.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/AudioComponent.h"
 
@@ -82,7 +83,7 @@ void AWeapon::Tick(float DeltaTime)
 
 	if (Cast<AVRCharacter>(Owner->GetPawn()))
 	{
-		HitDitect();
+		HitDetect();
 	}
 }
 
@@ -146,12 +147,33 @@ void AWeapon::Equipped(AController* Controller)
 	}
 }
 
-void AWeapon::HitDitect()
+void AWeapon::HitDetectStart()
+{
+	LastHitStart = StaticMeshComponent->GetSocketLocation(TEXT("HitStart"));
+	LastHitEnd = StaticMeshComponent->GetSocketLocation(TEXT("HitEnd"));
+}
+
+void AWeapon::HitDetect()
 {
 	if (bApplyDamage) return; //데미지 한번 만 줄수 있게
 
 	FVector HitStart = StaticMeshComponent->GetSocketLocation(TEXT("HitStart"));
 	FVector HitEnd = StaticMeshComponent->GetSocketLocation(TEXT("HitEnd"));
+
+	struct FLastCache
+	{
+		FLastCache(AWeapon* InWeapon, 
+			const FVector& InStart, const FVector& InEnd) 
+			: Weapon(InWeapon), Start(InStart), End(InEnd) {}
+
+		~FLastCache() 
+		{
+			Weapon->LastHitStart = Start;
+			Weapon->LastHitEnd = End;
+		}
+		AWeapon* Weapon = nullptr;
+		FVector Start, End;
+	}; FLastCache LastCache(this, HitStart, HitEnd);
 
 	FHitResult HitResult;
 	//ĸ�� �õ� ��
@@ -173,99 +195,114 @@ void AWeapon::HitDitect()
 	//DrawDebugCylinder(GetWorld(), HitStart, HitEnd, 5.f, 1, FColor::Green,false, 2.f);
 	//DrawDebugLine(GetWorld(), HitStart, HitEnd, FColor::Green, false, 2.f);
 	bool bHit = UKismetSystemLibrary::SphereTraceSingle(GetWorld(), HitStart, HitEnd, 5.f, TraceTypeQuery4, false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green, FLinearColor::Red, 0.5f);
+	if (!bHit)
+	{
+		const FVector CenterStart = (LastHitStart + LastHitEnd) / 2.0;
+		const FVector CenterEnd = (HitStart + HitEnd) / 2.0;
+		FVector Dir = (HitEnd - HitStart);
+		Dir.Normalize();
+
+		double Distance = UKismetMathLibrary::Vector_Distance(HitStart, HitEnd) / 2.0;
+		bHit = UKismetSystemLibrary::BoxTraceSingle(GetWorld(), CenterStart, CenterEnd, 
+			FVector(Distance, 5.f, 5.f), Dir.Rotation(), TraceTypeQuery4, false, IgnoreActors, EDrawDebugTrace::ForDuration, HitResult, true, FLinearColor::Green, FLinearColor::Red, 0.5f);
+	}
 
 	if (bHit)
 	{
-
-		if (ACharacter* Character = Cast<ACharacter>(HitResult.GetActor()))
-		{
-			if (Character->GetController() == Owner)
-			{
-				bHit = false;
-				return;
-			}
-		}
-
-		if (AWeapon* HitWeapon = Cast<AWeapon>(HitResult.GetActor()))
-		{
-			if (HitWeapon->Owner == Owner)
-			{
-				bHit = false;
-				return;
-			}
-		}
-
-		DrawDebugLine(
-			GetWorld(),
-			HitStart,
-			HitResult.Location,
-			FColor::Red,
-			false, 10.0f, 0, 1.0f
-		);
-
-
-		DrawDebugSphere(
-			GetWorld(),
-			HitResult.Location,
-			2.0f,
-			24,
-			FColor::Red,
-			false, 10.0f
-		);
-
-		if (AWeapon* HitWeapon = Cast<AWeapon>(HitResult.GetActor()))
-		{
-			if (Owner)
-			{
-				Owner->GetCharacter()->StopAnimMontage();
-
-				ParticleComponent->SetTemplate(Particles[1]);
-				ParticleComponent->SetWorldLocation(HitResult.ImpactPoint);
-				ParticleComponent->ActivateSystem();
-
-				SetRandomSoundAndPlay();
-
-				return;
-			}
-		}
-		
-
-		if (AShield* HitShield = Cast<AShield>(HitResult.GetActor()))
-		{
-			AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Owner->GetCharacter());
-			if (MnBCharacter)
-			{
-				if (Owner)
-				{
-					Owner->GetCharacter()->StopAnimMontage();
-					MnBCharacter->Blocked();
-
-					ParticleComponent->SetTemplate(Particles[1]);
-					ParticleComponent->SetWorldLocation(HitResult.ImpactPoint);
-					ParticleComponent->ActivateSystem();
-
-					SetRandomSoundAndPlay();
-
-					return;
-				}
-
-			}
-		}
-
-		ParticleComponent->SetTemplate(Particles[0]);
-		ParticleComponent->SetWorldLocation(HitResult.ImpactPoint);
-		ParticleComponent->ActivateSystem();
-
-		UGameplayStatics::ApplyDamage(HitResult.GetActor(), 1, Owner, this, nullptr);
-
-		bApplyDamage = true;
-
+		HitDetectImpl(HitResult);
 	}
 
 	if (bApplyDamage == false)
 	{
 		ObstacleDitect();
 	}
+}
+
+void AWeapon::HitDetectImpl(FHitResult& InHitResult)
+{
+	FVector HitStart = StaticMeshComponent->GetSocketLocation(TEXT("HitStart"));
+	FVector HitEnd = StaticMeshComponent->GetSocketLocation(TEXT("HitEnd"));
+
+	if (ACharacter* Character = Cast<ACharacter>(InHitResult.GetActor()))
+	{
+		if (Character->GetController() == Owner)
+		{
+			return;
+		}
+	}
+
+	if (AWeapon* HitWeapon = Cast<AWeapon>(InHitResult.GetActor()))
+	{
+		if (HitWeapon->Owner == Owner)
+		{
+			return;
+		}
+	}
+
+	DrawDebugLine(
+		GetWorld(),
+		HitStart,
+		InHitResult.Location,
+		FColor::Red,
+		false, 10.0f, 0, 1.0f
+	);
+
+
+	DrawDebugSphere(
+		GetWorld(),
+		InHitResult.Location,
+		2.0f,
+		24,
+		FColor::Red,
+		false, 10.0f
+	);
+
+	if (AWeapon* HitWeapon = Cast<AWeapon>(InHitResult.GetActor()))
+	{
+		if (Owner)
+		{
+			Owner->GetCharacter()->StopAnimMontage();
+
+			ParticleComponent->SetTemplate(Particles[1]);
+			ParticleComponent->SetWorldLocation(InHitResult.ImpactPoint);
+			ParticleComponent->ActivateSystem();
+
+			SetRandomSoundAndPlay();
+
+			return;
+		}
+	}
+
+
+	if (AShield* HitShield = Cast<AShield>(InHitResult.GetActor()))
+	{
+		AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Owner->GetCharacter());
+		if (MnBCharacter)
+		{
+			if (Owner)
+			{
+				Owner->GetCharacter()->StopAnimMontage();
+				MnBCharacter->Blocked();
+
+				ParticleComponent->SetTemplate(Particles[1]);
+				ParticleComponent->SetWorldLocation(InHitResult.ImpactPoint);
+				ParticleComponent->ActivateSystem();
+
+				SetRandomSoundAndPlay();
+
+				return;
+			}
+
+		}
+	}
+
+	ParticleComponent->SetTemplate(Particles[0]);
+	ParticleComponent->SetWorldLocation(InHitResult.ImpactPoint);
+	ParticleComponent->ActivateSystem();
+
+	UGameplayStatics::ApplyDamage(InHitResult.GetActor(), 1, Owner, this, nullptr);
+
+	bApplyDamage = true;
 }
 
 bool AWeapon::ObstacleDitect()

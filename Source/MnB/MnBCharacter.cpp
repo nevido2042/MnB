@@ -104,6 +104,21 @@ void AMnBCharacter::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	CameraRaycast();
 	UpdateActorInfo();
+
+	if (bReadyToAttack)
+	{
+		bReadyToLeftAttack = false;
+		bReadyToRightAttack = false;
+
+		if (LookAxisVector.X < 0)
+		{
+			bReadyToLeftAttack = true;
+		}
+		else
+		{
+			bReadyToRightAttack = true;
+		}
+	}
 }
 
 #include "Weapons/Shield.h"
@@ -155,33 +170,26 @@ void AMnBCharacter::Equip()
 
 void AMnBCharacter::ReadyToAttack()
 {
-	bReadyToLeftAttack = false;
-	bReadyToRightAttack = false;
-
-	if (LookAxisVector.X < 0)
-	{
-		bReadyToLeftAttack = true;
-	}
-	else
-	{
-		bReadyToRightAttack = true;
-	}
+	bReadyToAttack = true;
 
 }
 
 void AMnBCharacter::Attack()
 {
+	bReadyToAttack = false;
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance->IsAnyMontagePlaying()) { return; }
 	if (bReadyToRightAttack)
 	{
 		bReadyToRightAttack = false;
 		SetCurrentAttackDirection(EAttackDirection::AttackRight);
-		PlayAnimMontage(AttackRightAnimMontage);
+		PlayAnimMontage(AttackRightAnimMontage, 1.5f);
 	}
 	else if (bReadyToLeftAttack)
 	{
 		bReadyToLeftAttack = false;
 		SetCurrentAttackDirection(EAttackDirection::AttackLeft);
-		PlayAnimMontage(AttackLeftAnimMontage);
+		PlayAnimMontage(AttackLeftAnimMontage, 1.5f);
 	}
 }
 
