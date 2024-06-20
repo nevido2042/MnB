@@ -272,6 +272,34 @@ void AMnBCharacter::GuardEnd()
 	EquippedWeapon->GetGuardCollider()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
+#include "UserWidget/InventoryUserWidget.h"
+void AMnBCharacter::InventoryOnOFF()
+{
+	if (UInventoryUserWidget* InvenWidget = Cast<AControllerPC>(GetController())->GetInventoryWidget())
+	{
+		APlayerController* PC = Cast<APlayerController>(GetController());
+
+		if (InvenWidget->GetVisibility() == ESlateVisibility::Visible)
+		{
+			InvenWidget->SetVisibility(ESlateVisibility::Hidden);
+
+			PC->SetShowMouseCursor(false);
+
+			FInputModeGameOnly Mode;
+			PC->SetInputMode(Mode);
+		}
+		else
+		{
+			InvenWidget->SetVisibility(ESlateVisibility::Visible);
+
+			PC->SetShowMouseCursor(true);
+
+			FInputModeGameAndUI Mode;
+			PC->SetInputMode(Mode);
+		}
+	}
+}
+
 void AMnBCharacter::Blocked()
 {
 	if (CurAttackDir == EAttackDirection::AttackLeft)
@@ -389,6 +417,8 @@ void AMnBCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(GuardAction, ETriggerEvent::Started, this, &AMnBCharacter::Guard);
 		EnhancedInputComponent->BindAction(GuardAction, ETriggerEvent::Completed, this, &AMnBCharacter::GuardEnd);
 
+		// Inventory
+		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Completed, this, &AMnBCharacter::InventoryOnOFF);
 	}
 	else
 	{

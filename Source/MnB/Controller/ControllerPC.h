@@ -27,4 +27,20 @@ protected:
 public:
 	UUserWidget* GetCurrentWidget() { return CurrentWidget; }
 
+protected:
+	virtual void OnPossess(APawn* aPawn) override;
+
+public:
+	void PickUpItem(const FName& InKey);
+
+	class UInventoryUserWidget* GetInventoryWidget() { return InventoryWidget; }
+
+protected:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UInventoryUserWidget> InventoryWidgetAsset = nullptr;
+
+	UInventoryUserWidget* InventoryWidget = nullptr;
+
+	void CreateInventoryWidget();
+
 };
