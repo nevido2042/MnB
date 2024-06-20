@@ -51,14 +51,14 @@ AVRCharacter::AVRCharacter()
 	RightHand->SetupAttachment(MotionControllerRight);
 
 	{
-		ConstructorHelpers::FObjectFinder<USkeletalMesh>Finder(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/MannequinsXR/Meshes/SKM_MannyXR_right.SKM_MannyXR_right'"));
+		static ConstructorHelpers::FObjectFinder<USkeletalMesh>Finder(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/MannequinsXR/Meshes/SKM_MannyXR_right.SKM_MannyXR_right'"));
 		RightHand->SetSkeletalMesh(Finder.Object);
 
 		const FTransform Transform = FTransform(FRotator(25.000000, 0.000000, 89.999999), FVector(-2.981260, 3.500000, 4.561753));
 		RightHand->SetRelativeTransform(Transform);
 	}
 	{
-		ConstructorHelpers::FObjectFinder<USkeletalMesh>Finder(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/MannequinsXR/Meshes/SKM_MannyXR_left.SKM_MannyXR_left'"));
+		static ConstructorHelpers::FObjectFinder<USkeletalMesh>Finder(TEXT("/Script/Engine.SkeletalMesh'/Game/Characters/MannequinsXR/Meshes/SKM_MannyXR_left.SKM_MannyXR_left'"));
 		LeftHand->SetSkeletalMesh(Finder.Object);
 
 		const FTransform Transform = FTransform(FRotator(-25.000000, -179.999999, 89.999998), FVector(-2.981260, -3.500000, 4.561753));
@@ -67,7 +67,7 @@ AVRCharacter::AVRCharacter()
 		LeftHand->bMirror = true;
 	}
 	{
-		ConstructorHelpers::FClassFinder<UVRHandAnimInstance>Finder(TEXT("/Script/Engine.AnimBlueprint'/Game/MyAssets/VR/ABP_Hand.ABP_Hand_C'"));
+		static ConstructorHelpers::FClassFinder<UVRHandAnimInstance>Finder(TEXT("/Script/Engine.AnimBlueprint'/Game/MyAssets/VR/ABP_Hand.ABP_Hand_C'"));
 		ensure(Finder.Class);
 		if (Finder.Class)
 		{
@@ -79,7 +79,7 @@ AVRCharacter::AVRCharacter()
 	GetCapsuleComponent()->SetCapsuleHalfHeight(10.f);
 
 	{
-		ConstructorHelpers::FClassFinder<UUserWidget>Finder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/VR/UI/BP_Info.BP_Info_C'"));
+		static ConstructorHelpers::FClassFinder<UUserWidget>Finder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/VR/UI/BP_Info.BP_Info_C'"));
 		ensure(Finder.Class);
 		if (Finder.Class)
 		{
@@ -101,7 +101,7 @@ AVRCharacter::AVRCharacter()
 	HitCapsule->SetCollisionProfileName("Hitable");
 
 	{
-		ConstructorHelpers::FClassFinder<UUserWidget>Finder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/VR/UI/BP_HealthBar.BP_HealthBar_C'"));
+		static ConstructorHelpers::FClassFinder<UUserWidget>Finder(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/VR/UI/BP_HealthBar.BP_HealthBar_C'"));
 		ensure(Finder.Class);
 		if (Finder.Class)
 		{

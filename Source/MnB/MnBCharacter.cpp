@@ -70,7 +70,7 @@ AMnBCharacter::AMnBCharacter()
 	Health = CreateDefaultSubobject<UHealth>(TEXT("Health"));
 
 	{
-		ConstructorHelpers::FObjectFinder<UAnimMontage>Finder(TEXT("/Script/Engine.AnimMontage'/Game/MyAssets/Animations/Korea/Standing_React_Large_From_Right_Montage.Standing_React_Large_From_Right_Montage'"));
+		static ConstructorHelpers::FObjectFinder<UAnimMontage>Finder(TEXT("/Script/Engine.AnimMontage'/Game/MyAssets/Animations/Korea/Standing_React_Large_From_Right_Montage.Standing_React_Large_From_Right_Montage'"));
 		ensure(Finder.Object);
 		if (Finder.Object)
 		{

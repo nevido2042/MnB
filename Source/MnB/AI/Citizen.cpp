@@ -7,38 +7,28 @@
 
 ACitizen::ACitizen()
 {
-	{
-		ConstructorHelpers::FObjectFinder<USkeletalMesh>Finder(TEXT("/Script/Engine.SkeletalMesh'/Game/KoreanTraditionalMartialArts/Meshs/Characters/Meshs/SKM_Soldier_4.SKM_Soldier_4'"));
-		if (Finder.Object)
-		{
-			Mesh = Finder.Object;
-		}
-	}
-	{
-		ConstructorHelpers::FClassFinder<UAnimInstance>Finder(TEXT("/ Script / Engine.AnimBlueprint'/Game/MyAssets/Character/ABP_Korea.ABP_Korea_C'"));
-		if (Finder.Class)
-		{
-			AnimClass = Finder.Class;
-		}
-	}
+	static ConstructorHelpers::FClassFinder<UAnimInstance>AnimClassAsset(TEXT("/ Script / Engine.AnimBlueprint'/Game/MyAssets/Character/ABP_Korea.ABP_Korea_C'"));
+	check(AnimClassAsset.Class);
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>Finder(TEXT("/Script/Engine.SkeletalMesh'/Game/KoreanTraditionalMartialArts/Meshs/Characters/Meshs/SKM_Soldier_4.SKM_Soldier_4'"));
+	check(Finder.Object);
 
-	GetMesh()->SetSkeletalMesh(Mesh);
-	GetMesh()->AddRelativeLocation(FVector(0, 0, -90.f));
-	GetMesh()->SetAnimClass(AnimClass);
+	USkeletalMeshComponent* MeshComponent = GetMesh();
+	MeshComponent->SetSkeletalMesh(Finder.Object);
+	MeshComponent->AddRelativeLocation(FVector(0, 0, -90.f));
+	MeshComponent->SetAnimClass(AnimClassAsset.Class);
 	FTransform NewTransform = FTransform
 	(
 		FRotator(0.0, -90.0, 0.0),
 		FVector(0.0, 0.0, -90.0),
 		FVector(1.0, 1.0, 1.0)
 	);
-	GetMesh()->SetRelativeTransform(NewTransform);
-
+	MeshComponent->SetRelativeTransform(NewTransform);
 
 	{
-		ConstructorHelpers::FObjectFinder<UBehaviorTree>Finder(TEXT("/Script/AIModule.BehaviorTree'/Game/MyAssets/AI/Citizen/BT_Citizen.BT_Citizen'"));
-		if (Finder.Object)
+		static ConstructorHelpers::FObjectFinder<UBehaviorTree>FinderAsset(TEXT("/Script/AIModule.BehaviorTree'/Game/MyAssets/AI/Citizen/BT_Citizen.BT_Citizen'"));
+		if (FinderAsset.Object)
 		{
-			Tree = Finder.Object;
+			Tree = FinderAsset.Object;
 		}
 	}
 
@@ -51,11 +41,13 @@ ACitizen::ACitizen()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	{
-		ConstructorHelpers::FObjectFinder<UMaterial>Finder(TEXT("/Script/Engine.Material'/Game/MyAssets/Materials/MT_Yellow.MT_Yellow'"));
-		ensure(Finder.Object);
-		if (Finder.Object)
+		static ConstructorHelpers::FObjectFinder<UMaterial>FinderAsset(TEXT("/Script/Engine.Material'/Game/MyAssets/Materials/MT_Yellow.MT_Yellow'"));
+		ensure(FinderAsset.Object);
+		if (FinderAsset.Object)
 		{
-			Cloth = Finder.Object;
+			//Cloth = FinderAsset.Object;
+
+			GetMesh()->SetMaterial(7, FinderAsset.Object);
 		}
 	}
 }
@@ -78,8 +70,6 @@ void ACitizen::BeginPlay()
 void ACitizen::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
-
-	GetMesh()->SetMaterial(7, Cloth);
 }
 
 void ACitizen::Tick(float DeltaTime)

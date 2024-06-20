@@ -12,21 +12,21 @@ AArenaManager::AArenaManager()
 	PrimaryActorTick.bCanEverTick = true;
 
 	{
-		ConstructorHelpers::FObjectFinder<USkeletalMesh>Finder(TEXT("/Script/Engine.SkeletalMesh'/Game/KoreanTraditionalMartialArts/Meshs/Characters/Meshs/SKM_Soldier_3.SKM_Soldier_3'"));
+		static ConstructorHelpers::FObjectFinder<USkeletalMesh>Finder(TEXT("/Script/Engine.SkeletalMesh'/Game/KoreanTraditionalMartialArts/Meshs/Characters/Meshs/SKM_Soldier_3.SKM_Soldier_3'"));
 		if (Finder.Object)
 		{
 			Mesh = Finder.Object;
 		}
 	}
 	{
-		ConstructorHelpers::FObjectFinder<UMaterial>Finder(TEXT("/Script/Engine.Material'/Game/MyAssets/Materials/MT_Brown.MT_Brown'"));
+		static ConstructorHelpers::FObjectFinder<UMaterial>Finder(TEXT("/Script/Engine.Material'/Game/MyAssets/Materials/MT_Brown.MT_Brown'"));
 		if (Finder.Object)
 		{
 			ClothMaterial = Finder.Object;
 		}
 	}
 	{
-		ConstructorHelpers::FClassFinder<UAnimInstance>Finder(TEXT("/ Script / Engine.AnimBlueprint'/Game/MyAssets/Character/ABP_Korea.ABP_Korea_C'"));
+		static ConstructorHelpers::FClassFinder<UAnimInstance>Finder(TEXT("/ Script / Engine.AnimBlueprint'/Game/MyAssets/Character/ABP_Korea.ABP_Korea_C'"));
 		if (Finder.Class)
 		{
 			AnimClass = Finder.Class;

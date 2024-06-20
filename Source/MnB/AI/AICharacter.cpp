@@ -23,7 +23,7 @@ AAICharacter::AAICharacter()
 
 	
 	{
-		ConstructorHelpers::FObjectFinder<UAnimMontage>Finder(TEXT("/Script/Engine.AnimMontage'/Game/MyAssets/Animations/Korea/Outward_Montage.Outward_Montage'"));
+		static ConstructorHelpers::FObjectFinder<UAnimMontage>Finder(TEXT("/Script/Engine.AnimMontage'/Game/MyAssets/Animations/Korea/Outward_Montage.Outward_Montage'"));
 		if (Finder.Object)
 		{
 			LeftAttack = Finder.Object;
@@ -31,7 +31,7 @@ AAICharacter::AAICharacter()
 	}
 
 	{
-		ConstructorHelpers::FObjectFinder<UAnimMontage>Finder(TEXT("/Script/Engine.AnimMontage'/Game/MyAssets/Animations/Korea/Stable_Sword_Inward_Slash_Montage.Stable_Sword_Inward_Slash_Montage'"));
+		static ConstructorHelpers::FObjectFinder<UAnimMontage>Finder(TEXT("/Script/Engine.AnimMontage'/Game/MyAssets/Animations/Korea/Stable_Sword_Inward_Slash_Montage.Stable_Sword_Inward_Slash_Montage'"));
 		if (Finder.Object)
 		{
 			RightAttack = Finder.Object;
@@ -39,7 +39,7 @@ AAICharacter::AAICharacter()
 	}
 
 	{
-		ConstructorHelpers::FObjectFinder<UAnimMontage>Finder(TEXT("/Script/Engine.AnimMontage'/Game/MyAssets/Animations/Korea/Standing_React_Large_From_Right_Montage.Standing_React_Large_From_Right_Montage'"));
+		static ConstructorHelpers::FObjectFinder<UAnimMontage>Finder(TEXT("/Script/Engine.AnimMontage'/Game/MyAssets/Animations/Korea/Standing_React_Large_From_Right_Montage.Standing_React_Large_From_Right_Montage'"));
 		if (Finder.Object)
 		{
 			DamagedMontage = Finder.Object;

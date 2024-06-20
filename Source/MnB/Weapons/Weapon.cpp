@@ -41,7 +41,7 @@ AWeapon::AWeapon()
 	GuardCollider->SetCollisionProfileName(TEXT("Gaurd"));
 
 	{
-		ConstructorHelpers::FObjectFinder<UParticleSystem>Finder(TEXT("/Script/Engine.ParticleSystem'/Game/Realistic_Starter_VFX_Pack_Vol2/Particles/Blood/P_Blood_Splat_Cone.P_Blood_Splat_Cone'"));
+		static ConstructorHelpers::FObjectFinder<UParticleSystem>Finder(TEXT("/Script/Engine.ParticleSystem'/Game/Realistic_Starter_VFX_Pack_Vol2/Particles/Blood/P_Blood_Splat_Cone.P_Blood_Splat_Cone'"));
 		ensure(Finder.Object);
 		if (Finder.Object)
 		{
@@ -49,7 +49,7 @@ AWeapon::AWeapon()
 		}
 	}
 	{
-		ConstructorHelpers::FObjectFinder<UParticleSystem>Finder(TEXT("	/ Script / Engine.ParticleSystem'/Game/Realistic_Starter_VFX_Pack_Vol2/Particles/Hit/P_Default.P_Default'"));
+		static ConstructorHelpers::FObjectFinder<UParticleSystem>Finder(TEXT("	/ Script / Engine.ParticleSystem'/Game/Realistic_Starter_VFX_Pack_Vol2/Particles/Hit/P_Default.P_Default'"));
 		ensure(Finder.Object);
 		if (Finder.Object)
 		{

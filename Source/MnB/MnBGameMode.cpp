@@ -9,14 +9,14 @@
 AMnBGameMode::AMnBGameMode()
 {
 	// set default pawn class to our Blueprinted character
-	static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter"));
-	if (PlayerPawnBPClass.Class != NULL)
-	{
-		DefaultPawnClass = PlayerPawnBPClass.Class;
-	}
+	//static ConstructorHelpers::FClassFinder<APawn> PlayerPawnBPClass(TEXT("/Game/ThirdPerson/Blueprints/BP_ThirdPersonCharacter"));
+	//if (PlayerPawnBPClass.Class != NULL)
+	//{
+	//	DefaultPawnClass = PlayerPawnBPClass.Class;
+	//}
 
 	{
-		ConstructorHelpers::FClassFinder<APawn>Finder(TEXT("/Script/Engine.Blueprint'/Game/MyAssets/VR/BP_VRCharacter.BP_VRCharacter_C'"));
+		static ConstructorHelpers::FClassFinder<APawn>Finder(TEXT("/Script/Engine.Blueprint'/Game/MyAssets/VR/BP_VRCharacter.BP_VRCharacter_C'"));
 		if (Finder.Class)
 		{
 			VRPawnClass = Finder.Class;
@@ -25,7 +25,7 @@ AMnBGameMode::AMnBGameMode()
 	}
 
 	{
-		ConstructorHelpers::FClassFinder<APlayerController>Finder(TEXT("/Script/Engine.Blueprint'/Game/MyAssets/VR/BPC_VR.BPC_VR_C'"));
+		static ConstructorHelpers::FClassFinder<APlayerController>Finder(TEXT("/Script/Engine.Blueprint'/Game/MyAssets/VR/BPC_VR.BPC_VR_C'"));
 		if (Finder.Class)
 		{
 			VRPlayerControllerClass = Finder.Class;
@@ -34,7 +34,7 @@ AMnBGameMode::AMnBGameMode()
 	}
 
 	{
-		ConstructorHelpers::FClassFinder<APawn>Finder(TEXT("/Script/Engine.Blueprint'/Game/MyAssets/Character/BP_MnBCharacter.BP_MnBCharacter_C'"));
+		static ConstructorHelpers::FClassFinder<APawn>Finder(TEXT("/Script/Engine.Blueprint'/Game/MyAssets/Character/BP_MnBCharacter.BP_MnBCharacter_C'"));
 		if (Finder.Class)
 		{
 			PCPawnClass = Finder.Class;
@@ -42,7 +42,7 @@ AMnBGameMode::AMnBGameMode()
 	}
 
 	{
-		ConstructorHelpers::FClassFinder<APlayerController>Finder(TEXT("/Script/Engine.Blueprint'/Game/MyAssets/Controller/BPC_PC.BPC_PC_C'"));
+		static ConstructorHelpers::FClassFinder<APlayerController>Finder(TEXT("/Script/Engine.Blueprint'/Game/MyAssets/Controller/BPC_PC.BPC_PC_C'"));
 		if (Finder.Class)
 		{
 			PCPlayerControllerClass = Finder.Class;

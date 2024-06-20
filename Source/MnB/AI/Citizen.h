@@ -26,9 +26,5 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	USkeletalMesh* Mesh = nullptr;
-
-	TSubclassOf<UAnimInstance> AnimClass = nullptr;
-	
-	UMaterial* Cloth = nullptr;
+	//UMaterial* Cloth = nullptr;
 };
