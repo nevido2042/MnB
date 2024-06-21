@@ -45,13 +45,8 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	USceneComponent* SitLocation = nullptr;
-
-	/*UPROPERTY(EditAnywhere)
-	class UChildActorComponent* SitLoc = nullptr;*/
 public:
 	USceneComponent* GetSitLocation() { return SitLocation; }
-
-	//UChildActorComponent* GetSitLoc() { return SitLoc; }
 
 private:
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;

@@ -5,7 +5,6 @@
 
 #include "Components/Health.h"
 #include "Components/CapsuleComponent.h"
-#include "Components/ChildActorComponent.h"
 
 // Sets default values
 AHorse::AHorse()
@@ -26,8 +25,6 @@ AHorse::AHorse()
 	SitLocation = CreateDefaultSubobject<USceneComponent>(TEXT("SitLocation"));
 	SitLocation->SetupAttachment(GetMesh());
 
-	/*SitLoc = CreateDefaultSubobject<UChildActorComponent>(TEXT("Person"));
-	SitLoc->SetupAttachment(GetMesh());*/
 }
 
 // Called when the game starts or when spawned
@@ -67,6 +64,7 @@ void AHorse::Interact(AActor* InActor)
 		{
 			Char->SetActorLocation(Right->GetComponentLocation());
 		}
+
 		Char->SetCurHorse(this);
 
 		Char->StartGetOnMontage();
