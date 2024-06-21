@@ -541,8 +541,9 @@ void AVRCharacter::MoveHorse(FVector2D Vect)
 {
 	CurHorse->AddMovementInput(CurHorse->GetActorForwardVector(), Vect.Y);
 
+	float RotateScale = 2.f;
 	//AddActorLocalRotation(FRotator(0.f, Vect.X, 0.f));
-	CurHorse->AddActorLocalRotation(FRotator(0.f, Vect.X, 0.f));
+	CurHorse->AddActorLocalRotation(FRotator(0.f, Vect.X * RotateScale, 0.f));
 }
 
 //#include "GameFramework/CharacterMovementComponent.h"
