@@ -5,23 +5,7 @@
 #include "MnBCharacter.h"
 #include "Horse/Horse.h"
 #include "GameFramework/CharacterMovementComponent.h"
-
-//void USitOnNotify::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration, const FAnimNotifyEventReference& EventReference)
-//{
-//	if (AMnBCharacter* Char = Cast<AMnBCharacter>(MeshComp->GetOwner()))
-//	{
-//		FVector SitLoc = Char->GetCurHorse()->GetSitLocation()->GetComponentLocation();
-//		Char->SetActorLocation(SitLoc);
-//	}
-//}
-//
-//void USitOnNotify::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime, const FAnimNotifyEventReference& EventReference)
-//{
-//}
-//
-//void USitOnNotify::NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
-//{
-//}
+#include "AnimInstance/MnBCharacterAnimInstance.h"
 
 void USitOnNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
@@ -42,6 +26,11 @@ void USitOnNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* A
 		Char->GetController()->SetControlRotation(SitRot);
 
 		Horse->AttachToActor(Char, FAttachmentTransformRules::KeepWorldTransform);
-		//Horse->AddActorLocalRotation(FRotator(0.f, -90.f, 0.f));
+
+		Char->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+
+		UMnBCharacterAnimInstance* Anim = Cast<UMnBCharacterAnimInstance>(Char->GetMesh()->GetAnimInstance());
+		Anim->SetRide(true);
+
 	}
 }

@@ -6,6 +6,7 @@
 #include "Components/Health.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/ChildActorComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AHorse::AHorse()
@@ -54,23 +55,35 @@ void AHorse::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 #include "MnBCharacter.h"
 void AHorse::Interact(AActor* InActor)
 {
-	if (AMnBCharacter* Char = Cast<AMnBCharacter>(InActor))
+	if (Rider == nullptr)
 	{
-		float LeftDist = FVector::Dist(Left->GetComponentLocation(), Char->GetActorLocation());
-		float RightDist = FVector::Dist(Right->GetComponentLocation(), Char->GetActorLocation()); 
-
-		if (LeftDist < RightDist)
+		if (AMnBCharacter* Char = Cast<AMnBCharacter>(InActor))
 		{
-			Char->SetActorLocation(Left->GetComponentLocation());
-		}
-		else
-		{
-			Char->SetActorLocation(Right->GetComponentLocation());
-		}
-		Char->SetCurHorse(this);
+			Rider = Char;
 
-		Char->StartGetOnMontage();
+			float LeftDist = FVector::Dist(Left->GetComponentLocation(), Char->GetActorLocation());
+			float RightDist = FVector::Dist(Right->GetComponentLocation(), Char->GetActorLocation());
+
+			if (LeftDist < RightDist)
+			{
+				Char->SetActorLocation(Left->GetComponentLocation());
+			}
+			else
+			{
+				Char->SetActorLocation(Right->GetComponentLocation());
+			}
+			Char->SetCurHorse(this);
+			Char->GetCharacterMovement()->DisableMovement();
+
+			Char->StartGetOnMontage();
+		}
 	}
+	else if (Rider)
+	{
+		Rider->StartDescendingHorseMontage();
+		Rider = nullptr;
+	}
+
 }
 
 void AHorse::SetCapsuleCollisionProfileName(FName CollisionProfileName)

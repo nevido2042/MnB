@@ -236,6 +236,11 @@ void AMnBCharacter::Interact()
 {
 	if (FocusingActor == nullptr) { return; }
 
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying())
+	{
+		return;
+	}
+
 	IInteractableActor* InteractableActor = Cast<IInteractableActor>(FocusingActor);
 	if (InteractableActor)
 	{
@@ -387,6 +392,16 @@ void AMnBCharacter::SetRandomSoundAndPlay()
 
 	Audio->SetSound(HitSounds[rand]);
 	Audio->Play();
+}
+
+void AMnBCharacter::StartDescendingHorseMontage()
+{
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying())
+	{
+		return;
+	}
+
+	PlayAnimMontage(StartDescendingMontage);
 }
 
 void AMnBCharacter::StartGetOnMontage()

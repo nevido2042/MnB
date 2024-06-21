@@ -46,10 +46,14 @@ protected:
 	UPROPERTY(EditAnywhere)
 	USceneComponent* SitLocation = nullptr;
 
+	class AMnBCharacter* Rider = nullptr;
+
 	/*UPROPERTY(EditAnywhere)
 	class UChildActorComponent* SitLoc = nullptr;*/
 public:
 	USceneComponent* GetSitLocation() { return SitLocation; }
+	USceneComponent* GetLeft() { return Left; }
+
 
 	//UChildActorComponent* GetSitLoc() { return SitLoc; }
 

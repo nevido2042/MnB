@@ -182,10 +182,14 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* StartGetOnHorseMontage = nullptr;
 
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* StartDescendingMontage = nullptr;
+
 	class AHorse* CurHorse = nullptr;
 
 public:
 	void StartGetOnMontage();
+	void StartDescendingHorseMontage();
 
 	AHorse* GetCurHorse() { return CurHorse; }
 	void SetCurHorse(AHorse* InHorse) { CurHorse = InHorse; }
