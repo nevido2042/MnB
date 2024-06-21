@@ -94,6 +94,8 @@ void AHorse::Interact(AActor* InActor)
 			Char->GetCharacterMovement()->DisableMovement();
 
 			Char->StartGetOnMontage();
+
+			Char->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
 		}
 	}
 	else if (Rider)

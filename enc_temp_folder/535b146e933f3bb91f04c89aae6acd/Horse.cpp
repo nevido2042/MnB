@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/ChildActorComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "MnBCharacter.h"
 
 // Sets default values
 AHorse::AHorse()
@@ -43,6 +44,23 @@ void AHorse::BeginPlay()
 void AHorse::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	//if (Rider)
+	//{
+	//	FVector2D MovementVector = Rider->GetMovementVector();
+
+	//	const FRotator Rotation = Controller->GetControlRotation();
+	//	const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+	//	// get forward vector
+	//	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+	//	// get right vector 
+	//	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+	//	AddMovementInput(ForwardDirection, MovementVector.Y);
+	//	AddMovementInput(RightDirection, MovementVector.X);
+	//}
 
 }
 

@@ -48,8 +48,8 @@ protected:
 
 	class AMnBCharacter* Rider = nullptr;
 
-	//UPROPERTY(EditAnywhere)
-	//float MoveSpeed = 1000.f;
+	UPROPERTY(EditAnywhere)
+	float MoveSpeed = 1000.f;
 
 	/*UPROPERTY(EditAnywhere)
 	class UChildActorComponent* SitLoc = nullptr;*/
@@ -59,7 +59,7 @@ public:
 
 	AMnBCharacter* GetRider() { return Rider; }
 
-	//float GetMoveSpeed() { return MoveSpeed; }
+	float GetMoveSpeed() { return MoveSpeed; }
 
 	//UChildActorComponent* GetSitLoc() { return SitLoc; }
 

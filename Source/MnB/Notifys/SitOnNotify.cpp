@@ -27,7 +27,7 @@ void USitOnNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* A
 		Char->SetActorRotation(SitRot);
 		Char->GetController()->SetControlRotation(SitRot);
 
-		Char->AttachToActor(Horse, FAttachmentTransformRules::KeepWorldTransform);
+		//Char->AttachToActor(Horse, FAttachmentTransformRules::KeepWorldTransform);
 
 		//Char->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 

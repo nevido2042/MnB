@@ -413,16 +413,7 @@ void AMnBCharacter::StartDescendingHorseMontage()
 
 void AMnBCharacter::MoveHorse(FVector2D Vect)
 {
-	const FRotator Rotation = Controller->GetControlRotation();
-	const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-	// get forward vector
-	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-
-	// get right vector 
-	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-	CurHorse->AddMovementInput(ForwardDirection, Vect.Y);
+	CurHorse->AddMovementInput(CurHorse->GetActorForwardVector(), Vect.Y);
 	CurHorse->AddActorLocalRotation(FRotator(0.f, Vect.X, 0.f));
 }
 

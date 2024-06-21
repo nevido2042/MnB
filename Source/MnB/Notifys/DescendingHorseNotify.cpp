@@ -23,7 +23,7 @@ void UDescendingHorseNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSeque
 		UMnBCharacterAnimInstance* Anim = Cast<UMnBCharacterAnimInstance>(Char->GetMesh()->GetAnimInstance());
 		Anim->SetRide(false);
 
-		Horse->SetCapsuleCollisionProfileName(TEXT("Horse"));
+		Horse->SetCapsuleCollisionProfileName(TEXT("Pawn"));
 
 		UHorseAnimInstance* HorseAnim = Cast<UHorseAnimInstance>(Horse->GetMesh()->GetAnimInstance());
 		HorseAnim->SetOwnerMovement(nullptr);

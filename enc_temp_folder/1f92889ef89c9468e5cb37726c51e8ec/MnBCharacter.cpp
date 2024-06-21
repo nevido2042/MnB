@@ -21,6 +21,7 @@
 #include "Components/Health.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/AudioComponent.h"
+#include "Horse/Horse.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -104,6 +105,12 @@ void AMnBCharacter::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	CameraRaycast();
 	UpdateActorInfo();
+
+	/*if (bOnHorse)
+	{
+		FVector Loc = CurHorse->GetSitLocation()->GetComponentLocation();
+		SetActorLocation(Loc);
+	}*/
 }
 
 #include "Weapons/Shield.h"
@@ -404,6 +411,12 @@ void AMnBCharacter::StartDescendingHorseMontage()
 	PlayAnimMontage(StartDescendingMontage);
 }
 
+void AMnBCharacter::MoveHorse(FVector2D Vect)
+{
+	CurHorse->AddMovementInput(CurHorse->GetActorForwardVector(), Vect.Y* CurHorse->GetMoveSpeed());
+	CurHorse->AddActorLocalRotation(FRotator(0.f, Vect.X, 0.f));
+}
+
 void AMnBCharacter::StartGetOnMontage()
 {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying())
@@ -472,6 +485,11 @@ void AMnBCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
+
+		if (CurHorse)
+		{
+			MoveHorse(MovementVector);
+		}
 	}
 }
 
