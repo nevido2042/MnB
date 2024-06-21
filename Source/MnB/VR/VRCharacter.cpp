@@ -17,6 +17,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Components/Health.h"
+#include "Horse/Horse.h"
 
 // Sets default values
 AVRCharacter::AVRCharacter()
@@ -535,6 +536,11 @@ float AVRCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 void AVRCharacter::RideHorse()
 {
 	Horse->GetChildActor()->GetComponentByClass<USkeletalMeshComponent>()->SetCollisionProfileName("Interactable");
+	Cast<AHorse>(Horse->GetChildActor())->SetCapsuleCollisionProfileName(TEXT("Horse"));
+	if (CurHorse)
+	{
+		CurHorse->SetCapsuleCollisionProfileName(TEXT("Horse"));
+	}
 
 	GetCapsuleComponent()->SetCapsuleHalfHeight(150.f);
 	Horse->SetHiddenInGame(false);
@@ -544,6 +550,12 @@ void AVRCharacter::RideHorse()
 void AVRCharacter::GetOffHorse()
 {
 	Horse->GetChildActor()->GetComponentByClass<USkeletalMeshComponent>()->SetCollisionProfileName("NoCollision");
+	Cast<AHorse>(Horse->GetChildActor())->SetCapsuleCollisionProfileName(TEXT("Horse"));
+
+	if (CurHorse)
+	{
+		CurHorse->SetCapsuleCollisionProfileName(TEXT("Pawn"));
+	}
 
 	GetCapsuleComponent()->SetCapsuleHalfHeight(34.f);
 	Horse->SetHiddenInGame(true);

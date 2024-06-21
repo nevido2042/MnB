@@ -4,6 +4,7 @@
 #include "Horse/Horse.h"
 
 #include "Components/Health.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 AHorse::AHorse()
@@ -12,6 +13,9 @@ AHorse::AHorse()
 	PrimaryActorTick.bCanEverTick = true;
 
 	Health = CreateDefaultSubobject<UHealth>(TEXT("Health"));
+
+	BodyCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("BodyCapsule"));
+	BodyCapsule->SetupAttachment(RootComponent);
 
 }
 
@@ -39,6 +43,12 @@ void AHorse::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AHorse::Interact(AActor* InActor)
 {
+}
+
+void AHorse::SetCapsuleCollisionProfileName(FName CollisionProfileName)
+{
+	GetCapsuleComponent()->SetCollisionProfileName(CollisionProfileName);
+	BodyCapsule->SetCollisionProfileName(CollisionProfileName);
 }
 
 float AHorse::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

@@ -29,8 +29,13 @@ public:
 
 	virtual void Interact(AActor* InActor) override;
 
+	void SetCapsuleCollisionProfileName(FName CollisionProfileName);
+
 protected:
 	class UHealth* Health = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	class UCapsuleComponent* BodyCapsule = nullptr;
 
 private:
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
