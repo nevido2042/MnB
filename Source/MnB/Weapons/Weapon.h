@@ -43,6 +43,8 @@ protected:
 
 	bool bOwnerVR = false;
 
+	bool bHitVRMode = false;
+
 	UPROPERTY(EditAnywhere)
 	class UCapsuleComponent* GuardCollider = nullptr;
 

@@ -95,8 +95,9 @@ void AWeapon::Interact(AActor* InActor)
 
 void AWeapon::SetWeaponHitable()
 {
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("SetWeaponHitable"));
+	//GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("SetWeaponHitable"));
 	bApplyDamage = false;
+	bHitVRMode = false;
 }
 
 void AWeapon::Equipped()
@@ -159,6 +160,11 @@ void AWeapon::HitDetect()
 {
 	if (bApplyDamage) return; //데미지 한번 만 줄수 있게
 
+	if (bOwnerVR && bHitVRMode)
+	{
+		return;
+	}
+
 	FVector HitStart = StaticMeshComponent->GetSocketLocation(TEXT("HitStart"));
 	FVector HitEnd = StaticMeshComponent->GetSocketLocation(TEXT("HitEnd"));
 
@@ -211,17 +217,12 @@ void AWeapon::HitDetect()
 
 	if (bHit)
 	{
+		bHitVRMode = true;
 		HitDetectImpl(HitResult);
 	}
 
 	if (bApplyDamage == false && !bHit)
 	{
-		if (bOwnerVR)
-		{
-			return;
-		}
-
-
 		ObstacleDitect();
 	}
 }
@@ -322,6 +323,8 @@ bool AWeapon::ObstacleDitect()
 	DrawDebugLine(GetWorld(), RayStart, RayEnd, FColor::Black, false, 0.5f);
 	if (bHit)
 	{
+
+		bHitVRMode = true;
 
 		if (ACharacter* Character = Cast<ACharacter>(HitResult.GetActor()))
 		{
