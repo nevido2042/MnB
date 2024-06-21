@@ -74,7 +74,7 @@ void AHorse::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 #include "VR/VRCharacter.h"
 void AHorse::Interact(AActor* InActor)
 {
-	if (Rider == nullptr)
+	if (Rider == nullptr && RiderVR == nullptr)
 	{
 		if (AMnBCharacter* Char = Cast<AMnBCharacter>(InActor))
 		{
@@ -110,6 +110,7 @@ void AHorse::Interact(AActor* InActor)
 			VRChar->SetActorLocation(SitLoc);
 			VRChar->SetActorRotation(SitRot);
 			VRChar->GetController()->SetControlRotation(SitRot);
+			RiderVR = VRChar;
 		}
 	}
 	else if (Rider)

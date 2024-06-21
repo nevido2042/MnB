@@ -201,6 +201,11 @@ void AVRCharacter::OnMove(const FInputActionValue& InputActionValue)
 {
 	const FVector2D ActionValue = InputActionValue.Get<FVector2D>();
 
+	if (CurHorse)
+	{
+		MoveHorse(ActionValue);
+	}
+
 	const FRotator CameraRotator = VRCamera->GetRelativeRotation();
 	const FRotator CameraYawRotator = FRotator(0., CameraRotator.Yaw, 0.);
 
@@ -220,11 +225,6 @@ void AVRCharacter::OnMove(const FInputActionValue& InputActionValue)
 		{
 			const FVector RightVector = GetActorRightVector(); //UKismetMathLibrary::GetRightVector(CameraYawRotator);
 			AddMovementInput(RightVector, ActionValue.X);
-		}
-
-		if (CurHorse)
-		{
-			MoveHorse(ActionValue);
 		}
 	}
 }
