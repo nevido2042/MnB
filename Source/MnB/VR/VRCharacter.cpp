@@ -540,6 +540,8 @@ float AVRCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 void AVRCharacter::MoveHorse(FVector2D Vect)
 {
 	CurHorse->AddMovementInput(CurHorse->GetActorForwardVector(), Vect.Y);
+
+	//AddActorLocalRotation(FRotator(0.f, Vect.X, 0.f));
 	CurHorse->AddActorLocalRotation(FRotator(0.f, Vect.X, 0.f));
 }
 
