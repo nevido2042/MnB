@@ -534,6 +534,8 @@ float AVRCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 #include "GameFramework/CharacterMovementComponent.h"
 void AVRCharacter::RideHorse()
 {
+	Horse->GetChildActor()->GetComponentByClass<USkeletalMeshComponent>()->SetCollisionProfileName("Interactable");
+
 	GetCapsuleComponent()->SetCapsuleHalfHeight(150.f);
 	Horse->SetHiddenInGame(false);
 	GetCharacterMovement()->MaxWalkSpeed = HorseSpeed;
@@ -541,6 +543,8 @@ void AVRCharacter::RideHorse()
 
 void AVRCharacter::GetOffHorse()
 {
+	Horse->GetChildActor()->GetComponentByClass<USkeletalMeshComponent>()->SetCollisionProfileName("NoCollision");
+
 	GetCapsuleComponent()->SetCapsuleHalfHeight(34.f);
 	Horse->SetHiddenInGame(true);
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpped;

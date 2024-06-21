@@ -5,6 +5,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "Blueprint/UserWidget.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
+#include "GameFramework/GameUserSettings.h"
 
 AMnBGameMode::AMnBGameMode()
 {
@@ -58,16 +59,44 @@ void AMnBGameMode::BeginPlay()
 
 APlayerController* AMnBGameMode::Login(UPlayer* NewPlayer, ENetRole InRemoteRole, const FString& Portal, const FString& Options, const FUniqueNetIdRepl& UniqueId, FString& ErrorMessage)
 {
+	UGameUserSettings* GameUserSetting = UGameUserSettings::GetGameUserSettings();
+
 	const bool bVR = UHeadMountedDisplayFunctionLibrary::IsHeadMountedDisplayEnabled();
 	if (bVR)
 	{
 		DefaultPawnClass = VRPawnClass;
 		PlayerControllerClass = VRPlayerControllerClass;
+
+		GameUserSetting->SetViewDistanceQuality(0);
+		GameUserSetting->SetAntiAliasingQuality(0);
+		GameUserSetting->SetPostProcessingQuality(0);
+		GameUserSetting->SetShadowQuality(0);
+		GameUserSetting->SetGlobalIlluminationQuality(0);
+		GameUserSetting->SetReflectionQuality(0);
+		GameUserSetting->SetTextureQuality(0);
+		GameUserSetting->SetVisualEffectQuality(0);
+		GameUserSetting->SetFoliageQuality(0);
+		GameUserSetting->SetShadingQuality(0);
+
+		GameUserSetting->ApplySettings(false);
 	}
 	else
 	{
 		DefaultPawnClass = PCPawnClass;
 		PlayerControllerClass = PCPlayerControllerClass;
+
+		GameUserSetting->SetViewDistanceQuality(2);
+		GameUserSetting->SetAntiAliasingQuality(2);
+		GameUserSetting->SetPostProcessingQuality(2);
+		GameUserSetting->SetShadowQuality(2);
+		GameUserSetting->SetGlobalIlluminationQuality(2);
+		GameUserSetting->SetReflectionQuality(2);
+		GameUserSetting->SetTextureQuality(2);
+		GameUserSetting->SetVisualEffectQuality(2);
+		GameUserSetting->SetFoliageQuality(2);
+		GameUserSetting->SetShadingQuality(2);
+
+		GameUserSetting->ApplySettings(false);
 	}
 	
 	return Super::Login(NewPlayer, InRemoteRole, Portal, Options, UniqueId, ErrorMessage);
