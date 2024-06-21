@@ -173,11 +173,22 @@ protected:
 	class UAudioComponent * Audio = nullptr;
 
 	UPROPERTY(EditAnywhere)
-
 	TArray<class USoundBase*> HitSounds;
 
 private:
 	void SetRandomSoundAndPlay();
+
+protected:
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* StartGetOnHorseMontage = nullptr;
+
+	class AHorse* CurHorse = nullptr;
+
+public:
+	void StartGetOnMontage();
+
+	AHorse* GetCurHorse() { return CurHorse; }
+	void SetCurHorse(AHorse* InHorse) { CurHorse = InHorse; }
 
 };
 

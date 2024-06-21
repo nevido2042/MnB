@@ -17,6 +17,14 @@ AHorse::AHorse()
 	BodyCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("BodyCapsule"));
 	BodyCapsule->SetupAttachment(RootComponent);
 
+	Left = CreateDefaultSubobject<USceneComponent>(TEXT("Left"));
+	Left->SetupAttachment(GetMesh());
+	Right = CreateDefaultSubobject<USceneComponent>(TEXT("Right"));
+	Right->SetupAttachment(GetMesh());
+
+	SitLocation = CreateDefaultSubobject<USceneComponent>(TEXT("SitLocation"));
+	SitLocation->SetupAttachment(GetMesh());
+
 }
 
 // Called when the game starts or when spawned
@@ -40,9 +48,27 @@ void AHorse::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 }
-
+#include "MnBCharacter.h"
 void AHorse::Interact(AActor* InActor)
 {
+	if (AMnBCharacter* Char = Cast<AMnBCharacter>(InActor))
+	{
+		float LeftDist = FVector::Dist(Left->GetComponentLocation(), Char->GetActorLocation());
+		float RightDist = FVector::Dist(Right->GetComponentLocation(), Char->GetActorLocation()); 
+
+		if (LeftDist < RightDist)
+		{
+			Char->SetActorLocation(Left->GetComponentLocation());
+		}
+		else
+		{
+			Char->SetActorLocation(Right->GetComponentLocation());
+		}
+
+		Char->SetCurHorse(this);
+
+		Char->StartGetOnMontage();
+	}
 }
 
 void AHorse::SetCapsuleCollisionProfileName(FName CollisionProfileName)

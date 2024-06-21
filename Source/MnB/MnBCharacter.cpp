@@ -389,6 +389,16 @@ void AMnBCharacter::SetRandomSoundAndPlay()
 	Audio->Play();
 }
 
+void AMnBCharacter::StartGetOnMontage()
+{
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying())
+	{
+		return;
+	}
+
+	PlayAnimMontage(StartGetOnHorseMontage);
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 

@@ -37,6 +37,17 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class UCapsuleComponent* BodyCapsule = nullptr;
 
+	UPROPERTY(EditAnywhere)
+	USceneComponent* Left = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	USceneComponent* Right = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	USceneComponent* SitLocation = nullptr;
+public:
+	USceneComponent* GetSitLocation() { return SitLocation; }
+
 private:
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 };
