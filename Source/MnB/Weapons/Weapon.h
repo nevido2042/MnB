@@ -41,6 +41,8 @@ protected:
 
 	bool bApplyDamage = false;
 
+	bool bOwnerVR = false;
+
 	UPROPERTY(EditAnywhere)
 	class UCapsuleComponent* GuardCollider = nullptr;
 

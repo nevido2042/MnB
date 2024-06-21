@@ -81,7 +81,7 @@ void AWeapon::Tick(float DeltaTime)
 
 	if (Owner == nullptr) return;
 
-	if (Cast<AVRCharacter>(Owner->GetPawn()))
+	if (bOwnerVR)
 	{
 		HitDetect();
 	}
@@ -141,6 +141,8 @@ void AWeapon::Equipped(AController* Controller)
 
 	if (Cast<AVRCharacter>(Owner->GetPawn()))
 	{
+		bOwnerVR = true;
+
 		GetWorldTimerManager().SetTimer(Timer, this, &AWeapon::SetWeaponHitable, 1.f, true); //왜 반복 안하는가`
 
 		GuardCollider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
@@ -214,6 +216,12 @@ void AWeapon::HitDetect()
 
 	if (bApplyDamage == false && !bHit)
 	{
+		if (bOwnerVR)
+		{
+			return;
+		}
+
+
 		ObstacleDitect();
 	}
 }
@@ -389,4 +397,6 @@ void AWeapon::Unequipped()
 	StaticMeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 
 	GetWorldTimerManager().ClearTimer(Timer);
+
+	bOwnerVR = false;
 }
