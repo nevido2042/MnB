@@ -6,8 +6,6 @@
 #include "Horse/Horse.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AnimInstance/MnBCharacterAnimInstance.h"
-#include "AnimInstance/HorseAnimInstance.h"
-
 
 void USitOnNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
@@ -27,16 +25,12 @@ void USitOnNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* A
 		Char->SetActorRotation(SitRot);
 		Char->GetController()->SetControlRotation(SitRot);
 
-		Char->AttachToActor(Horse, FAttachmentTransformRules::KeepWorldTransform);
+		Horse->AttachToActor(Char, FAttachmentTransformRules::KeepWorldTransform);
 
-		//Char->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+		Char->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 
 		UMnBCharacterAnimInstance* Anim = Cast<UMnBCharacterAnimInstance>(Char->GetMesh()->GetAnimInstance());
 		Anim->SetRide(true);
 
-		UHorseAnimInstance* HorseAnim = Cast<UHorseAnimInstance>(Horse->GetMesh()->GetAnimInstance());
-		HorseAnim->SetOwnerMovement(Char);
-
-		//Char->bOnHorse = true;
 	}
 }

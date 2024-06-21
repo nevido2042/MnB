@@ -7,7 +7,6 @@
 #include "Horse/Horse.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AnimInstance/MnBCharacterAnimInstance.h"
-#include "AnimInstance/HorseAnimInstance.h"
 
 void UDescendingHorseNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
@@ -15,7 +14,7 @@ void UDescendingHorseNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSeque
 	{
 		AHorse* Horse = Char->GetCurHorse();
 		Char->GetCharacterMovement()->GravityScale = 1.f;
-		Char->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		Horse->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		
 		FVector Loc = Horse->GetLeft()->GetComponentLocation();
 		Char->SetActorLocation(Loc);
@@ -24,13 +23,5 @@ void UDescendingHorseNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSeque
 		Anim->SetRide(false);
 
 		Horse->SetCapsuleCollisionProfileName(TEXT("Horse"));
-
-		UHorseAnimInstance* HorseAnim = Cast<UHorseAnimInstance>(Horse->GetMesh()->GetAnimInstance());
-		HorseAnim->SetOwnerMovement(nullptr);
-
-		Char->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
-
-		Char->SetCurHorse(nullptr);
-		//Char->bOnHorse = false;
 	}
 }

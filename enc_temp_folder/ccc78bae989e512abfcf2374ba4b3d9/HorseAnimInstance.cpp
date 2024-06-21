@@ -21,39 +21,24 @@ void UHorseAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	if (!Pawn) { return; }
 
-	/*if (Pawn->GetParentActor() == nullptr) return;*/
+	if (Pawn->GetParentActor() == nullptr) return;
 
 	if (AVRCharacter* Char = Cast<AVRCharacter>(Pawn->GetParentActor()))
 	{
 		OwnerMovement = Char->GetCharacterMovement();
 	}
 
-	/*if (AHorse* Horse = Cast<AHorse>(Pawn))
+	if (AHorse* Horse = Cast<AHorse>(Pawn))
 	{
 		if (Horse->GetRider())
 		{
 			OwnerMovement = Horse->GetRider()->GetCharacterMovement();
 		}
-	}*/
+	}
 
 	if (OwnerMovement)
 	{
 		Speed = OwnerMovement->Velocity.Length();
 	}
 
-}
-
-void UHorseAnimInstance::SetOwnerMovement(ACharacter* InCharacter)
-{
-	if (InCharacter == nullptr)
-	{
-		OwnerMovement = nullptr;
-	}
-	else if (AHorse* Horse = Cast<AHorse>(Pawn))
-	{
-		if (Horse->GetRider())
-		{
-			OwnerMovement = Horse->GetRider()->GetCharacterMovement();
-		}
-	}
 }

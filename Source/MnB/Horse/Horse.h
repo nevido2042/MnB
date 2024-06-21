@@ -54,6 +54,7 @@ public:
 	USceneComponent* GetSitLocation() { return SitLocation; }
 	USceneComponent* GetLeft() { return Left; }
 
+	AMnBCharacter* GetRider() { return Rider; }
 
 	//UChildActorComponent* GetSitLoc() { return SitLoc; }
 

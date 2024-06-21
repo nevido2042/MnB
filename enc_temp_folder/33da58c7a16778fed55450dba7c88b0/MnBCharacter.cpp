@@ -21,7 +21,6 @@
 #include "Components/Health.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/AudioComponent.h"
-#include "Horse/Horse.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -105,12 +104,6 @@ void AMnBCharacter::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	CameraRaycast();
 	UpdateActorInfo();
-
-	/*if (bOnHorse)
-	{
-		FVector Loc = CurHorse->GetSitLocation()->GetComponentLocation();
-		SetActorLocation(Loc);
-	}*/
 }
 
 #include "Weapons/Shield.h"
@@ -411,21 +404,6 @@ void AMnBCharacter::StartDescendingHorseMontage()
 	PlayAnimMontage(StartDescendingMontage);
 }
 
-void AMnBCharacter::MoveHorse(FVector2D Vect)
-{
-	const FRotator Rotation = Controller->GetControlRotation();
-	const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-	// get forward vector
-	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-
-	// get right vector 
-	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-	CurHorse->AddMovementInput(ForwardDirection, Vect.Y);
-	CurHorse->AddActorLocalRotation(FRotator(0.f, Vect.X, 0.f));
-}
-
 void AMnBCharacter::StartGetOnMontage()
 {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying())
@@ -494,11 +472,6 @@ void AMnBCharacter::Move(const FInputActionValue& Value)
 		// add movement 
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
-
-		if (CurHorse)
-		{
-			MoveHorse(MovementVector);
-		}
 	}
 }
 

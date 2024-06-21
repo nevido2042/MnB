@@ -194,12 +194,5 @@ public:
 	AHorse* GetCurHorse() { return CurHorse; }
 	void SetCurHorse(AHorse* InHorse) { CurHorse = InHorse; }
 
-private:
-	//FVector2D MovementVector;
-
-public:
-	//FVector2D GetMovementVector() { return MovementVector; }
-
-	void MoveHorse(FVector2D Vect);
 };
 
