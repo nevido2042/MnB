@@ -71,6 +71,7 @@ void AHorse::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 #include "MnBCharacter.h"
+#include "VR/VRCharacter.h"
 void AHorse::Interact(AActor* InActor)
 {
 	if (Rider == nullptr)
@@ -97,11 +98,37 @@ void AHorse::Interact(AActor* InActor)
 
 			Char->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
 		}
+		else if (AVRCharacter* VRChar = Cast<AVRCharacter>(InActor))
+		{
+			VRChar->SetCurHorse(this);
+			VRChar->GetCharacterMovement()->DisableMovement();
+			VRChar->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
+			SetCapsuleCollisionProfileName(TEXT("Vehicle"));
+			VRChar->GetCharacterMovement()->GravityScale = 0.f;
+			FVector SitLoc = GetSitLocation()->GetComponentLocation();
+			FRotator SitRot = GetSitLocation()->GetComponentRotation();
+			VRChar->SetActorLocation(SitLoc);
+			VRChar->SetActorRotation(SitRot);
+			VRChar->GetController()->SetControlRotation(SitRot);
+		}
 	}
 	else if (Rider)
 	{
 		Rider->StartDescendingHorseMontage();
 		Rider = nullptr;
+	}
+	else if (RiderVR)
+	{
+		RiderVR->GetCharacterMovement()->GravityScale = 1.f;
+		RiderVR->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+		SetCapsuleCollisionProfileName(TEXT("Pawn"));
+
+		RiderVR->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+
+		RiderVR->SetCurHorse(nullptr);
+
+		RiderVR = nullptr;
 	}
 
 }

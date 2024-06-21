@@ -34,8 +34,8 @@ void USitOnNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* A
 		UMnBCharacterAnimInstance* Anim = Cast<UMnBCharacterAnimInstance>(Char->GetMesh()->GetAnimInstance());
 		Anim->SetRide(true);
 
-		UHorseAnimInstance* HorseAnim = Cast<UHorseAnimInstance>(Horse->GetMesh()->GetAnimInstance());
-		HorseAnim->SetOwnerMovement(Char);
+		//UHorseAnimInstance* HorseAnim = Cast<UHorseAnimInstance>(Horse->GetMesh()->GetAnimInstance());
+		//HorseAnim->SetOwnerMovement(Char);
 
 		//Char->bOnHorse = true;
 	}

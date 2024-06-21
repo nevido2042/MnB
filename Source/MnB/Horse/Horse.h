@@ -47,6 +47,7 @@ protected:
 	USceneComponent* SitLocation = nullptr;
 
 	class AMnBCharacter* Rider = nullptr;
+	class AVRCharacter* RiderVR = nullptr;
 
 	//UPROPERTY(EditAnywhere)
 	//float MoveSpeed = 1000.f;

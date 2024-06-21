@@ -25,8 +25,8 @@ void UDescendingHorseNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSeque
 
 		Horse->SetCapsuleCollisionProfileName(TEXT("Pawn"));
 
-		UHorseAnimInstance* HorseAnim = Cast<UHorseAnimInstance>(Horse->GetMesh()->GetAnimInstance());
-		HorseAnim->SetOwnerMovement(nullptr);
+		//UHorseAnimInstance* HorseAnim = Cast<UHorseAnimInstance>(Horse->GetMesh()->GetAnimInstance());
+		//HorseAnim->SetOwnerMovement(nullptr);
 
 		Char->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 

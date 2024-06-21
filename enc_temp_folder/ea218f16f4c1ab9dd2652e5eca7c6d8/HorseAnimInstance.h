@@ -26,6 +26,6 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	float Speed;
 
-//public:
-//	void SetOwnerMovement(class ACharacter* InCharacter);
+public:
+	void SetOwnerMovement(class ACharacter* InCharacter);
 };

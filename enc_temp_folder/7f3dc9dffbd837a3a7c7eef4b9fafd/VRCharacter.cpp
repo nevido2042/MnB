@@ -112,8 +112,8 @@ AVRCharacter::AVRCharacter()
 	WidgetComponent = CreateDefaultSubobject< UWidgetComponent>(TEXT("HealthBar"));
 	WidgetComponent->SetupAttachment(RootComponent);
 
-	//Horse = CreateDefaultSubobject<UChildActorComponent>(TEXT("Horse"));
-	//Horse->SetupAttachment(RootComponent);
+	Horse = CreateDefaultSubobject<UChildActorComponent>(TEXT("Horse"));
+	Horse->SetupAttachment(RootComponent);
 }	 
 
 // Called when the game starts or when spawned
@@ -140,7 +140,7 @@ void AVRCharacter::BeginPlay()
 
 	SetHandWidget();
 	//SetHealthWidget();
-	//GetOffHorse();
+	GetOffHorse();
 
 }
 
@@ -212,19 +212,14 @@ void AVRCharacter::OnMove(const FInputActionValue& InputActionValue)
 
 	if (!FMath::IsNearlyZero(ActionValue.X))
 	{
-		/*if (bRiddingHorse)
+		if (bRiddingHorse)
 		{
 			AddControllerYawInput(ActionValue.X);
 		}
-		else*/
+		else
 		{
 			const FVector RightVector = GetActorRightVector(); //UKismetMathLibrary::GetRightVector(CameraYawRotator);
 			AddMovementInput(RightVector, ActionValue.X);
-		}
-
-		if (CurHorse)
-		{
-			MoveHorse(ActionValue);
 		}
 	}
 }
@@ -537,42 +532,36 @@ float AVRCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 	return Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
 }
 
-void AVRCharacter::MoveHorse(FVector2D Vect)
+#include "GameFramework/CharacterMovementComponent.h"
+void AVRCharacter::RideHorse()
 {
-	CurHorse->AddMovementInput(CurHorse->GetActorForwardVector(), Vect.Y);
-	CurHorse->AddActorLocalRotation(FRotator(0.f, Vect.X, 0.f));
+	Horse->GetChildActor()->GetComponentByClass<USkeletalMeshComponent>()->SetCollisionProfileName("Interactable");
+	Cast<AHorse>(Horse->GetChildActor())->SetCapsuleCollisionProfileName(TEXT("Horse"));
+	if (CurHorse)
+	{
+		CurHorse->SetCapsuleCollisionProfileName(TEXT("Horse"));
+	}
+
+	GetCapsuleComponent()->SetCapsuleHalfHeight(150.f);
+	Horse->SetHiddenInGame(false);
+	GetCharacterMovement()->MaxWalkSpeed = HorseSpeed;
 }
 
-//#include "GameFramework/CharacterMovementComponent.h"
-//void AVRCharacter::RideHorse()
-//{
-//	Horse->GetChildActor()->GetComponentByClass<USkeletalMeshComponent>()->SetCollisionProfileName("Interactable");
-//	Cast<AHorse>(Horse->GetChildActor())->SetCapsuleCollisionProfileName(TEXT("Horse"));
-//	if (CurHorse)
-//	{
-//		CurHorse->SetCapsuleCollisionProfileName(TEXT("Horse"));
-//	}
-//
-//	GetCapsuleComponent()->SetCapsuleHalfHeight(150.f);
-//	Horse->SetHiddenInGame(false);
-//	GetCharacterMovement()->MaxWalkSpeed = HorseSpeed;
-//}
-//
-//void AVRCharacter::GetOffHorse()
-//{
-//	Horse->GetChildActor()->GetComponentByClass<USkeletalMeshComponent>()->SetCollisionProfileName("NoCollision");
-//	Cast<AHorse>(Horse->GetChildActor())->SetCapsuleCollisionProfileName(TEXT("Horse"));
-//
-//	if (CurHorse)
-//	{
-//		CurHorse->SetCapsuleCollisionProfileName(TEXT("Pawn"));
-//	}
-//
-//	GetCapsuleComponent()->SetCapsuleHalfHeight(34.f);
-//	Horse->SetHiddenInGame(true);
-//	GetCharacterMovement()->MaxWalkSpeed = WalkSpped;
-//
-//}
+void AVRCharacter::GetOffHorse()
+{
+	Horse->GetChildActor()->GetComponentByClass<USkeletalMeshComponent>()->SetCollisionProfileName("NoCollision");
+	Cast<AHorse>(Horse->GetChildActor())->SetCapsuleCollisionProfileName(TEXT("Horse"));
+
+	if (CurHorse)
+	{
+		CurHorse->SetCapsuleCollisionProfileName(TEXT("Pawn"));
+	}
+
+	GetCapsuleComponent()->SetCapsuleHalfHeight(34.f);
+	Horse->SetHiddenInGame(true);
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpped;
+
+}
 
 #include "Horse/Horse.h"
 void AVRCharacter::Interact(AActor* HandFoucsing)
@@ -585,7 +574,7 @@ void AVRCharacter::Interact(AActor* HandFoucsing)
 		InteractableActor->Interact(this);
 	}
 
-	/*if (AHorse* FocusHorse = Cast<AHorse>(HandFoucsing))
+	if (AHorse* FocusHorse = Cast<AHorse>(HandFoucsing))
 	{
 		if (bRiddingHorse)
 		{
@@ -607,6 +596,6 @@ void AVRCharacter::Interact(AActor* HandFoucsing)
 
 			CurHorse->SetActorHiddenInGame(true);
 		}
-	}*/
+	}
 }
 

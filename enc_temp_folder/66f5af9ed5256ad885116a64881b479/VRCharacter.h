@@ -109,25 +109,20 @@ protected:
 	UPROPERTY(EditAnyWhere)
 	class UCapsuleComponent* HitCapsule = nullptr;
 
-	//UPROPERTY(EditAnywhere)
-	//class UChildActorComponent* Horse = nullptr;
+	UPROPERTY(EditAnywhere)
+	class UChildActorComponent* Horse = nullptr;
 
-	//bool bRiddingHorse = false;
+	bool bRiddingHorse = false;
 
 	class AHorse* CurHorse = nullptr;
-public:
 
-	void SetCurHorse(AHorse* InHorse) { CurHorse = InHorse; }
-	void MoveHorse(FVector2D Vect);
 private:
-	//void RideHorse();
-	//void GetOffHorse();
+	void RideHorse();
+	void GetOffHorse();
 
 private:
 	UPROPERTY(EditAnywhere)
 	float WalkSpped = 200.f;
 	UPROPERTY(EditAnywhere)
 	float HorseSpeed = 600.f;
-
-
 };
