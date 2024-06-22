@@ -193,6 +193,14 @@ void AWeapon::HitDetect()
 	if (Owner)
 	{
 		IgnoreActors.Add(Owner->GetPawn()); //when die can't find pawn
+
+		if (AMnBCharacter* Char = Cast<AMnBCharacter>(Owner->GetPawn()))
+		{
+			if (Char->GetEquippeddShield())
+			{
+				IgnoreActors.Add(Char->GetEquippeddShield());
+			}
+		}
 	}
 	IgnoreActors.Add(this);
 	

@@ -157,6 +157,8 @@ protected:
 public:
 	void Blocked();
 	void SetCurrentAttackDirection(EAttackDirection value) { CurAttackDir = value; }
+
+	AShield* GetEquippeddShield() { return EquippedShield; }
 private:
 	class UAIPerceptionStimuliSourceComponent* StimulusSource;
 
