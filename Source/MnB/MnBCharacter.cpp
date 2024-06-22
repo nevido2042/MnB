@@ -156,6 +156,8 @@ void AMnBCharacter::Equip()
 
 		WeaponMesh->SetRelativeLocation(FVector::Zero());
 		WeaponMesh->SetRelativeRotation(EquippedWeapon->GetWeaponGrip()->GetRelativeRotation());
+
+		SetBow(true);
 	}
 	else
 	{
@@ -165,6 +167,7 @@ void AMnBCharacter::Equip()
 			WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 
 			EquippedWeapon->Unequipped();
+			SetBow(false);
 		}
 
 		UStaticMeshComponent* WeaponMesh = FocusingActor->GetComponentByClass<UStaticMeshComponent>();
@@ -193,7 +196,6 @@ void AMnBCharacter::ReadyToAttack()
 	{
 		UMnBCharacterAnimInstance* MnBAnim = Cast<UMnBCharacterAnimInstance>(AnimInstance);
 		MnBAnim->SetBowDraw(true);
-		UE_LOG(LogTemp, Warning, TEXT("BowDraw %d"), MnBAnim->GetBowDraw());
 		return;
 	}
 
@@ -216,6 +218,16 @@ void AMnBCharacter::Attack()
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
 	if (AnimInstance->IsAnyMontagePlaying()) { return; }
+
+	if (bBow)
+	{
+		UMnBCharacterAnimInstance* MnBAnim = Cast<UMnBCharacterAnimInstance>(AnimInstance);
+		MnBAnim->SetBowDraw(false);
+
+		PlayAnimMontage(BowRecoil);
+
+		return;
+	}
 
 	if (bReadyToRightAttack)
 	{
@@ -448,6 +460,13 @@ void AMnBCharacter::MoveHorse(FVector2D Vect)
 {
 	CurHorse->AddMovementInput(CurHorse->GetActorForwardVector(), Vect.Y);
 	CurHorse->AddActorLocalRotation(FRotator(0.f, Vect.X, 0.f));
+}
+
+void AMnBCharacter::SetBow(bool Value)
+{
+	bBow = Value;
+	UMnBCharacterAnimInstance* Anim = Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	Anim->SetBow(Value);
 }
 
 void AMnBCharacter::StartGetOnMontage()

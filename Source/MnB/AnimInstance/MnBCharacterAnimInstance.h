@@ -52,6 +52,9 @@ protected:
 	TEnumAsByte<EBlockedDirection> BlockedDir = EBlockedDirection::None;
 
 	UPROPERTY(BlueprintReadOnly)
+	bool bBow = false;
+
+	UPROPERTY(BlueprintReadOnly)
 	bool bBowDraw = false;
 
 protected:
@@ -73,4 +76,6 @@ public:
 	void SetBowDraw(bool Value) { bBowDraw = Value; }
 
 	bool GetBowDraw() { return bBowDraw; }
+
+	void SetBow(bool Value) { bBow = Value; }
 };

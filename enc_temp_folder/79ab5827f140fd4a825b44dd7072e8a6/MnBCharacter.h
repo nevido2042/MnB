@@ -144,10 +144,7 @@ protected:
 
 	UAnimMontage* DamagedMontage = nullptr;
 
-	bool bBow = false;
-
-	UPROPERTY(EditAnywhere)
-	UAnimMontage* BowRecoil = nullptr;
+	bool bBow = true;
 
 protected:
 	void ReadyToAttack();
@@ -200,6 +197,7 @@ public:
 
 	AHorse* GetCurHorse() { return CurHorse; }
 	void SetCurHorse(AHorse* InHorse) { CurHorse = InHorse; }
+
 private:
 	//FVector2D MovementVector;
 
@@ -207,8 +205,5 @@ public:
 	//FVector2D GetMovementVector() { return MovementVector; }
 
 	void MoveHorse(FVector2D Vect);
-
-public:
-	void SetBow(bool Value);
 };
 

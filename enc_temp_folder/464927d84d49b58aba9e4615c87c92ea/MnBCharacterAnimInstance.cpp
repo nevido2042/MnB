@@ -35,8 +35,6 @@ void UMnBCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	IsReadyToAttack();
 
 	GetMoveDirection();
-
-	UE_LOG(LogTemp, Warning, TEXT("Guard: %d"), GuardDir);
 }
 
 void UMnBCharacterAnimInstance::IsShouldMove()
