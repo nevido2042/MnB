@@ -233,11 +233,8 @@ void AVRCharacter::OnLook(const FInputActionValue& InputActionValue)
 {
 	const float ActionValue = InputActionValue.Get<float>();
 
-	//FVector NewVector = FVector(0.f, ActionValue, 0.f);
-	//NewVector.ToOrientationQuat();
-
 	AddControllerYawInput(ActionValue);
-	//AddActorLocalRotation(NewVector.ToOrientationQuat());
+
 }
 
 void AVRCharacter::OnGrabStarted(UMotionControllerComponent* MotionControllerComponent, const bool bLeft, const FInputActionValue& InputActionValue)
@@ -463,18 +460,6 @@ void AVRCharacter::SetHandWidget()
 	WidgetComponentLeft->SetRelativeTransform(Transform);
 }
 
-//void AVRCharacter::SetHealthWidget()
-//{
-//	WidgetComponent->SetWidgetClass(HealthWidget);
-//
-//	/*FTransform Transform = FTransform(
-//		FRotator(60.0, 180.0, -90.0),
-//		FVector(0.0, 0.0, 0.0),
-//		FVector(0.2, 0.2, 0.2));
-//
-//	WidgetComponent->SetRelativeTransform(Transform);*/
-//}
-
 #include "MnB/UserWidget/VRInfoWidget.h"
 #include "MnB/Interface/InteractableActor.h"
 void AVRCharacter::UpdateWidget(class UWidgetComponent* InWidget, AActor* InFocusingActor)
@@ -513,9 +498,6 @@ float AVRCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AC
 {
 	Health->AddCurrentHP(-Damage);
 
-	//StopAnimMontage();
-	//GetMesh()->GetAnimInstance()->Montage_Play(DamagedMontage);
-
 	if (FMath::IsNearlyZero(Health->GetCurrentHP()))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Die"));
@@ -542,40 +524,9 @@ void AVRCharacter::MoveHorse(FVector2D Vect)
 	CurHorse->AddMovementInput(CurHorse->GetActorForwardVector(), Vect.Y);
 
 	float RotateScale = 2.f;
-	//AddActorLocalRotation(FRotator(0.f, Vect.X, 0.f));
+
 	CurHorse->AddActorLocalRotation(FRotator(0.f, Vect.X * RotateScale, 0.f));
 }
-
-//#include "GameFramework/CharacterMovementComponent.h"
-//void AVRCharacter::RideHorse()
-//{
-//	Horse->GetChildActor()->GetComponentByClass<USkeletalMeshComponent>()->SetCollisionProfileName("Interactable");
-//	Cast<AHorse>(Horse->GetChildActor())->SetCapsuleCollisionProfileName(TEXT("Horse"));
-//	if (CurHorse)
-//	{
-//		CurHorse->SetCapsuleCollisionProfileName(TEXT("Horse"));
-//	}
-//
-//	GetCapsuleComponent()->SetCapsuleHalfHeight(150.f);
-//	Horse->SetHiddenInGame(false);
-//	GetCharacterMovement()->MaxWalkSpeed = HorseSpeed;
-//}
-//
-//void AVRCharacter::GetOffHorse()
-//{
-//	Horse->GetChildActor()->GetComponentByClass<USkeletalMeshComponent>()->SetCollisionProfileName("NoCollision");
-//	Cast<AHorse>(Horse->GetChildActor())->SetCapsuleCollisionProfileName(TEXT("Horse"));
-//
-//	if (CurHorse)
-//	{
-//		CurHorse->SetCapsuleCollisionProfileName(TEXT("Pawn"));
-//	}
-//
-//	GetCapsuleComponent()->SetCapsuleHalfHeight(34.f);
-//	Horse->SetHiddenInGame(true);
-//	GetCharacterMovement()->MaxWalkSpeed = WalkSpped;
-//
-//}
 
 #include "Horse/Horse.h"
 void AVRCharacter::Interact(AActor* HandFoucsing)
@@ -587,29 +538,5 @@ void AVRCharacter::Interact(AActor* HandFoucsing)
 	{
 		InteractableActor->Interact(this);
 	}
-
-	/*if (AHorse* FocusHorse = Cast<AHorse>(HandFoucsing))
-	{
-		if (bRiddingHorse)
-		{
-			GetOffHorse();
-			bRiddingHorse = false;
-
-			CurHorse->SetActorHiddenInGame(false);
-			CurHorse->SetActorLocationAndRotation(GetActorLocation(), GetActorRotation());
-
-		}
-		else
-		{
-			RideHorse();
-			bRiddingHorse = true;
-
-			SetActorLocationAndRotation(FocusHorse->GetActorLocation(), FocusHorse->GetActorRotation());
-
-			CurHorse = FocusHorse;
-
-			CurHorse->SetActorHiddenInGame(true);
-		}
-	}*/
 }
 

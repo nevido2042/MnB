@@ -114,6 +114,7 @@ void AMnBCharacter::Tick(float DeltaSeconds)
 }
 
 #include "Weapons/Shield.h"
+#include "Weapons/Bow.h"
 void AMnBCharacter::Equip()
 {
 	if (FocusingActor == nullptr) { return; }
@@ -136,6 +137,25 @@ void AMnBCharacter::Equip()
 
 		WeaponMesh->SetRelativeLocation(FVector::Zero());
 		WeaponMesh->SetRelativeRotation(EquippedShield->GetWeaponGrip()->GetRelativeRotation());
+	}
+	else if (Cast<ABow>(FocusingActor))
+	{
+		if (EquippedWeapon != nullptr)
+		{
+
+			UStaticMeshComponent* WeaponMesh = EquippedWeapon->GetComponentByClass<UStaticMeshComponent>();
+			WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+
+			EquippedWeapon->Unequipped();
+		}
+
+		UStaticMeshComponent* WeaponMesh = FocusingActor->GetComponentByClass<UStaticMeshComponent>();
+
+		WeaponMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform, TEXT("BowSocket"));
+		EquippedWeapon = Cast<ABow>(FocusingActor);
+
+		WeaponMesh->SetRelativeLocation(FVector::Zero());
+		WeaponMesh->SetRelativeRotation(EquippedWeapon->GetWeaponGrip()->GetRelativeRotation());
 	}
 	else
 	{
@@ -168,6 +188,15 @@ void AMnBCharacter::ReadyToAttack()
 	bReadyToRightAttack = false;
 
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+
+	if (bBow)
+	{
+		UMnBCharacterAnimInstance* MnBAnim = Cast<UMnBCharacterAnimInstance>(AnimInstance);
+		MnBAnim->SetBowDraw(true);
+		UE_LOG(LogTemp, Warning, TEXT("BowDraw %d"), MnBAnim->GetBowDraw());
+		return;
+	}
+
 	if (AnimInstance->IsAnyMontagePlaying()) { return; }
 
 	if (LookAxisVector.X < 0)
@@ -187,6 +216,7 @@ void AMnBCharacter::Attack()
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
 	if (AnimInstance->IsAnyMontagePlaying()) { return; }
+
 	if (bReadyToRightAttack)
 	{
 		SetCurrentAttackDirection(EAttackDirection::AttackRight);
@@ -262,7 +292,6 @@ void AMnBCharacter::RecoverBlockedState()
 
 void AMnBCharacter::Guard()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Garud()"));
 	if (LookAxisVector.X < 0)
 	{
 		Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance())->SetGuardDirection(EGuardDirection::GuardLeft);
@@ -273,6 +302,8 @@ void AMnBCharacter::Guard()
 	}
 
 	if (EquippedWeapon == nullptr) return;
+	if (EquippedWeapon->GetGuardCollider() == nullptr) return;//bow not has guard collider
+
 	EquippedWeapon->GetGuardCollider()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 }
 
@@ -282,6 +313,8 @@ void AMnBCharacter::GuardEnd()
 	Cast<UMnBCharacterAnimInstance>(GetMesh()->GetAnimInstance())->SetGuardDirection(EGuardDirection::GuardNone);
 
 	if (EquippedWeapon == nullptr) return;
+	if (EquippedWeapon->GetGuardCollider() == nullptr) return;//bow not has guard collider
+
 	EquippedWeapon->GetGuardCollider()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 

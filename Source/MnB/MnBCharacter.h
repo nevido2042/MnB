@@ -144,6 +144,8 @@ protected:
 
 	UAnimMontage* DamagedMontage = nullptr;
 
+	bool bBow = true;
+
 protected:
 	void ReadyToAttack();
 	void Attack();

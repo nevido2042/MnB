@@ -51,6 +51,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	TEnumAsByte<EBlockedDirection> BlockedDir = EBlockedDirection::None;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool bBowDraw = false;
+
 protected:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
@@ -66,4 +69,8 @@ public:
 	void SetGuardDirection(TEnumAsByte<EGuardDirection> Value) { GuardDir = Value; }
 
 	void SetRide(bool Value) { bRide = Value; }
+
+	void SetBowDraw(bool Value) { bBowDraw = Value; }
+
+	bool GetBowDraw() { return bBowDraw; }
 };
