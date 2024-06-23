@@ -226,6 +226,10 @@ void AMnBCharacter::Attack()
 
 		PlayAnimMontage(BowRecoil);
 
+		FVector Location = GetActorLocation();
+		FRotator Rotation = GetActorRotation();
+		GetWorld()->SpawnActor(Arrow, &Location, &Rotation);
+
 		return;
 	}
 

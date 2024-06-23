@@ -149,6 +149,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* BowRecoil = nullptr;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class AArrow> Arrow = nullptr;
+
 protected:
 	void ReadyToAttack();
 	void Attack();
