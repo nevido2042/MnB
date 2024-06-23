@@ -225,8 +225,8 @@ void AMnBCharacter::Attack()
 
 		PlayAnimMontage(BowRecoil);
 
-		FVector Location = GetActorLocation();
-		FRotator Rotation = GetActorRotation();
+		FVector Location = GetMesh()->GetSocketByName("WeaponSocket")->GetSocketLocation(GetMesh());
+		FRotator Rotation = GetControlRotation();
 		GetWorld()->SpawnActor(Arrow, &Location, &Rotation);
 
 		return;
