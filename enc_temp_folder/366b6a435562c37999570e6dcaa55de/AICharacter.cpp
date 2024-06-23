@@ -209,18 +209,12 @@ void AAICharacter::Die()
 
 void AAICharacter::MyDestroy()
 {
-	//TArray<AActor*> AttachedActors;
-	//GetAttachedActors(AttachedActors);
-	//
-	//for (AActor* Iter : AttachedActors)
-	//{
-	//	Iter->Destroy();
-	//}
-
-	auto Childrens = GetMesh()->GetAttachChildren();
-	for (auto Iter : Childrens)
+	TArray<AActor*> AttachedActors;
+	GetAttachedActors(AttachedActors);
+	
+	for (AActor* Iter : AttachedActors)
 	{
-		Iter->DestroyComponent();
+		Iter->Destroy();
 	}
 
 	Destroy(); 

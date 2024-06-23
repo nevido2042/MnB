@@ -50,7 +50,7 @@ protected:
 	class AVRCharacter* RiderVR = nullptr;
 
 	//UPROPERTY(EditAnywhere)
-	//float MoveSpeed = 1000.f;
+	//float MaxWalkSpeed = 1000.f;
 
 	/*UPROPERTY(EditAnywhere)
 	class UChildActorComponent* SitLoc = nullptr;*/
@@ -60,7 +60,7 @@ public:
 
 	AMnBCharacter* GetRider() { return Rider; }
 
-	//float GetMoveSpeed() { return MoveSpeed; }
+	//float GetMaxWalkSpeed() { return MaxWalkSpeed; }
 
 	//UChildActorComponent* GetSitLoc() { return SitLoc; }
 

@@ -42,5 +42,12 @@ void AArrow::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, A
 	ProjectileMovementComponent->ProjectileGravityScale = 0.f;
 
 	UGameplayStatics::ApplyDamage(OtherActor, 1.f, nullptr, nullptr, nullptr);
+
+	if (OtherActor->GetComponentByClass<USkeletalMeshComponent>())
+	{
+		AttachToComponent(OtherActor->GetComponentByClass<USkeletalMeshComponent>(), FAttachmentTransformRules::KeepWorldTransform);
+	}
+
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 

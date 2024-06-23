@@ -205,7 +205,9 @@ public:
 	void SetCurHorse(AHorse* InHorse) { CurHorse = InHorse; }
 private:
 	//FVector2D MovementVector;
-
+	//bool bHorseSlowDown = false;
+	//void StartHorseSlowDown();
+	//void HorseSlowDown();
 public:
 	//FVector2D GetMovementVector() { return MovementVector; }
 

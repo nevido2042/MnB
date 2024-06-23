@@ -191,14 +191,14 @@ void AMnBCharacter::ReadyToAttack()
 
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 
-	if (AnimInstance->IsAnyMontagePlaying()) { return; }
-
 	if (bBow)
 	{
 		UMnBCharacterAnimInstance* MnBAnim = Cast<UMnBCharacterAnimInstance>(AnimInstance);
 		MnBAnim->SetBowDraw(true);
 		return;
 	}
+
+	if (AnimInstance->IsAnyMontagePlaying()) { return; }
 
 	if (LookAxisVector.X < 0)
 	{
