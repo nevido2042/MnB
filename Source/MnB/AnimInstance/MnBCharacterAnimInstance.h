@@ -57,6 +57,15 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	bool bBowDraw = false;
 
+	UPROPERTY(BlueprintReadOnly)
+	float ControlYaw;
+
+	UPROPERTY(BlueprintReadOnly)
+	float ControlPitch;
+
+	UPROPERTY(BlueprintReadOnly)
+	FVector CharacterForwardVector;
+
 protected:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
@@ -78,4 +87,8 @@ public:
 	bool GetBowDraw() { return bBowDraw; }
 
 	void SetBow(bool Value) { bBow = Value; }
+
+	void SetControlYawPitch();
+
+	void SetCharacterForwardVector();
 };

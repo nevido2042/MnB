@@ -476,9 +476,10 @@ void AMnBCharacter::MoveHorse(FVector2D Vect)
 {
 	/*float& CurWalkSpped = CurHorse->GetCharacterMovement()->MaxWalkSpeed;
 	CurWalkSpped = FMath::Lerp(CurWalkSpped, CurHorse->GetMaxWalkSpeed(), GetWorld()->DeltaTimeSeconds);*/
+	float RotateScale = 2.f;
 
 	CurHorse->AddMovementInput(CurHorse->GetActorForwardVector(), Vect.Y);
-	CurHorse->AddActorLocalRotation(FRotator(0.f, Vect.X, 0.f));
+	CurHorse->AddActorLocalRotation(FRotator(0.f, Vect.X * RotateScale, 0.f));
 }
 
 void AMnBCharacter::SetBow(bool Value)

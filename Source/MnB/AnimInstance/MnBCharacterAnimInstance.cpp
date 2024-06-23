@@ -36,7 +36,9 @@ void UMnBCharacterAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 	GetMoveDirection();
 
-	UE_LOG(LogTemp, Warning, TEXT("Guard: %d"), GuardDir);
+	SetControlYawPitch();
+
+	SetCharacterForwardVector();
 }
 
 void UMnBCharacterAnimInstance::IsShouldMove()
@@ -64,5 +66,28 @@ void UMnBCharacterAnimInstance::IsReadyToAttack()
 	{
 		bReadyToRightAttack = MnBCharacter->IsReadyToRightAttack();
 		bReadyToLeftAttack = MnBCharacter->IsReadyToLeftAttack();
+	}
+}
+
+void UMnBCharacterAnimInstance::SetControlYawPitch()
+{
+	if (MnBCharacter)
+	{
+		ControlYaw = MnBCharacter->GetControlRotation().Yaw;
+		if (ControlYaw > 225 && ControlYaw < 360)
+		{
+			ControlYaw -= 360;
+		}
+
+
+		ControlPitch = MnBCharacter->GetControlRotation().Pitch;
+	}
+}
+
+void UMnBCharacterAnimInstance::SetCharacterForwardVector()
+{
+	if (MnBCharacter)
+	{
+		CharacterForwardVector = MnBCharacter->GetActorForwardVector();
 	}
 }
