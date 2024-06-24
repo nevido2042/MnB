@@ -22,6 +22,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Components/AudioComponent.h"
 #include "Horse/Horse.h"
+#include "Weapons/Arrow.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -129,6 +130,15 @@ void AMnBCharacter::Equip()
 			EquippedShield->Unequipped();
 		}
 
+		if (Cast<ABow>(EquippedWeapon))
+		{
+			UStaticMeshComponent* WeaponMesh = EquippedWeapon->GetComponentByClass<UStaticMeshComponent>();
+			WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+
+			EquippedWeapon->Unequipped();
+			EquippedWeapon = nullptr;
+		}
+
 		UStaticMeshComponent* WeaponMesh = FocusingActor->GetComponentByClass<UStaticMeshComponent>();
 
 		WeaponMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepWorldTransform, TEXT("ShieldSocket"));
@@ -146,6 +156,15 @@ void AMnBCharacter::Equip()
 			WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 
 			EquippedWeapon->Unequipped();
+		}
+
+		if (EquippedShield)
+		{
+			UStaticMeshComponent* WeaponMesh = EquippedShield->GetComponentByClass<UStaticMeshComponent>();
+			WeaponMesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+
+			EquippedShield->Unequipped();
+			EquippedShield = nullptr;
 		}
 
 		UStaticMeshComponent* WeaponMesh = FocusingActor->GetComponentByClass<UStaticMeshComponent>();

@@ -169,7 +169,10 @@ void AAICharacter::Die()
 		auto Childrens = GetMesh()->GetAttachChildren();
 		for (auto Iter : Childrens)
 		{
-			Iter->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+			if (Cast<AWeapon>(Iter))
+			{
+				Iter->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+			}
 		}
 
 		CurWeapon->Unequipped();
