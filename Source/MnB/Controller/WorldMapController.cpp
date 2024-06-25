@@ -24,6 +24,22 @@ void AWorldMapController::BeginPlay()
 
 }
 
+void AWorldMapController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	FHitResult Hit;
+	bool bHitSuccessful = false;
+
+	bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_GameTraceChannel3, true, Hit);
+
+	if (bHitSuccessful)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Town"));
+	}
+
+}
+
 void AWorldMapController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -44,9 +60,7 @@ FVector AWorldMapController::GetClickLocation()
 	FHitResult Hit;
 	bool bHitSuccessful = false;
 
-	{
-		bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
-	}
+	bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
 
 	// If we hit a surface, cache the location
 	if (bHitSuccessful)
@@ -55,11 +69,4 @@ FVector AWorldMapController::GetClickLocation()
 	}
 
 	return FVector::ZeroVector;
-	//// Move towards mouse pointer or touch
-	//APawn* ControlledPawn = GetPawn();
-	//if (ControlledPawn != nullptr)
-	//{
-	//	FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
-	//	ControlledPawn->AddMovementInput(WorldDirection, 1.0, false);
-	//}
 }

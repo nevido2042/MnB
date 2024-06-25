@@ -20,6 +20,8 @@ class MNB_API AWorldMapController : public APlayerController
 	
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaSeconds);
+
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* MappingContext;
