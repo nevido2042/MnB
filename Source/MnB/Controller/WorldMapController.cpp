@@ -5,6 +5,7 @@
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Blueprint/UserWidget.h"
 
 void AWorldMapController::BeginPlay()
 {
@@ -22,22 +23,14 @@ void AWorldMapController::BeginPlay()
 	FInputModeGameAndUI Mode;
 	SetInputMode(Mode);
 
+	WorldOption = CreateWidget(GetWorld(), WorldOptionAsset);
+	WorldOption->AddToViewport();
+	WorldOption->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void AWorldMapController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-
-	FHitResult Hit;
-	bool bHitSuccessful = false;
-
-	bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_GameTraceChannel3, true, Hit);
-
-	if (bHitSuccessful)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Town"));
-	}
-
 }
 
 void AWorldMapController::SetupInputComponent()
@@ -46,13 +39,33 @@ void AWorldMapController::SetupInputComponent()
 
     if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent))
     {
-        EnhancedInputComponent->BindAction(ClickMoveAction, ETriggerEvent::Completed, this, &AWorldMapController::ClickMove);
+		EnhancedInputComponent->BindAction(ClickMoveAction, ETriggerEvent::Completed, this, &AWorldMapController::ClickMove);
+
+        EnhancedInputComponent->BindAction(ClickAction, ETriggerEvent::Completed, this, &AWorldMapController::Click);
     }
 }
 
 void AWorldMapController::ClickMove()
 {
 	UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, GetClickLocation());
+}
+
+void AWorldMapController::Click()
+{
+	FHitResult Hit;
+	bool bHitSuccessful = false;
+
+	bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_GameTraceChannel3, true, Hit);
+
+	if (bHitSuccessful)
+	{
+		WorldOption->SetVisibility(ESlateVisibility::Visible);
+	}
+	else
+	{
+		WorldOption->SetVisibility(ESlateVisibility::Hidden);
+	}
+
 }
 
 FVector AWorldMapController::GetClickLocation()

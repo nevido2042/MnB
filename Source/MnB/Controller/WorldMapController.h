@@ -30,9 +30,20 @@ class MNB_API AWorldMapController : public APlayerController
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ClickMoveAction;
 
+	/** Click Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ClickAction;
+
 	virtual void SetupInputComponent() override;
 
 	void ClickMove();
 
+	void Click();
+
 	FVector GetClickLocation();
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> WorldOptionAsset = nullptr;
+
+	UUserWidget* WorldOption = nullptr;
 };
