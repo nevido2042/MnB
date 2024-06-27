@@ -221,6 +221,15 @@ public:
 	void SetBow(bool Value);
 
 protected:
+	void SetVisibleExitTownWidget();
+	void SetHiddenExitTownWidget();
 	void ExitTownIncreasePercent();
+
+	class UExitTownWidget* ExitTownWidget = nullptr;
+
+	/*UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> ExitTownWidgetAsset;*/
+
+	//class UUserWidget* ExitTownWidget = nullptr;
 };
 

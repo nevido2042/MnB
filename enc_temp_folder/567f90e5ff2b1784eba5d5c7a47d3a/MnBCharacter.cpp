@@ -535,7 +535,7 @@ void AMnBCharacter::ExitTownIncreasePercent()
 	/*UE_LOG(LogTemp, Warning, TEXT("ExitTownIncreasePercent"));*/
 	
 	float NewPercent = ExitTownWidget->GetCurPercent() + GetWorld()->DeltaTimeSeconds;
-	//NewPercent = NewPercent / 10.f;
+	NewPercent = NewPercent / 10.f;
 	ExitTownWidget->SetCurPercent(NewPercent);
 	ExitTownWidget->GetExitTownBar()->SetPercent(NewPercent);
 

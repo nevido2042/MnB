@@ -16,6 +16,8 @@ AControllerPC::AControllerPC()
 			Widget = Finder.Class;
 		}
 	}
+
+	
 }
 
 void AControllerPC::BeginPlay()
@@ -27,6 +29,10 @@ void AControllerPC::BeginPlay()
 	SetShowMouseCursor(false);
 	FInputModeGameOnly Mode;
 	SetInputMode(Mode);
+
+	ExitTownWidget = CreateWidget(GetWorld(),ExitTownWidgetAsset);
+	ExitTownWidget->AddToViewport();
+	ExitTownWidget->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void AControllerPC::OnPossess(APawn* aPawn)

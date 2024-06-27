@@ -43,4 +43,14 @@ protected:
 
 	void CreateInventoryWidget();
 
+protected:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> ExitTownWidgetAsset;
+
+	class UUserWidget* ExitTownWidget = nullptr;
+public:
+	UUserWidget* GetExitTownWidget() { return ExitTownWidget; }
+
+
+
 };

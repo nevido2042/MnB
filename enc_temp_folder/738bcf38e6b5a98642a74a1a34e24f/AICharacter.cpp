@@ -46,13 +46,14 @@ AAICharacter::AAICharacter()
 		}
 	}
 
+	Health = CreateDefaultSubobject<UHealth>(TEXT("Health"));
+
+
 	Audio = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
 	Audio->SetupAttachment(RootComponent);
 
 	GetMesh()->SetGenerateOverlapEvents(true);
 	GetMesh()->SetCollisionProfileName(TEXT("Hitable"));
-
-	Health = CreateDefaultSubobject<UHealth>(TEXT("Health"));
 }
 
 // Called when the game starts or when spawned
