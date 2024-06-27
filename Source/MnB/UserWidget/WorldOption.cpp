@@ -18,7 +18,7 @@ void UWorldOption::LoadTownLevel()
 {
 	UE_LOG(LogTemp, Warning, TEXT("LoadTownLevel"));
 	
-	FLatentActionInfo LatentInfo;
-	//UGameplayStatics::LoadStreamLevel(this, TEXT("Demo"), true, true, LatentInfo);
+	/*FLatentActionInfo LatentInfo;
+	UGameplayStatics::LoadStreamLevel(this, TEXT("Demo"), true, true, LatentInfo);*/
 	UGameplayStatics::OpenLevel(GetWorld(), TEXT("Demo"));
 }

@@ -18,6 +18,7 @@ public class MnB : ModuleRules
 			"HeadMountedDisplay",
             "XRBase",
             "AnimGraphRuntime",
+            "MoviePlayer"
         });
 
 		if(Target.Type == TargetType.Editor)

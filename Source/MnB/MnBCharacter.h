@@ -84,6 +84,10 @@ class AMnBCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* InventoryAction;
 
+	/** ExitTown Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ExitTownAction;
+
 public:
 	AMnBCharacter();
 	
@@ -215,5 +219,8 @@ public:
 
 public:
 	void SetBow(bool Value);
+
+protected:
+	void ExitTownIncreasePercent();
 };
 

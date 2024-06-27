@@ -59,6 +59,13 @@ void AWorldMapController::Click()
 
 	if (bHitSuccessful)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("dist %f"), FVector::Dist(GetPawn()->GetActorLocation(), Hit.Location));
+
+		if (FVector::Dist(GetPawn()->GetActorLocation(), Hit.Location) > 300.f)
+		{
+			return;
+		}
+
 		WorldOption->SetVisibility(ESlateVisibility::Visible);
 	}
 	else

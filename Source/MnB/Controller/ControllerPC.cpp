@@ -22,8 +22,11 @@ void AControllerPC::BeginPlay()
 {
 	CurrentWidget = CreateWidget(GetWorld(), Widget);
 	CurrentWidget->AddToViewport();
-
 	CreateInventoryWidget();
+
+	SetShowMouseCursor(false);
+	FInputModeGameOnly Mode;
+	SetInputMode(Mode);
 }
 
 void AControllerPC::OnPossess(APawn* aPawn)

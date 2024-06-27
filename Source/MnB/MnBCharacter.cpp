@@ -508,6 +508,12 @@ void AMnBCharacter::SetBow(bool Value)
 	Anim->SetBow(Value);
 }
 
+void AMnBCharacter::ExitTownIncreasePercent()
+{
+	UE_LOG(LogTemp, Warning, TEXT("ExitTownIncreasePercent"));
+	GetWorld()->DeltaTimeSeconds;
+}
+
 void AMnBCharacter::StartGetOnMontage()
 {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying())
@@ -550,6 +556,10 @@ void AMnBCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 		// Inventory
 		EnhancedInputComponent->BindAction(InventoryAction, ETriggerEvent::Completed, this, &AMnBCharacter::InventoryOnOFF);
+
+		//ExitTown
+		EnhancedInputComponent->BindAction(ExitTownAction, ETriggerEvent::Triggered, this, &AMnBCharacter::ExitTownIncreasePercent);
+
 	}
 	else
 	{
