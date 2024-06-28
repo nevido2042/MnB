@@ -26,6 +26,10 @@ void AWorldMapController::BeginPlay()
 	WorldOption = CreateWidget(GetWorld(), WorldOptionAsset);
 	WorldOption->AddToViewport();
 	WorldOption->SetVisibility(ESlateVisibility::Hidden);
+
+	FightOption = CreateWidget(GetWorld(), FightOptionAsset);
+	FightOption->AddToViewport();
+	FightOption->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void AWorldMapController::Tick(float DeltaSeconds)
@@ -77,6 +81,8 @@ void AWorldMapController::ClickMove()
 	UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, GetClickLocation());
 }
 
+#include "WorldMap/WorldBuilding.h"
+#include "AI/WorldNPC.h"
 void AWorldMapController::Click()
 {
 	FHitResult Hit;
@@ -93,11 +99,19 @@ void AWorldMapController::Click()
 			return;
 		}
 
-		WorldOption->SetVisibility(ESlateVisibility::Visible);
+		if (Cast<AWorldBuilding>(Hit.GetActor()))
+		{
+			WorldOption->SetVisibility(ESlateVisibility::Visible);
+		}
+		if (Cast<AWorldNPC>(Hit.GetActor()))
+		{
+			FightOption->SetVisibility(ESlateVisibility::Visible);
+		}
 	}
 	else
 	{
 		WorldOption->SetVisibility(ESlateVisibility::Hidden);
+		FightOption->SetVisibility(ESlateVisibility::Hidden);
 	}
 
 }

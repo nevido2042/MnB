@@ -427,6 +427,11 @@ float AMnBCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, A
 		TArray<AActor*> OutActors;
 		UGameplayStatics::GetAllActorsOfClass(GetWorld(), AArenaManager::StaticClass(), OutActors);
 
+		if (OutActors.IsEmpty())
+		{
+			return Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+		}
+
 		if (OutActors[0])
 		{
 			if (AArenaManager * ArenaManager = Cast<AArenaManager>(OutActors[0]))

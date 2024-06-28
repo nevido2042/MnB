@@ -53,4 +53,10 @@ protected:
 	TSubclassOf<class UUserWidget> WorldOptionAsset = nullptr;
 
 	UUserWidget* WorldOption = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> FightOptionAsset = nullptr;
+
+	UUserWidget* FightOption = nullptr;
+
 };
