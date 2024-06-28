@@ -33,6 +33,33 @@ void AWorldMapController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 }
 
+#include "LocalSaveLoad/WorldSaveGame.h"
+#include "Kismet/GameplayStatics.h"
+void AWorldMapController::OnPossess(APawn* aPawn)
+{
+	WorldSaveGame = Cast<UWorldSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("World"), 0));
+	if (!WorldSaveGame)
+	{
+		WorldSaveGame = Cast<UWorldSaveGame>(UGameplayStatics::CreateSaveGameObject(UWorldSaveGame::StaticClass()));
+	}
+	ensure(WorldSaveGame);
+
+	Super::OnPossess(aPawn);
+
+	aPawn->SetActorLocation(WorldSaveGame->PlayerLocation);
+	aPawn->SetActorRotation(WorldSaveGame->PlayerRotation);
+}
+
+void AWorldMapController::OnUnPossess()
+{
+	WorldSaveGame->PlayerLocation = GetPawn()->GetActorLocation();
+	WorldSaveGame->PlayerRotation = GetPawn()->GetActorRotation();
+
+	UGameplayStatics::SaveGameToSlot(WorldSaveGame, TEXT("World"), 0);
+
+	Super::OnUnPossess();
+}
+
 void AWorldMapController::SetupInputComponent()
 {
 	Super::SetupInputComponent();

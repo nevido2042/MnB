@@ -22,6 +22,13 @@ class MNB_API AWorldMapController : public APlayerController
 
 	virtual void Tick(float DeltaSeconds);
 
+
+protected:
+	UPROPERTY(Transient)
+	class UWorldSaveGame* WorldSaveGame = nullptr;
+	virtual void OnPossess(APawn* aPawn) override;
+	virtual void OnUnPossess();
+
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* MappingContext;
