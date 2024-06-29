@@ -65,9 +65,23 @@ void AMnBAIController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulu
 {
 	if (TargetCharacter) return; //if already Set Target return
 
-	TargetCharacter = Cast<ACharacter>(Actor);
-	if (TargetCharacter)
+	//same team return
+	AAICharacter* ControlledPawn = Cast<AAICharacter>(GetPawn());
+	AAICharacter* TempAIChar = Cast<AAICharacter>(Actor);
+	if (TempAIChar == nullptr)
 	{
+		return;
+	}
+
+	if (ControlledPawn->GetTeam() == TempAIChar->GetTeam())
+	{
+		return;
+	}
+
+	TargetCharacter = TempAIChar;
+
+	if (TargetCharacter)
+	{		
 		//GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed());
 		if (GetBlackboardComponent())
 		{

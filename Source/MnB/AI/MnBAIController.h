@@ -35,15 +35,17 @@ protected:
 
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(BlueprintReadOnly)
+	class AAICharacter* TargetCharacter = nullptr;
+
 private:
+	UPROPERTY(EditAnywhere)
 	class UAISenseConfig_Sight* SightConfig;
 
 	void SetupPerceptionSystem();
 
 	UFUNCTION()
 	void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
-
-	ACharacter* TargetCharacter = nullptr;
 
 	void CheckTargetIsDie();
 

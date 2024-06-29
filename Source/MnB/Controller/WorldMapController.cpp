@@ -45,6 +45,7 @@ void AWorldMapController::OnPossess(APawn* aPawn)
 	if (!WorldSaveGame)
 	{
 		WorldSaveGame = Cast<UWorldSaveGame>(UGameplayStatics::CreateSaveGameObject(UWorldSaveGame::StaticClass()));
+		WorldSaveGame->PlayerLocation = FVector(0.f, 400.f, 300.f);
 	}
 	ensure(WorldSaveGame);
 

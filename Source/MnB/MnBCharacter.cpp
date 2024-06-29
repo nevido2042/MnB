@@ -112,6 +112,11 @@ void AMnBCharacter::Tick(float DeltaSeconds)
 	CameraRaycast();
 	UpdateActorInfo();
 
+	if (bControlUnits)
+	{
+		ControlUnitRaycast();
+	}
+
 	//if (bHorseSlowDown)
 	//{
 	//	HorseSlowDown();
@@ -206,8 +211,26 @@ void AMnBCharacter::Equip()
 
 }
 
+#include "AI/MnBAIController.h"
 void AMnBCharacter::ReadyToAttack()
 {
+	if (bControlUnits)
+	{
+		for (AAICharacter* AICharacter : CallUnits)
+		{
+			if (AICharacter->IsDie()||AICharacter== nullptr)
+			{
+				continue;
+			}
+
+			Cast<AAIController>(AICharacter->GetController())->MoveToLocation(ControlHitResult.Location);
+		}
+
+		CancelControl();
+
+		return;
+	}
+
 	//bReadyToAttack = true;
 
 	bReadyToLeftAttack = false;
@@ -382,6 +405,39 @@ void AMnBCharacter::InventoryOnOFF()
 			FInputModeGameAndUI Mode;
 			PC->SetInputMode(Mode);
 		}
+	}
+}
+
+void AMnBCharacter::ControlUnitRaycast()
+{
+	float LineLength = 5000.f;
+	FVector LineStart = GetFollowCamera()->GetComponentLocation();
+	FVector LineEnd = LineStart + GetFollowCamera()->GetComponentRotation().Vector() * LineLength;
+	DrawDebugLine(GetWorld(), LineStart, LineEnd, FColor::Green);
+
+	ControlHitResult;
+	bool bHit = GetWorld()->LineTraceSingleByChannel(ControlHitResult, LineStart, LineEnd, ECollisionChannel::ECC_GameTraceChannel5);//Ground
+	if (bHit)
+	{
+		DrawDebugLine(
+			GetWorld(),
+			LineStart,
+			ControlHitResult.Location,
+			FColor::Red,
+			false, 0.5f, 0, 1.0f
+		);
+
+
+		DrawDebugSphere(
+			GetWorld(),
+			ControlHitResult.Location,
+			12.0f,
+			24,
+			FColor::Red,
+			false, 0.5f
+		);
+
+		CurFlag->SetActorLocation(ControlHitResult.Location);
 	}
 }
 
@@ -599,6 +655,8 @@ void AMnBCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		EnhancedInputComponent->BindAction(ExitTownAction, ETriggerEvent::Completed, this, &AMnBCharacter::SetHiddenExitTownWidget);
 		EnhancedInputComponent->BindAction(ExitTownAction, ETriggerEvent::Canceled, this, &AMnBCharacter::SetHiddenExitTownWidget);
 
+		//Call All
+		EnhancedInputComponent->BindAction(CallAllAction, ETriggerEvent::Completed, this, &AMnBCharacter::CallAll);
 
 
 	}
@@ -651,4 +709,39 @@ void AMnBCharacter::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void AMnBCharacter::CancelControl()
+{
+	bControlUnits = false;
+
+	CurFlag->Destroy();
+	CallUnits.Empty();
+}
+
+#include "AI/AICharacter.h"
+void AMnBCharacter::CallAll()
+{
+	if (bControlUnits == true)
+	{
+		CancelControl();
+		return;
+	}
+
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AAICharacter::StaticClass(), OutActors);
+
+	for (AActor* Iter : OutActors)
+	{
+		AAICharacter* AICharacter = Cast<AAICharacter>(Iter);
+		if (AICharacter->GetTeam() == ETeam::ATeam)
+		{
+			CallUnits.Add(AICharacter);
+		}
+	}
+
+	bControlUnits = true;
+	CurFlag = GetWorld()->SpawnActor(FlagAsset);
+	//spawn flag
+	//raycast
 }

@@ -10,6 +10,14 @@
 #include "CombatInterface.h"
 #include "AICharacter.generated.h"
 
+
+UENUM(BlueprintType)
+enum ETeam
+{
+	ATeam,
+	BTeam
+};
+
 UCLASS()
 class MNB_API AAICharacter : public ACharacter, public ICombatInterface
 {
@@ -87,4 +95,11 @@ protected:
 
 private:
 	void SetRandomSoundAndPlay();
+
+protected:
+	UPROPERTY(EditAnywhere)
+	TEnumAsByte<ETeam> Team;
+
+public:
+	TEnumAsByte<ETeam> GetTeam() { return Team; }
 };

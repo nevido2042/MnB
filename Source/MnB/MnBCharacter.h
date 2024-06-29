@@ -88,6 +88,19 @@ class AMnBCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ExitTownAction;
 
+	/** CallAll Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* CallAllAction;
+
+protected:
+	UPROPERTY(BlueprintReadOnly)
+	TArray<class AAICharacter*> CallUnits;
+
+	FHitResult ControlHitResult;
+
+private:
+	void CancelControl();
+
 public:
 	AMnBCharacter();
 	
@@ -99,6 +112,8 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	void CallAll();
 			
 
 protected:
@@ -165,6 +180,15 @@ protected:
 	void Guard();
 	void GuardEnd();
 	void InventoryOnOFF();
+
+	void ControlUnitRaycast();
+
+private:
+	bool bControlUnits = false;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> FlagAsset = nullptr;
+	AActor* CurFlag = nullptr;
 
 public:
 	void Blocked();
