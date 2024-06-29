@@ -173,18 +173,6 @@ void AAICharacter::PlayBowRecoil()
 	PlayAnimMontage(BowRecoil);
 }
 
-#include "Engine/SkeletalMeshSocket.h"
-void AAICharacter::FireArrow()
-{
-	PlayBowRecoil();
-	AActor* Arrow = GetWorld()->SpawnActor(ArrowAsset);
-
-	FVector Location = GetMesh()->GetSocketByName("WeaponSocket")->GetSocketLocation(GetMesh());
-	FRotator Rotation = GetControlRotation();
-	GetWorld()->SpawnActor(ArrowAsset, &Location, &Rotation);
-}
-
-
 #include "AI/MnBAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 void AAICharacter::Die()

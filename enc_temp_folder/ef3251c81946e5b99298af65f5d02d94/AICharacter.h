@@ -69,18 +69,14 @@ protected:
 
 	UAnimMontage* DamagedMontage = nullptr;
 
-	class UHealth* Health = nullptr;
-
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* BowRecoil = nullptr;
 
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class AArrow> ArrowAsset = nullptr;
+	class UHealth* Health = nullptr;
 
 public:
 	void PlayAttack(bool bLeft);
 	void PlayBowRecoil();
-	void FireArrow();
 
 private:
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
