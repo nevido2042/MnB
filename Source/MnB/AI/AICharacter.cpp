@@ -209,6 +209,8 @@ void AAICharacter::Die()
 		BB->SetValueAsBool("IsDie", true);
 	}
 
+	Controller->UnPossess();
+
 	UnPossessed();
 	Controller = nullptr;
 	Tree = nullptr;

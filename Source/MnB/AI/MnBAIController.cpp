@@ -10,7 +10,7 @@
 
 AMnBAIController::AMnBAIController(FObjectInitializer const& ObjectInitializer)
 {
-	SetupPerceptionSystem();
+	//SetupPerceptionSystem();
 }
 
 void AMnBAIController::OnPossess(APawn* InPawn)
@@ -35,9 +35,83 @@ void AMnBAIController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	CheckTargetIsDie();
+	//CheckTargetIsDie();
+	
+	//SearchTarget();
 
 	RotateToTarget();
+}
+#include "Kismet/KismetSystemLibrary.h"
+void AMnBAIController::SearchTarget()
+{
+	if (TargetCharacter && GetPawn() && GetWorld())
+	{
+		return;
+	}
+	if (AAICharacter* AIChar = Cast<AAICharacter>(GetPawn()))
+	{
+		if (AIChar->IsDie())
+		{
+			return;
+		}
+	}
+
+	TArray<TEnumAsByte<EObjectTypeQuery>> Array;
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(GetPawn());
+	TArray<class AActor*> OutActors;
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetPawn()->GetActorLocation(), 900000.f, Array, ACharacter::StaticClass(), ActorsToIgnore, OutActors);
+
+	float MinDist = -1.f;
+	AActor* MinDistActor = nullptr;
+	AAICharacter* ControlledPawn = Cast<AAICharacter>(GetPawn());
+	for (AActor* Actor : OutActors)
+	{
+		//team check
+
+		//same team return
+		AAICharacter* TempAIChar = Cast<AAICharacter>(Actor);
+		if (TempAIChar == nullptr)
+		{
+			continue;
+		}
+		if (ControlledPawn->GetTeam() == TempAIChar->GetTeam())
+		{
+			continue;
+		}
+
+		//distance check
+		float NewDist = FVector::Dist(GetPawn()->GetActorLocation(), Actor->GetActorLocation());
+
+		if (MinDist == -1.f)
+		{
+			MinDist = NewDist;
+			MinDistActor = Actor;
+		}
+		else if (MinDist > NewDist)
+		{
+			MinDist = NewDist;
+			MinDistActor = Actor;
+		}
+	}
+
+	if (MinDistActor == nullptr)
+	{
+		return;
+	}
+
+	TargetCharacter = Cast<AAICharacter>(MinDistActor);
+
+	//TargetCharacter = TempAIChar;
+
+	if (TargetCharacter)
+	{
+		//GetBlackboardComponent()->SetValueAsBool("CanSeePlayer", Stimulus.WasSuccessfullySensed());
+		if (GetBlackboardComponent())
+		{
+			GetBlackboardComponent()->SetValueAsObject("TargetCharacter", TargetCharacter);
+		}
+	}
 }
 
 void AMnBAIController::SetupPerceptionSystem()
@@ -57,6 +131,7 @@ void AMnBAIController::SetupPerceptionSystem()
 
 		GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
 		GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AMnBAIController::OnTargetDetected);
+		GetPerceptionComponent()->OnTargetPerceptionForgotten.AddDynamic(this, &AMnBAIController::OnTargetForgottened);
 		GetPerceptionComponent()->ConfigureSense((*SightConfig));
 	}
 }
@@ -90,6 +165,11 @@ void AMnBAIController::OnTargetDetected(AActor* Actor, FAIStimulus const Stimulu
 	}
 }
 
+void AMnBAIController::OnTargetForgottened(AActor* Actor)
+{
+	TargetCharacter = nullptr;
+}
+
 void AMnBAIController::CheckTargetIsDie()
 {
 	if (IsValid(TargetCharacter) == false) return;
@@ -100,6 +180,7 @@ void AMnBAIController::CheckTargetIsDie()
 		{
 			TargetCharacter = nullptr;
 			GetBlackboardComponent()->SetValueAsObject("TargetCharacter", TargetCharacter);
+			/*GetBlackboardComponent()->SetValueAsBool("IsDie", false);*/
 		}
 	}
 }

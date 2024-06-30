@@ -38,6 +38,11 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	class AAICharacter* TargetCharacter = nullptr;
 
+public:
+	AAICharacter* GetTargetCharacter() { return TargetCharacter; }
+	void ClearTarget() { TargetCharacter = nullptr; }
+
+	void SearchTarget();
 private:
 	class UAISenseConfig_Sight* SightConfig;
 
@@ -45,6 +50,10 @@ private:
 
 	UFUNCTION()
 	void OnTargetDetected(AActor* Actor, FAIStimulus const Stimulus);
+
+	UFUNCTION()
+	void OnTargetForgottened(AActor* Actor);
+
 
 	void CheckTargetIsDie();
 
