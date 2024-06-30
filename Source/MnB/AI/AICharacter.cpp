@@ -13,13 +13,21 @@ AAICharacter::AAICharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	//{
-	//	ConstructorHelpers::FClassFinder<AWeapon>Finder(TEXT("/Script/Engine.Blueprint'/Game/MyAssets/Weapons/BP_Sword.BP_Sword_C'"));
-	//	if (Finder.Class)
-	//	{
-	//		WeaponAsset = Finder.Class;
-	//	}
-	//}
+	{
+		static ConstructorHelpers::FObjectFinder<UMaterial>Finder(TEXT("/Script/Engine.Material'/Game/KoreanTraditionalMartialArts/Meshs/Characters/Materials/M_Cloth_1.M_Cloth_1'"));
+		if (Finder.Object)
+		{
+			ATeamCloth = Finder.Object;
+		}
+	}
+
+	{
+		static ConstructorHelpers::FObjectFinder<UMaterial>Finder(TEXT("/Script/Engine.Material'/Game/KoreanTraditionalMartialArts/Meshs/Characters/Materials/M_Cloth_2.M_Cloth_2'"));
+		if (Finder.Object)
+		{
+			BTeamCloth = Finder.Object;
+		}
+	}
 
 	
 	{
@@ -53,6 +61,8 @@ AAICharacter::AAICharacter()
 	GetMesh()->SetCollisionProfileName(TEXT("Hitable"));
 
 	Health = CreateDefaultSubobject<UHealth>(TEXT("Health"));
+
+	//SetTeamCloth();
 }
 
 // Called when the game starts or when spawned
@@ -61,6 +71,20 @@ void AAICharacter::BeginPlay()
 	Super::BeginPlay();
 	
 	EquipWeapon();
+
+	//SetTeamCloth();
+}
+
+void AAICharacter::PreEditChange(FProperty* PropertyThatWillChange)
+{
+	Super::PreEditChange(PropertyThatWillChange);
+}
+
+void AAICharacter::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+	Super::PostEditChangeProperty(PropertyChangedEvent);
+
+	SetTeamCloth();
 }
 
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
@@ -233,6 +257,18 @@ void AAICharacter::MyDestroy()
 	}
 
 	Destroy(); 
+}
+
+void AAICharacter::SetTeamCloth()
+{
+	if (Team == ETeam::ATeam)
+	{
+		GetMesh()->SetMaterial(8, ATeamCloth);
+	}
+	else if(Team == ETeam::BTeam )
+	{
+		GetMesh()->SetMaterial(8, BTeamCloth);
+	}
 }
 
 void AAICharacter::SetRandomSoundAndPlay()

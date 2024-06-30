@@ -31,6 +31,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+#if WITH_EDITOR
+	virtual void PreEditChange(FProperty* PropertyThatWillChange) override;
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
+#endif
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -77,6 +82,12 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class AArrow> ArrowAsset = nullptr;
 
+	UPROPERTY(BlueprintReadOnly)
+	UMaterial* ATeamCloth = nullptr;
+
+	UPROPERTY(BlueprintReadOnly)
+	UMaterial* BTeamCloth = nullptr;
+
 public:
 	void PlayAttack(bool bLeft);
 	void PlayBowRecoil();
@@ -87,6 +98,8 @@ private:
 
 	bool bDie = false;
 	void Die();
+
+	void SetTeamCloth();
 public:
 	bool IsDie() { return bDie; }
 
