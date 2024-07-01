@@ -82,6 +82,10 @@ class AMnBCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* CallInfantryAction;
 
+	/** CallBowMan Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* CallBowManAction;
+
 	/** Charge Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ChargeAction;
@@ -114,6 +118,8 @@ protected:
 	void CallAll();
 
 	void CallInfantry();
+
+	void CallBowMan();
 	
 	void Charge();
 

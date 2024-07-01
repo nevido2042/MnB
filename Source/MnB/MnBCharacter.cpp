@@ -37,6 +37,7 @@
 #include "UserWidget/ExitTownWidget.h"
 #include "Components/ProgressBar.h"
 #include "AI/InfantryAI.h"
+#include "AI/BowManAI.h"
 
 
 
@@ -653,6 +654,9 @@ void AMnBCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		//Call Infantry
 		EnhancedInputComponent->BindAction(CallInfantryAction, ETriggerEvent::Completed, this, &AMnBCharacter::CallInfantry);
 
+		//Call BowMan
+		EnhancedInputComponent->BindAction(CallBowManAction, ETriggerEvent::Completed, this, &AMnBCharacter::CallBowMan);
+
 
 		//Charge
 		EnhancedInputComponent->BindAction(ChargeAction, ETriggerEvent::Started, this, &AMnBCharacter::Charge);
@@ -758,6 +762,33 @@ void AMnBCharacter::CallInfantry()
 	TArray<AActor*> OutActors;
 	//Infantry만 체크
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AInfantryAI::StaticClass(), OutActors);
+
+	for (AActor* Iter : OutActors)
+	{
+		AAICharacter* AICharacter = Cast<AAICharacter>(Iter);
+		if (AICharacter->GetTeam() == ETeam::ATeam)
+		{
+			CallUnits.Add(AICharacter);
+		}
+	}
+
+	bControlUnits = true;
+	CurFlag = GetWorld()->SpawnActor(FlagAsset);
+	//spawn flag
+	//raycast
+}
+
+void AMnBCharacter::CallBowMan()
+{
+	if (bControlUnits == true)
+	{
+		CancelControl();
+		return;
+	}
+
+	TArray<AActor*> OutActors;
+	//BowMan만 체크
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABowManAI::StaticClass(), OutActors);
 
 	for (AActor* Iter : OutActors)
 	{
