@@ -28,9 +28,6 @@ void AMnBAIController::OnPossess(APawn* InPawn)
 			RunBehaviorTree(tree);
 		}
 	}
-
-	GetBlackboardComponent()->SetValueAsBool("IsCharge", true);
-
 }
 
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"

@@ -78,6 +78,14 @@ class AMnBCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* CallAllAction;
 
+	/** Charge Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ChargeAction;
+
+	/** Stop Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* StopAction;
+
 protected:
 	UPROPERTY(BlueprintReadOnly)
 	TArray<class AAICharacter*> CallUnits;
@@ -100,7 +108,10 @@ protected:
 	void Look(const FInputActionValue& Value);
 
 	void CallAll();
-			
+	
+	void Charge();
+
+	void Stop();
 
 protected:
 	// APawn interface

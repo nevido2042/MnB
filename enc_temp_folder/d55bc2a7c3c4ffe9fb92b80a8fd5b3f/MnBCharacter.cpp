@@ -25,16 +25,6 @@
 #include "Weapons/Arrow.h"
 #include "AI/AICharacter.h"
 #include "Enum/Enums.h"
-#include "BehaviorTree/BlackboardComponent.h"
-#include "Kismet/KismetMathLibrary.h"
-#include "NPC/ArenaManager.h"
-#include "UserWidget/InventoryUserWidget.h"
-#include "AI/MnBAIController.h"
-#include "Weapons/Shield.h"
-#include "Weapons/Bow.h"
-#include "Controller/ControllerPC.h"
-#include "MnB/UserWidget/PCWidget.h"
-
 
 
 //DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -116,6 +106,8 @@ void AMnBCharacter::BeginPlay()
 	}
 }
 
+#include "Controller/ControllerPC.h"
+#include "MnB/UserWidget/PCWidget.h"
 void AMnBCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -133,7 +125,8 @@ void AMnBCharacter::Tick(float DeltaSeconds)
 	//}
 }
 
-
+#include "Weapons/Shield.h"
+#include "Weapons/Bow.h"
 void AMnBCharacter::Equip()
 {
 	if (FocusingActor == nullptr) { return; }
@@ -220,6 +213,7 @@ void AMnBCharacter::Equip()
 
 }
 
+#include "AI/MnBAIController.h"
 void AMnBCharacter::ReadyToAttack()
 {
 	if (bControlUnits)
@@ -232,7 +226,6 @@ void AMnBCharacter::ReadyToAttack()
 			}
 
 			Cast<AAIController>(AICharacter->GetController())->MoveToLocation(ControlHitResult.Location);
-			Cast<AAIController>(AICharacter->GetController())->GetBlackboardComponent()->SetValueAsBool("IsCharge", false);
 		}
 
 		CancelControl();
@@ -389,7 +382,7 @@ void AMnBCharacter::GuardEnd()
 	EquippedWeapon->GetGuardCollider()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
-
+#include "UserWidget/InventoryUserWidget.h"
 void AMnBCharacter::InventoryOnOFF()
 {
 	if (UInventoryUserWidget* InvenWidget = Cast<AControllerPC>(GetController())->GetInventoryWidget())
@@ -475,6 +468,7 @@ void AMnBCharacter::SetupStimulusSource()
 	}
 }
 
+#include "NPC/ArenaManager.h"
 float AMnBCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	Health->AddCurrentHP(-Damage);
@@ -533,6 +527,7 @@ void AMnBCharacter::UpdateActorInfo()
 	}
 }
 
+#include "Kismet/KismetMathLibrary.h"
 void AMnBCharacter::SetRandomSoundAndPlay()
 {
 	int rand = UKismetMathLibrary::RandomInteger(HitSounds.Num());
@@ -758,6 +753,7 @@ void AMnBCharacter::CallAll()
 	//raycast
 }
 
+#include "BehaviorTree/BlackboardComponent.h"
 void AMnBCharacter::Charge()
 {
 	if (bControlUnits)
@@ -778,10 +774,6 @@ void AMnBCharacter::Stop()
 	{
 		for (AAICharacter* AICharacter : CallUnits)
 		{
-			if (AICharacter->IsDie())
-			{
-				continue;
-			}
 
 			Cast<AAIController>(AICharacter->GetController())->GetBlackboardComponent()->SetValueAsBool("IsCharge", false);
 			Cast<AAIController>(AICharacter->GetController())->StopMovement();
