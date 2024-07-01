@@ -8,15 +8,8 @@
 #include "GameFramework/Character.h"
 #include "Animation/AnimMontage.h"
 #include "CombatInterface.h"
+#include "Enum/Enums.h"
 #include "AICharacter.generated.h"
-
-
-UENUM(BlueprintType)
-enum ETeam
-{
-	ATeam,
-	BTeam
-};
 
 UCLASS()
 class MNB_API AAICharacter : public ACharacter, public ICombatInterface

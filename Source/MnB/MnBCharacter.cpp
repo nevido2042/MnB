@@ -23,9 +23,11 @@
 #include "Components/AudioComponent.h"
 #include "Horse/Horse.h"
 #include "Weapons/Arrow.h"
+#include "AI/AICharacter.h"
+#include "Enum/Enums.h"
 
 
-DEFINE_LOG_CATEGORY(LogTemplateCharacter);
+//DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
 // AMnBCharacter
@@ -660,10 +662,10 @@ void AMnBCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 
 	}
-	else
+	/*else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
-	}
+	}*/
 }
 
 void AMnBCharacter::Move(const FInputActionValue& Value)

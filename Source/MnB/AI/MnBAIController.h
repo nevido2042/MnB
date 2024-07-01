@@ -28,7 +28,7 @@ class MNB_API AMnBAIController : public AAIController
 	
 public:
 	explicit AMnBAIController(FObjectInitializer const& ObjectInitializer);
-	ACharacter* GetTarget() const { return TargetCharacter; }
+	AActor* GetTarget() const { return TargetCharacter; }
 
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
@@ -36,11 +36,12 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 
 	UPROPERTY(BlueprintReadOnly)
-	class AAICharacter* TargetCharacter = nullptr;
+	AActor* TargetCharacter = nullptr;
 
 public:
-	AAICharacter* GetTargetCharacter() { return TargetCharacter; }
-	void ClearTarget() { TargetCharacter = nullptr; }
+	AActor* GetTargetCharacter() { return TargetCharacter; }
+	void SetTarget(AActor* NewTarget);
+	void ClearTarget();
 
 	void SearchTarget();
 private:

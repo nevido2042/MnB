@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "MnBCharacter.h"
 #include "KismetAnimationLibrary.h"
+#include "Enum/Enums.h"
 
 void UMnBCharacterAnimInstance::NativeInitializeAnimation()
 {

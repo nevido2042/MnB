@@ -174,8 +174,14 @@ void AAICharacter::PlayAttack(bool bLeft)
 	}
 }
 
+#include "AI/MnBAIController.h"
 float AAICharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+	if (EventInstigator)
+	{
+		Cast<AMnBAIController>(GetController())->SetTarget(EventInstigator->GetPawn());
+	}
+
 	Health->AddCurrentHP(-Damage);
 
 	SetRandomSoundAndPlay();

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Enum/Enums.h"
 #include "MnBCharacter.generated.h"
 
 class USpringArmComponent;
@@ -13,31 +14,16 @@ class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
 
-DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
+//DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
-UENUM(BlueprintType)
-enum EBlockedDirection
-{
-	Left = -1,
-	None = 0,
-	Right = 1
-};
-
-UENUM(BlueprintType)
-enum EAttackDirection
-{
-	AttackLeft = -1,
-	AttackNone = 0,
-	AttackRight = 1
-};
-
-UENUM(BlueprintType)
-enum EGuardDirection
-{
-	GuardLeft = -1,
-	GuardNone = 0,
-	GarudRight = 1
-};
+//extern enum ETeam;
+//
+//UENUM(BlueprintType)
+//enum ETeam
+//{
+//	ATeam,
+//	BTeam
+//};
 
 UCLASS(config=Game)
 class AMnBCharacter : public ACharacter
@@ -255,5 +241,10 @@ protected:
 	TSubclassOf<UUserWidget> ExitTownWidgetAsset;*/
 
 	//class UUserWidget* ExitTownWidget = nullptr;
+protected:
+	UPROPERTY(EditAnywhere)
+	TEnumAsByte<enum ETeam> Team = ETeam::ATeam;
+public:
+	TEnumAsByte<ETeam> GetTeam() { return Team; }
 };
 

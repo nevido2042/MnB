@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "MnBCharacter.h"
+#include "Enum/Enums.h"
 #include "MnBCharacterAnimInstance.generated.h"
 
 /**
@@ -76,9 +77,9 @@ private:
 	void IsReadyToAttack();
 
 public:
-	void SetBlockedDirection(TEnumAsByte<EBlockedDirection> Value) { BlockedDir = Value; }
+	void SetBlockedDirection(TEnumAsByte<enum EBlockedDirection> Value) { BlockedDir = Value; }
 
-	void SetGuardDirection(TEnumAsByte<EGuardDirection> Value) { GuardDir = Value; }
+	void SetGuardDirection(TEnumAsByte<enum EGuardDirection> Value) { GuardDir = Value; }
 
 	void SetRide(bool Value) { bRide = Value; }
 

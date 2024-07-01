@@ -7,6 +7,7 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "MnBCharacter.h"
+#include "Horse/Horse.h"
 
 AMnBAIController::AMnBAIController(FObjectInitializer const& ObjectInitializer)
 {
@@ -42,6 +43,16 @@ void AMnBAIController::Tick(float DeltaTime)
 	RotateToTarget();
 }
 #include "Kismet/KismetSystemLibrary.h"
+void AMnBAIController::SetTarget(AActor* NewTarget)
+{
+	TargetCharacter = NewTarget;
+	GetBlackboardComponent()->SetValueAsObject("TargetCharacter", TargetCharacter);
+}
+void AMnBAIController::ClearTarget()
+{
+	TargetCharacter = nullptr;
+	GetBlackboardComponent()->SetValueAsObject("TargetCharacter", TargetCharacter);
+}
 void AMnBAIController::SearchTarget()
 {
 	if (TargetCharacter && GetPawn() && GetWorld())
@@ -67,19 +78,30 @@ void AMnBAIController::SearchTarget()
 	AAICharacter* ControlledPawn = Cast<AAICharacter>(GetPawn());
 	for (AActor* Actor : OutActors)
 	{
+		//horse check
+		if (Cast<AHorse>(Actor))
+		{
+			continue;
+		}
+
 		//team check
-
-		//same team return
+		AMnBCharacter* TempPlayerChar = Cast<AMnBCharacter>(Actor);
+		if (TempPlayerChar)
+		{
+			if (ControlledPawn->GetTeam() == TempPlayerChar->GetTeam())
+			{
+				continue;
+			}
+		}
 		AAICharacter* TempAIChar = Cast<AAICharacter>(Actor);
-		if (TempAIChar == nullptr)
+		if (TempAIChar)
 		{
-			continue;
+			if (ControlledPawn->GetTeam() == TempAIChar->GetTeam())
+			{
+				continue;
+			}
 		}
-		if (ControlledPawn->GetTeam() == TempAIChar->GetTeam())
-		{
-			continue;
-		}
-
+		
 		//distance check
 		float NewDist = FVector::Dist(GetPawn()->GetActorLocation(), Actor->GetActorLocation());
 
@@ -100,7 +122,7 @@ void AMnBAIController::SearchTarget()
 		return;
 	}
 
-	TargetCharacter = Cast<AAICharacter>(MinDistActor);
+	TargetCharacter = MinDistActor;
 
 	//TargetCharacter = TempAIChar;
 
