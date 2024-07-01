@@ -112,8 +112,8 @@ private:
 
 protected:
 	UPROPERTY(EditAnywhere)
-	TEnumAsByte<ETeam> Team;
+	ETeam Team;
 
 public:
-	TEnumAsByte<ETeam> GetTeam() { return Team; }
+	ETeam GetTeam() { return Team; }
 };

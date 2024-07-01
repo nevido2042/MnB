@@ -47,10 +47,10 @@ protected:
 
 
 	UPROPERTY(BlueprintReadOnly)
-	TEnumAsByte<EGuardDirection> GuardDir = EGuardDirection::GuardNone;
+	EGuardDirection GuardDir = EGuardDirection::GuardNone;
 
 	UPROPERTY(BlueprintReadOnly)
-	TEnumAsByte<EBlockedDirection> BlockedDir = EBlockedDirection::None;
+	EBlockedDirection BlockedDir = EBlockedDirection::None;
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bBow = false;
@@ -77,9 +77,9 @@ private:
 	void IsReadyToAttack();
 
 public:
-	void SetBlockedDirection(TEnumAsByte<enum EBlockedDirection> Value) { BlockedDir = Value; }
+	void SetBlockedDirection(EBlockedDirection Value) { BlockedDir = Value; }
 
-	void SetGuardDirection(TEnumAsByte<enum EGuardDirection> Value) { GuardDir = Value; }
+	void SetGuardDirection(EGuardDirection Value) { GuardDir = Value; }
 
 	void SetRide(bool Value) { bRide = Value; }
 

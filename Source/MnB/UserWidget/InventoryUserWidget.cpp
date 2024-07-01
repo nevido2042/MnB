@@ -13,8 +13,9 @@ void UInventoryUserWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	LoadClass<UClass>(ANY_PACKAGE, TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/UI/BP_ItemSlot.BP_ItemSlot_C'"),
-		nullptr, LOAD_None, nullptr);
+	/*LoadClass<UClass>(ANY_PACKAGE, TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/UI/BP_ItemSlot.BP_ItemSlot_C'"),
+		nullptr, LOAD_None, nullptr);*/
+
 	UClass* ItemSlotAsset = FindObject<UClass>(ANY_PACKAGE, TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/UI/BP_ItemSlot.BP_ItemSlot_C'"));
 
 	Panel = Cast<UUniformGridPanel>(GetWidgetFromName(TEXT("InventoryPanel")));

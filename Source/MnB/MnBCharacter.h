@@ -243,8 +243,8 @@ protected:
 	//class UUserWidget* ExitTownWidget = nullptr;
 protected:
 	UPROPERTY(EditAnywhere)
-	TEnumAsByte<enum ETeam> Team = ETeam::ATeam;
+	ETeam Team = ETeam::ATeam;
 public:
-	TEnumAsByte<ETeam> GetTeam() { return Team; }
+	ETeam GetTeam() { return Team; }
 };
 
