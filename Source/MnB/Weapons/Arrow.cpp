@@ -5,6 +5,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/Character.h"
 
 // Sets default values
 AArrow::AArrow()
@@ -38,6 +39,11 @@ void AArrow::Tick(float DeltaTime)
 
 void AArrow::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	//if (Cast<ACharacter>(OtherActor) == nullptr)
+	//{
+	//	return;
+	//}
+
 	ProjectileMovementComponent->StopMovementImmediately();
 	ProjectileMovementComponent->ProjectileGravityScale = 0.f;
 

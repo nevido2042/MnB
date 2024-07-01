@@ -221,12 +221,11 @@ void AAICharacter::Die()
 {
 	if (CurWeapon)
 	{
-
-		auto Childrens = GetMesh()->GetAttachChildren();
+		/*auto Childrens = GetMesh()->GetAttachChildren();
 		for (auto Iter : Childrens)
 		{
 			Iter->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-		}
+		}*/
 
 		CurWeapon->Unequipped();
 		CurWeapon = nullptr;
@@ -256,13 +255,13 @@ void AAICharacter::Die()
 
 void AAICharacter::MyDestroy()
 {
-	auto Childrens = GetMesh()->GetAttachChildren();
+	/*auto Childrens = GetMesh()->GetAttachChildren();
 	for (auto Iter : Childrens)
 	{
 		Iter->DestroyComponent();
 	}
 
-	Destroy(); 
+	Destroy(); */
 }
 
 void AAICharacter::SetTeamCloth()
