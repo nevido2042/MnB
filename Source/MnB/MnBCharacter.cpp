@@ -34,6 +34,9 @@
 #include "Weapons/Bow.h"
 #include "Controller/ControllerPC.h"
 #include "MnB/UserWidget/PCWidget.h"
+#include "UserWidget/ExitTownWidget.h"
+#include "Components/ProgressBar.h"
+#include "AI/InfantryAI.h"
 
 
 
@@ -551,23 +554,8 @@ void AMnBCharacter::StartDescendingHorseMontage()
 	PlayAnimMontage(StartDescendingMontage);
 }
 
-//void AMnBCharacter::StartHorseSlowDown()
-//{
-//	bHorseSlowDown = true;
-//}
-//
-//void AMnBCharacter::HorseSlowDown()
-//{
-//	if (CurHorse == nullptr) return;
-//
-//	float& CurWalkSpeed = CurHorse->GetCharacterMovement()->MaxWalkSpeed;
-//	CurWalkSpeed = FMath::Lerp(CurWalkSpeed, 0.0f, GetWorld()->DeltaTimeSeconds);
-//}
-
 void AMnBCharacter::MoveHorse(FVector2D Vect)
 {
-	/*float& CurWalkSpped = CurHorse->GetCharacterMovement()->MaxWalkSpeed;
-	CurWalkSpped = FMath::Lerp(CurWalkSpped, CurHorse->GetMaxWalkSpeed(), GetWorld()->DeltaTimeSeconds);*/
 	float RotateScale = 2.f;
 
 	CurHorse->AddMovementInput(CurHorse->GetActorForwardVector(), Vect.Y);
@@ -581,9 +569,6 @@ void AMnBCharacter::SetBow(bool Value)
 	Anim->SetBow(Value);
 }
 
-//#include "Controller/ControllerPC.h"
-#include "UserWidget/ExitTownWidget.h"
-#include "Components/ProgressBar.h"
 void AMnBCharacter::SetVisibleExitTownWidget()
 {
 	ExitTownWidget = Cast<UExitTownWidget>(Cast<AControllerPC>(GetController())->GetExitTownWidget());
@@ -664,6 +649,10 @@ void AMnBCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 		//Call All
 		EnhancedInputComponent->BindAction(CallAllAction, ETriggerEvent::Completed, this, &AMnBCharacter::CallAll);
+
+		//Call Infantry
+		EnhancedInputComponent->BindAction(CallInfantryAction, ETriggerEvent::Completed, this, &AMnBCharacter::CallInfantry);
+
 
 		//Charge
 		EnhancedInputComponent->BindAction(ChargeAction, ETriggerEvent::Started, this, &AMnBCharacter::Charge);
@@ -758,17 +747,48 @@ void AMnBCharacter::CallAll()
 	//raycast
 }
 
+void AMnBCharacter::CallInfantry()
+{
+	if (bControlUnits == true)
+	{
+		CancelControl();
+		return;
+	}
+
+	TArray<AActor*> OutActors;
+	//Infantry만 체크
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AInfantryAI::StaticClass(), OutActors);
+
+	for (AActor* Iter : OutActors)
+	{
+		AAICharacter* AICharacter = Cast<AAICharacter>(Iter);
+		if (AICharacter->GetTeam() == ETeam::ATeam)
+		{
+			CallUnits.Add(AICharacter);
+		}
+	}
+
+	bControlUnits = true;
+	CurFlag = GetWorld()->SpawnActor(FlagAsset);
+	//spawn flag
+	//raycast
+}
+
 void AMnBCharacter::Charge()
 {
 	if (bControlUnits)
 	{
 		for (AAICharacter* AICharacter : CallUnits)
 		{
+			if (AICharacter->IsDie())
+			{
+				continue;
+			}
 
 			Cast<AAIController>(AICharacter->GetController())->GetBlackboardComponent()->SetValueAsBool("IsCharge", true);
 		}
 
-		CancelControl();
+		//CancelControl();
 	}
 }
 
@@ -787,6 +807,6 @@ void AMnBCharacter::Stop()
 			Cast<AAIController>(AICharacter->GetController())->StopMovement();
 		}
 
-		CancelControl();
+		//CancelControl();
 	}
 }
