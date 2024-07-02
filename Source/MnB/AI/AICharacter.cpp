@@ -217,6 +217,7 @@ void AAICharacter::FireArrow()
 
 #include "AI/MnBAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "BattleGameMode.h"
 void AAICharacter::Die()
 {
 	if (CurWeapon)
@@ -251,6 +252,8 @@ void AAICharacter::Die()
 
 	GetMesh()->SetCollisionProfileName("Dead");
 	GetMesh()->SetSimulatePhysics(true);
+
+	Cast<ABattleGameMode>(GetWorld()->GetAuthGameMode())->Decrease(Team);
 }
 
 void AAICharacter::MyDestroy()

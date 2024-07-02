@@ -13,7 +13,7 @@ void ABattleGameMode::BeginPlay()
 	BattleSituationWidget = CreateWidget(GetWorld(), BattleSituationWidgetAsset);
 	BattleSituationWidget->AddToViewport();
 
-	UBattleSituationWidget* BattleSituation = Cast<UBattleSituationWidget>(BattleSituationWidget);
+	BattleSituation = Cast<UBattleSituationWidget>(BattleSituationWidget);
 	BattleSituation->SetATeamBarPercent(1.f);
 	BattleSituation->SetBTeamBarPercent(1.f);
 
@@ -57,7 +57,16 @@ void ABattleGameMode::CountTeamUnits()
 	BTeamCur = BTeamInit;
 }
 
-void ABattleGameMode::Decrease(ETeam team)
+void ABattleGameMode::Decrease(ETeam Team)
 {
-	//BattleSituation->SetBTeamBarPercent(BTeamCur / BTeamInit);
+	if (Team == ETeam::ATeam)
+	{
+		--ATeamCur;
+		BattleSituation->SetATeamBarPercent((float)ATeamCur / (float)ATeamInit);
+	}
+	else if (Team == ETeam::BTeam)
+	{
+		--BTeamCur;
+		BattleSituation->SetBTeamBarPercent((float)BTeamCur / (float)BTeamInit);
+	}
 }

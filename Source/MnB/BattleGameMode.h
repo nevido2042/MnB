@@ -30,7 +30,9 @@ protected:
 private:
 	void CountTeamUnits();
 
+	class UBattleSituationWidget* BattleSituation = nullptr;
+
 public:
-	void Decrease(ETeam team);
+	void Decrease(ETeam Team);
 	
 };
