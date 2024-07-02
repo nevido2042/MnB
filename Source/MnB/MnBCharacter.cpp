@@ -38,6 +38,7 @@
 #include "Components/ProgressBar.h"
 #include "AI/InfantryAI.h"
 #include "AI/BowManAI.h"
+#include "UserWidget/ControlUnitWidget.h"
 
 
 
@@ -740,6 +741,9 @@ void AMnBCharacter::CancelControl()
 
 	CurFlag->Destroy();
 	CallUnits.Empty();
+
+	Cast<UControlUnitWidget>(Cast<AControllerPC>(GetController())->GetControlUnitWidget())->ActiveSwordManPanel(false);
+	Cast<UControlUnitWidget>(Cast<AControllerPC>(GetController())->GetControlUnitWidget())->ActiveBowManPanel(false);
 }
 
 #include "AI/AICharacter.h"
@@ -754,19 +758,38 @@ void AMnBCharacter::CallAll()
 	TArray<AActor*> OutActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AAICharacter::StaticClass(), OutActors);
 
+	uint8 SwordManCnt = 0;
+	uint8 BowManCnt = 0;
+
 	for (AActor* Iter : OutActors)
 	{
 		AAICharacter* AICharacter = Cast<AAICharacter>(Iter);
+		if (AICharacter->IsDie())
+		{
+			continue;
+		}
+
 		if (AICharacter->GetTeam() == ETeam::ATeam)
 		{
 			CallUnits.Add(AICharacter);
+
+			if (Cast<AInfantryAI>(AICharacter))
+			{
+				++SwordManCnt;
+			}
+			else if (Cast<ABowManAI>(AICharacter))
+			{
+				++BowManCnt;
+			}
 		}
 	}
 
 	bControlUnits = true;
 	CurFlag = GetWorld()->SpawnActor(FlagAsset);
-	//spawn flag
-	//raycast
+
+
+	Cast<UControlUnitWidget>(Cast<AControllerPC>(GetController())->GetControlUnitWidget())->ActiveSwordManPanel(true, SwordManCnt);
+	Cast<UControlUnitWidget>(Cast<AControllerPC>(GetController())->GetControlUnitWidget())->ActiveBowManPanel(true, BowManCnt);
 }
 
 void AMnBCharacter::CallInfantry()
@@ -781,12 +804,24 @@ void AMnBCharacter::CallInfantry()
 	//Infantry만 체크
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AInfantryAI::StaticClass(), OutActors);
 
+	uint8 SwordManCnt = 0;
+
 	for (AActor* Iter : OutActors)
 	{
 		AAICharacter* AICharacter = Cast<AAICharacter>(Iter);
+		if (AICharacter->IsDie())
+		{
+			continue;
+		}
+
 		if (AICharacter->GetTeam() == ETeam::ATeam)
 		{
 			CallUnits.Add(AICharacter);
+
+			if (Cast<AInfantryAI>(AICharacter))
+			{
+				++SwordManCnt;
+			}
 		}
 	}
 
@@ -794,6 +829,9 @@ void AMnBCharacter::CallInfantry()
 	CurFlag = GetWorld()->SpawnActor(FlagAsset);
 	//spawn flag
 	//raycast
+
+	Cast<UControlUnitWidget>(Cast<AControllerPC>(GetController())->GetControlUnitWidget())->ActiveSwordManPanel(true, SwordManCnt);
+
 }
 
 void AMnBCharacter::CallBowMan()
@@ -808,12 +846,25 @@ void AMnBCharacter::CallBowMan()
 	//BowMan만 체크
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABowManAI::StaticClass(), OutActors);
 
+	uint8 BowManCnt = 0;
+
 	for (AActor* Iter : OutActors)
 	{
 		AAICharacter* AICharacter = Cast<AAICharacter>(Iter);
+
+		if (AICharacter->IsDie())
+		{
+			continue;
+		}
+
 		if (AICharacter->GetTeam() == ETeam::ATeam)
 		{
 			CallUnits.Add(AICharacter);
+
+			if (Cast<ABowManAI>(AICharacter))
+			{
+				++BowManCnt;
+			}
 		}
 	}
 
@@ -821,6 +872,8 @@ void AMnBCharacter::CallBowMan()
 	CurFlag = GetWorld()->SpawnActor(FlagAsset);
 	//spawn flag
 	//raycast
+	Cast<UControlUnitWidget>(Cast<AControllerPC>(GetController())->GetControlUnitWidget())->ActiveBowManPanel(true, BowManCnt);
+
 }
 
 void AMnBCharacter::Charge()

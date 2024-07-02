@@ -36,7 +36,7 @@ void AControllerPC::BeginPlay()
 
 	ControlUnitWidget = CreateWidget(GetWorld(), ControlUnitWidgetAsset);
 	ControlUnitWidget->AddToViewport();
-	ControlUnitWidget->SetVisibility(ESlateVisibility::Hidden);
+	//ControlUnitWidget->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void AControllerPC::OnPossess(APawn* aPawn)

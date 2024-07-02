@@ -56,4 +56,6 @@ protected:
 	TSubclassOf<UUserWidget> ControlUnitWidgetAsset;
 
 	class UUserWidget* ControlUnitWidget = nullptr;
+public:
+	UUserWidget* GetControlUnitWidget() { return ControlUnitWidget; }
 };
