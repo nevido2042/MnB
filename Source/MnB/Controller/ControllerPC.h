@@ -51,6 +51,9 @@ protected:
 public:
 	UUserWidget* GetExitTownWidget() { return ExitTownWidget; }
 
+protected:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> ControlUnitWidgetAsset;
 
-
+	class UUserWidget* ControlUnitWidget = nullptr;
 };

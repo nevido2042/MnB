@@ -228,18 +228,18 @@ void AMnBCharacter::ReadyToAttack()
 {
 	if (bControlUnits)
 	{
-		for (AAICharacter* AICharacter : CallUnits)
-		{
-			if (AICharacter->IsDie()||AICharacter== nullptr)
-			{
-				continue;
-			}
+		//for (AAICharacter* AICharacter : CallUnits)
+		//{
+		//	if (AICharacter->IsDie()||AICharacter== nullptr)
+		//	{
+		//		continue;
+		//	}
 
-			Cast<AAIController>(AICharacter->GetController())->MoveToLocation(ControlHitResult.Location);
-			Cast<AAIController>(AICharacter->GetController())->GetBlackboardComponent()->SetValueAsBool("IsCharge", false);
-		}
+		//	Cast<AAIController>(AICharacter->GetController())->MoveToLocation(ControlHitResult.Location);
+		//	Cast<AAIController>(AICharacter->GetController())->GetBlackboardComponent()->SetValueAsBool("IsCharge", false);
+		//}
 
-		CancelControl();
+		//CancelControl();
 
 		return;
 	}
@@ -273,6 +273,24 @@ void AMnBCharacter::ReadyToAttack()
 
 void AMnBCharacter::Attack()
 {
+	if (bControlUnits)
+	{
+		for (AAICharacter* AICharacter : CallUnits)
+		{
+			if (AICharacter->IsDie() || AICharacter == nullptr)
+			{
+				continue;
+			}
+
+			Cast<AAIController>(AICharacter->GetController())->MoveToLocation(ControlHitResult.Location);
+			Cast<AAIController>(AICharacter->GetController())->GetBlackboardComponent()->SetValueAsBool("IsCharge", false);
+		}
+
+		CancelControl();
+
+		return;
+	}
+
 	//bReadyToAttack = false;
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 

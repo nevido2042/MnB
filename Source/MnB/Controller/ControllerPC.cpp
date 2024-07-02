@@ -33,6 +33,10 @@ void AControllerPC::BeginPlay()
 	ExitTownWidget = CreateWidget(GetWorld(),ExitTownWidgetAsset);
 	ExitTownWidget->AddToViewport();
 	ExitTownWidget->SetVisibility(ESlateVisibility::Hidden);
+
+	ControlUnitWidget = CreateWidget(GetWorld(), ControlUnitWidgetAsset);
+	ControlUnitWidget->AddToViewport();
+	ControlUnitWidget->SetVisibility(ESlateVisibility::Hidden);
 }
 
 void AControllerPC::OnPossess(APawn* aPawn)
