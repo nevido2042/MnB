@@ -197,7 +197,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AActor> FlagAsset = nullptr;
-	AActor* CurFlag = nullptr;
+	//AActor* CurFlag = nullptr;
+	TArray<AActor*> Flags;
 
 public:
 	void Blocked();
@@ -269,5 +270,10 @@ protected:
 	ETeam Team = ETeam::ATeam;
 public:
 	ETeam GetTeam() { return Team; }
+
+private:
+	void SpawnFlags();
+	void DestroyFlags();
+
 };
 

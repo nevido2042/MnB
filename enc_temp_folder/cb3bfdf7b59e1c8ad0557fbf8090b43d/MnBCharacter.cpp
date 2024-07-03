@@ -276,7 +276,6 @@ void AMnBCharacter::Attack()
 {
 	if (bControlUnits)
 	{
-		int Index = 0;
 		for (AAICharacter* AICharacter : CallUnits)
 		{
 			if (AICharacter->IsDie() || AICharacter == nullptr)
@@ -284,7 +283,7 @@ void AMnBCharacter::Attack()
 				continue;
 			}
 
-			Cast<AAIController>(AICharacter->GetController())->MoveToLocation(Flags[Index++]->GetActorLocation());
+			Cast<AAIController>(AICharacter->GetController())->MoveToLocation(ControlHitResult.Location);
 			Cast<AAIController>(AICharacter->GetController())->GetBlackboardComponent()->SetValueAsBool("IsCharge", false);
 		}
 
@@ -470,13 +469,12 @@ void AMnBCharacter::ControlUnitRaycast()
 			false, 0.5f
 		);
 
-		//
-		int Index = 0;
-		int Scale = 300;
+		int Index = 1;
+		int Scale = 100;
 		for (AActor* Flag : Flags)
 		{
 			Flag->SetActorLocation(ControlHitResult.Location);
-			Flag->AddActorLocalOffset(FVector::ForwardVector * Index * Scale - (CallUnits.Num() * Scale/2)* FVector::ForwardVector);
+			Flag->AddActorLocalOffset(FVector::ForwardVector * Index * Scale);
 			Index++;
 		}
 		
@@ -631,7 +629,7 @@ void AMnBCharacter::ExitTownIncreasePercent()
 
 void AMnBCharacter::SpawnFlags()
 {
-	for (int i = 0; i < CallUnits.Num(); i++)
+	for (int i = 0; i < 5; i++)
 	{
 		Flags.Add(GetWorld()->SpawnActor(FlagAsset));
 	}
