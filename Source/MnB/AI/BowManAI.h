@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AI/AICharacter.h"
+#include "AI/WarriorAI.h"
 #include "BowManAI.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MNB_API ABowManAI : public AAICharacter
+class MNB_API ABowManAI : public AWarriorAI
 {
 	GENERATED_BODY()
 	

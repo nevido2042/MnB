@@ -19,5 +19,12 @@ class MNB_API ABow : public AWeapon
 protected:
 	UPROPERTY(EditAnywhere)
 	USkeletalMeshComponent* SkeletalMeshComponent = nullptr;
+
+	//UPROPERTY(EditAnywhere)
+
+	//class UAudioComponent* Audio = nullptr;
+
+public:
+	void PlayRecoilSound();
 	
 };

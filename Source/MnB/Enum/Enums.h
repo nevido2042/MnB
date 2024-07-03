@@ -31,6 +31,7 @@ enum class EGuardDirection :uint8
 UENUM(BlueprintType)
 enum class ETeam :uint8
 {
+	NoTeam,
 	ATeam,
 	BTeam
 };

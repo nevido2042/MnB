@@ -8,7 +8,8 @@
 #include "Perception/AISenseConfig_Sight.h"
 #include "MnBCharacter.h"
 #include "Horse/Horse.h"
-
+#include "AI/WarriorAI.h"
+#include "Character/WorldCharacter.h"
 AMnBAIController::AMnBAIController(FObjectInitializer const& ObjectInitializer)
 {
 	//SetupPerceptionSystem();
@@ -74,13 +75,19 @@ void AMnBAIController::SearchTarget()
 	TArray<AActor*> ActorsToIgnore;
 	ActorsToIgnore.Add(GetPawn());
 	TArray<class AActor*> OutActors;
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetPawn()->GetActorLocation(), 900000.f, Array, ACharacter::StaticClass(), ActorsToIgnore, OutActors);
+	UKismetSystemLibrary::SphereOverlapActors(GetWorld(), GetPawn()->GetActorLocation(), SearchRadius, Array, ACharacter::StaticClass(), ActorsToIgnore, OutActors);
 
 	float MinDist = -1.f;
 	AActor* MinDistActor = nullptr;
 	AAICharacter* ControlledPawn = Cast<AAICharacter>(GetPawn());
 	for (AActor* Actor : OutActors)
 	{
+		//check warrior and player
+		if (!Cast<AWarriorAI>(Actor)&&!Cast<AMnBCharacter>(Actor)&&!Cast<AWorldCharacter>(Actor))
+		{
+			continue;
+		}
+
 		//horse check
 		if (Cast<AHorse>(Actor))
 		{
@@ -91,17 +98,23 @@ void AMnBAIController::SearchTarget()
 		AMnBCharacter* TempPlayerChar = Cast<AMnBCharacter>(Actor);
 		if (TempPlayerChar)
 		{
-			if (ControlledPawn->GetTeam() == TempPlayerChar->GetTeam())
+			if (ControlledPawn->GetTeam() != ETeam::NoTeam)
 			{
-				continue;
+				if (ControlledPawn->GetTeam() == TempPlayerChar->GetTeam())
+				{
+					continue;
+				}
 			}
 		}
 		AAICharacter* TempAIChar = Cast<AAICharacter>(Actor);
 		if (TempAIChar)
 		{
-			if (ControlledPawn->GetTeam() == TempAIChar->GetTeam())
+			if (ControlledPawn->GetTeam() != ETeam::NoTeam)
 			{
-				continue;
+				if (ControlledPawn->GetTeam() == TempAIChar->GetTeam())
+				{
+					continue;
+				}
 			}
 		}
 		

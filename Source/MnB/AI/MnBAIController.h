@@ -38,6 +38,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	AActor* TargetCharacter = nullptr;
 
+	UPROPERTY(EditAnywhere)
+	float SearchRadius = 900000.f;
+
 public:
 	AActor* GetTargetCharacter() { return TargetCharacter; }
 	void SetTarget(AActor* NewTarget);

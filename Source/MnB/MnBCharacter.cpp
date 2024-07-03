@@ -303,6 +303,7 @@ void AMnBCharacter::Attack()
 		UMnBCharacterAnimInstance* MnBAnim = Cast<UMnBCharacterAnimInstance>(AnimInstance);
 		MnBAnim->SetBowDraw(false);
 
+		Cast<ABow>(EquippedWeapon)->PlayRecoilSound();
 		PlayAnimMontage(BowRecoil);
 
 		FVector Location = GetMesh()->GetSocketByName("WeaponSocket")->GetSocketLocation(GetMesh());

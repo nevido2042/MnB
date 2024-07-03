@@ -22,21 +22,22 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void SpawnRandomPosition();
 protected:
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<class AAICharacter> Warrior = nullptr;
+	TSubclassOf<class AWarriorAI> Warrior = nullptr;
 
 	UPROPERTY(EditAnywhere)
-	TArray<TSubclassOf<class AAICharacter>> Warriors;
+	TArray<TSubclassOf<class AWarriorAI>> Warriors;
 
 	UPROPERTY(EditAnywhere, meta = (MakeEditWidget = "true"))
 	TArray<FVector> SpawnPositions;
 
 	USceneComponent* SceneComponent = nullptr;
 
-	void SpawnRandomPosition();
 
-	TSubclassOf<class AAICharacter> RandomWarrior();
+	TSubclassOf<class AWarriorAI> RandomWarrior();
 
 	FTimerHandle Timer;
 

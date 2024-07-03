@@ -5,6 +5,8 @@
 #include "AI/AICharacter.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "AI/InfantryAI.h"
+#include "AI/WarriorAI.h"
 
 // Sets default values
 AWarriorSpawner::AWarriorSpawner()
@@ -31,7 +33,7 @@ void AWarriorSpawner::BeginPlay()
 	
 	//SpawnRandomPosition();
 
-	GetWorldTimerManager().SetTimer(Timer, this, &AWarriorSpawner::SpawnRandomPosition, 5.f, true);
+	//GetWorldTimerManager().SetTimer(Timer, this, &AWarriorSpawner::SpawnRandomPosition, 5.f, true);
 }
 
 // Called every frame
@@ -39,13 +41,13 @@ void AWarriorSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//TArray<AActor*> OutActors;
-	//UGameplayStatics::GetAllActorsOfClass(GetWorld(), AAICharacter::StaticClass(), OutActors);
+	/*TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AInfantryAI::StaticClass(), OutActors);
 
-	//if (OutActors.Num() < 5)
-	//{
-	//	SpawnRandomPosition();
-	//}
+	if (OutActors.Num() < 5)
+	{
+		SpawnRandomPosition();
+	}*/
 
 }
 
@@ -62,7 +64,7 @@ void AWarriorSpawner::SpawnRandomPosition()
 	Actor->SetActorLocation(WorldPosition);
 }
 
-TSubclassOf<class AAICharacter> AWarriorSpawner::RandomWarrior()
+TSubclassOf<class AWarriorAI> AWarriorSpawner::RandomWarrior()
 {
 	if (Warriors.Num() == 0) return nullptr;
 

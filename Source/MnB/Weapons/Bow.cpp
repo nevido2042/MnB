@@ -3,6 +3,7 @@
 
 #include "Weapons/Bow.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/AudioComponent.h"
 
 ABow::ABow()
 {
@@ -13,4 +14,12 @@ ABow::ABow()
 	SkeletalMeshComponent->SetCanEverAffectNavigation(false);
 
 	GuardCollider->DestroyComponent();
+
+	/*Audio = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+	Audio->SetupAttachment(SkeletalMeshComponent);*/
+}
+
+void ABow::PlayRecoilSound()
+{
+	Audio->Play();
 }

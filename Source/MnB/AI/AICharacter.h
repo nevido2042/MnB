@@ -90,9 +90,11 @@ private:
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	bool bDie = false;
-	void Die();
 
 	void SetTeamCloth();
+
+protected:
+	virtual void Die();
 public:
 	bool IsDie() { return bDie; }
 

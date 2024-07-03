@@ -206,6 +206,8 @@ void AAICharacter::PlayBowRecoil()
 #include "Engine/SkeletalMeshSocket.h"
 void AAICharacter::FireArrow()
 {
+	Cast<ABow>(CurWeapon)->PlayRecoilSound();
+
 	PlayBowRecoil();
 	AActor* Arrow = GetWorld()->SpawnActor(ArrowAsset);
 
@@ -253,7 +255,10 @@ void AAICharacter::Die()
 	GetMesh()->SetCollisionProfileName("Dead");
 	GetMesh()->SetSimulatePhysics(true);
 
-	Cast<ABattleGameMode>(GetWorld()->GetAuthGameMode())->Decrease(Team);
+	if (ABattleGameMode* BattleGM = Cast<ABattleGameMode>(GetWorld()->GetAuthGameMode()))
+	{
+		BattleGM->Decrease(Team);
+	}
 }
 
 void AAICharacter::MyDestroy()
