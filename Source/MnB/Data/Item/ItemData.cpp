@@ -6,3 +6,8 @@
 FItemData::FItemData()
 {
 }
+
+//void FItemData::UseItem()
+//{
+//	UE_LOG(LogTemp, Warning, TEXT("UseItem"));
+//}

@@ -20,4 +20,13 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UTexture2D* ItemImage;
+
+	UPROPERTY(EditAnywhere)
+	UMaterial* Material;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UItem> ItemFunctionClass;
+
+//public:
+//	void UseItem();
 };

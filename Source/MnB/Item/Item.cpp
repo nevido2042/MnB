@@ -1,49 +1,40 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "Item/Item.h"
-#include "Components/BoxComponent.h"
+#include "Item.h"
 #include "Data/Item/ItemData.h"
+#include "Subsystem/DataSubsystem.h"
 
-// Sets default values
-AItem::AItem()
+//void UItem_Potion::UseItem(ARPGPlayerController* Controller, FItemData& ItemData)
+//{
+//	/*FDamageEvent DamageEvent;
+//	Controller->GetPawn()->TakeDamage(10.f, DamageEvent, nullptr, nullptr);*/
+//}
+//
+//void UItem_Weapon::UseItem(ARPGPlayerController* Controller, FItemData& ItemData)
+//{
+//	/*APawn* Pawn = Controller->GetPawn();
+//	AKDT2Character* Character = Cast<AKDT2Character>(Pawn);
+//	ensure(Character);
+//
+//	UDataSubsystem* DataSubsystem = Controller->GetWorld()->GetGameInstance()->GetSubsystem<UDataSubsystem>();
+//	const FWeaponDataTableRow* WeaponDataTableRow = DataSubsystem->FindWeapon(ItemData.ItemName);
+//	Character->SetWeaponData(WeaponDataTableRow);*/
+//}
+//
+//void UItem_Weapon::UnEquipItem(ARPGPlayerController* Controller, FItemData& ItemData)
+//{
+//	/*APawn* Pawn = Controller->GetPawn();
+//	AKDT2Character* Character = Cast<AKDT2Character>(Pawn);
+//	ensure(Character);
+//
+//	UDataSubsystem* DataSubsystem = Controller->GetWorld()->GetGameInstance()->GetSubsystem<UDataSubsystem>();
+//	const FWeaponDataTableRow* WeaponDataTableRow = DataSubsystem->FindWeapon(TEXT("Fist"));
+//	Character->SetWeaponData(WeaponDataTableRow);*/
+//}
+
+void UItem_Chest::UseItem(AController* Controller, FItemData& ItemData)
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
-	Collider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
-	SetRootComponent(Collider);
-
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	Mesh->SetupAttachment(Collider);
+	UE_LOG(LogTemp, Warning, TEXT("Chest"));
 }
 
-// Called when the game starts or when spawned
-void AItem::BeginPlay()
+void UItem_Chest::UnEquipItem(AController* Controller, FItemData& ItemData)
 {
-	Super::BeginPlay();
-	
-	SetInfo(FText::FromString(TEXT("Item\nPick Up")));
-
-	DataRow = DataHandle.GetRow<FItemData>(TEXT(""));
 }
-
-// Called every frame
-void AItem::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
-#include "Controller/ControllerPC.h"
-void AItem::Interact(AActor* InActor)
-{
-	if (APawn* Pawn = Cast<APawn>(InActor))
-	{
-		if (AControllerPC* Cont = Cast<AControllerPC>(Pawn->GetController()))
-		{
-			Cont->PickUpItem(DataRow->ItemName);
-		}
-	}
-}
-

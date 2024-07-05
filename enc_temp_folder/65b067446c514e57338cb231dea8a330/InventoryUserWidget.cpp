@@ -122,7 +122,7 @@ void UInventoryUserWidget::BindEvent(UItemSlotUserWidget* ItemSlot)
 			TWeakPtr<FItemData> ItemData = InventorySubsystem->Inventory[Index];
 			if (ItemData.IsValid())
 			{
-				if (ItemData.Pin()->ItemFunctionClass = UItem_Chest::StaticClass())
+				if (Cast<UItem_Chest>(ItemData.Pin()->ItemFunctionClass))
 				{
 					ChestSlot->SetImage(InventorySubsystem->Inventory[InSlot->ItemIndex]->ItemImage);
 				}

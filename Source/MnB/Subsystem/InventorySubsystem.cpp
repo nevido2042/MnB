@@ -4,6 +4,8 @@
 #include "Subsystem/InventorySubsystem.h"
 #include "Data/Item/ItemData.h"
 #include "DataSubsystem.h"
+#include "UserWidget/InventoryUserWidget.h"
+#include "Item/Item.h"
 
 void UInventorySubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -62,32 +64,39 @@ bool UInventorySubsystem::MoveItemToInventory(TSharedPtr<FItemData>& InItem)
 
 void UInventorySubsystem::UseItem(UInventoryUserWidget* Widget, uint32 InIndex)
 {
-	//TWeakPtr<FItemData> ItemData = Inventory[InIndex];
-	//if (!ItemData.IsValid()) { return; }
+	TWeakPtr<FItemData> ItemData = Inventory[InIndex];
+	if (!ItemData.IsValid()) { return; }
 
-	//ARPGPlayerController* RPGPlayerController = Cast<ARPGPlayerController>(Widget->GetOwningPlayer());
-	//ensure(RPGPlayerController);
+	AController* PlayerController = Cast<AController>(Widget->GetOwningPlayer());
+	ensure(PlayerController);
 
-	//UItem* Item = ItemData.Pin()->ItemFunctionClass->GetDefaultObject<UItem>();
+	UItem* Item = ItemData.Pin()->ItemFunctionClass->GetDefaultObject<UItem>();
 
-	//// interface로 번들 가능한 것에 대해서만 처리해도 되겠네요
-	//UItem_Weapon* ItemWeapon = Cast<UItem_Weapon>(Item);
-	//if (ItemWeapon)
-	//{
-	//	Weapon = Inventory[InIndex];
-	//	Item->UseItem(RPGPlayerController, *ItemData.Pin());
-	//	Inventory[InIndex] = nullptr;
-	//}
-	//else
-	//{
-	//	Item->UseItem(RPGPlayerController, *ItemData.Pin());
-	//	--ItemData.Pin()->CurrentBundleCount;
-	//}
+	UItem_Chest* ItemChest = Cast<UItem_Chest>(Item);
+	if (ItemChest)
+	{
+		Item->UseItem(PlayerController, *ItemData.Pin());
+		Inventory[InIndex] = nullptr;
+	}
 
-	//if (ItemData.Pin()->CurrentBundleCount == 0)
-	//{
-	//	Inventory[InIndex] = nullptr;
-	//}
+	// interface로 번들 가능한 것에 대해서만 처리해도 되겠네요
+	/*UItem_Weapon* ItemWeapon = Cast<UItem_Weapon>(Item);
+	if (ItemWeapon)
+	{
+		Weapon = Inventory[InIndex];
+		Item->UseItem(RPGPlayerController, *ItemData.Pin());
+		Inventory[InIndex] = nullptr;
+	}
+	else
+	{
+		Item->UseItem(RPGPlayerController, *ItemData.Pin());
+		--ItemData.Pin()->CurrentBundleCount;
+	}
 
-	//Widget->FlushInven();
+	if (ItemData.Pin()->CurrentBundleCount == 0)
+	{
+		Inventory[InIndex] = nullptr;
+	}*/
+
+	Widget->FlushInven();
 }

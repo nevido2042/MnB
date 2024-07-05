@@ -27,6 +27,8 @@ protected:
 
 	class UItemSlotUserWidget* ChestSlot = nullptr;
 
+
+
 	UInventorySubsystem* InventorySubsystem;
 
 	int32 InvenSize = 0;

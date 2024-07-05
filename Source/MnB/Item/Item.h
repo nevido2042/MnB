@@ -3,38 +3,50 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "Interface/InteractableActor.h"
 #include "Item.generated.h"
 
+struct FItemData;
+
 UCLASS()
-class MNB_API AItem : public AActor, public IInteractableActor
+class UItem : public UObject
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
-	AItem();
+
+	friend class UInventorySubsystem;
 
 protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	virtual void UseItem(AController* Controller, FItemData& ItemData)
+	{
+		int a = 0;
+	}
+	virtual void UnEquipItem(AController* Controller, FItemData& ItemData) {}
+};
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+//UCLASS()
+//class UItem_Potion : public UItem
+//{
+//	GENERATED_BODY()
+//	friend class UInventorySubsystem;
+//protected:
+//	virtual void UseItem(ARPGPlayerController* Controller, FItemData& ItemData);
+//};
 
-	virtual void Interact(AActor* InActor = nullptr) override;
+//UCLASS()
+//class UItem_Weapon : public UItem
+//{
+//	GENERATED_BODY()
+//	friend class UInventorySubsystem;
+//protected:
+//	virtual void UseItem(ARPGPlayerController* Controller, FItemData& ItemData);
+//	virtual void UnEquipItem(ARPGPlayerController* Controller, FItemData& ItemData);
+//};
 
+UCLASS()
+class UItem_Chest : public UItem
+{
+	GENERATED_BODY()
+	friend class UInventorySubsystem;
 protected:
-	UPROPERTY(EditAnywhere)
-	FDataTableRowHandle DataHandle;
-
-	struct FItemData* DataRow = nullptr;
-
-	UPROPERTY(EditAnywhere)
-	class UBoxComponent* Collider = nullptr;
-
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* Mesh = nullptr;
+	virtual void UseItem(AController* Controller, FItemData& ItemData);
+	virtual void UnEquipItem(AController* Controller, FItemData& ItemData);
 };
