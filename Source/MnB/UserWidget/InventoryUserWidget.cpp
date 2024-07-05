@@ -17,12 +17,24 @@ void UInventoryUserWidget::NativeConstruct()
 	/*LoadClass<UClass>(ANY_PACKAGE, TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/UI/BP_ItemSlot.BP_ItemSlot_C'"),
 		nullptr, LOAD_None, nullptr);*/
 
-	UClass* ItemSlotAsset = FindObject<UClass>(ANY_PACKAGE, TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/UI/BP_ItemSlot.BP_ItemSlot_C'"));
+	/*UClass* ItemSlotAsset = FindObject<UClass>(ANY_PACKAGE, TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/MyAssets/UI/BP_ItemSlot.BP_ItemSlot_C'"));*/
 
 	Panel = Cast<UUniformGridPanel>(GetWidgetFromName(TEXT("InventoryPanel")));
 
 	ChestSlot = Cast<UItemSlotUserWidget>(GetWidgetFromName(TEXT("UI_ChestSlot")));
 	ChestSlot->SetImage(nullptr);
+
+	//BindEvent(ChestSlot);
+
+	ChestSlot->ItemBtnClicked.BindLambda([this](UItemSlotUserWidget* InSlot)
+	{
+		if (ChestSlot->Image == nullptr)
+			return;
+
+		ChestSlot->SetImage(nullptr);
+		InventorySubsystem->AddItem("Chest");
+		FlushInven();
+	});
 
 
 	ULocalPlayer* LocalPlayer = GetOwningLocalPlayer();
@@ -53,6 +65,7 @@ void UInventoryUserWidget::NativeConstruct()
 		}
 	}
 
+
 	FlushInven();
 }
 
@@ -63,6 +76,11 @@ void UInventoryUserWidget::NativeOnInitialized()
 	SetVisibility(ESlateVisibility::Hidden);
 	//LeftImage = Cast<UImage>(GetWidgetFromName(TEXT("ImageLeft")));
 
+	/*ChestSlot->ItemBtnClicked.BindLambda([this]()
+	{
+		ChestSlot->SetImage(nullptr);
+		InventorySubsystem->AddItem("Chest");
+	});*/
 }
 
 void UInventoryUserWidget::FlushInven()

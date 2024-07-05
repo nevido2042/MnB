@@ -26,10 +26,14 @@ protected:
 	void MakeInventory();
 	void ClearInventory();
 
-	bool AddItem(const FName& InKey);
+
 	bool MoveItemToInventory(TSharedPtr<FItemData>& InItem);
 
+
 	void UseItem(class UInventoryUserWidget* Widget, uint32 InIndex);
+
+public:
+	bool AddItem(const FName& InKey);
 
 protected:
 	const uint32 MaxInvenSize = 20;

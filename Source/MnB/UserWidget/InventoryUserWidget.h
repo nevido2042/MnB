@@ -37,6 +37,9 @@ protected:
 
 	bool bHoldItem = false;
 	
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> ItemSlotAsset = nullptr;
+
 	UPROPERTY()
 	TArray<UItemSlotUserWidget*> Slots;
 
