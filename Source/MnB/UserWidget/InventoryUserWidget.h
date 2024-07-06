@@ -53,4 +53,6 @@ public:
 	
 private:
 	void BindEvent(UItemSlotUserWidget* Slot);
+
+	void ChestSlotBindEvent(UItemSlotUserWidget* ItemSlot);
 };

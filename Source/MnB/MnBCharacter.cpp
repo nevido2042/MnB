@@ -648,6 +648,16 @@ void AMnBCharacter::DestroyFlags()
 	Flags.Empty();
 }
 
+void AMnBCharacter::SetInitChestMaterial()
+{
+	GetMesh()->SetMaterial(1, InitChestMaterial);
+}
+
+void AMnBCharacter::SaveInitChestMaterial()
+{
+	InitChestMaterial = GetMesh()->GetMaterial(1)->GetMaterial();
+}
+
 void AMnBCharacter::StartGetOnMontage()
 {
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying())

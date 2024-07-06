@@ -32,12 +32,16 @@ protected:
 
 	void UseItem(class UInventoryUserWidget* Widget, uint32 InIndex);
 
+	void UnEquipChest(UInventoryUserWidget* Widget);
+
 public:
 	bool AddItem(const FName& InKey);
 
 protected:
 	const uint32 MaxInvenSize = 20;
 	TArray<TSharedPtr<FItemData>> Inventory;
+
+	TSharedPtr<FItemData> Chest;
 
 	class UDataSubsystem* DataSubsystem;
 };

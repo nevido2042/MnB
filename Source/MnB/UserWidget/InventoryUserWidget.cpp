@@ -25,17 +25,7 @@ void UInventoryUserWidget::NativeConstruct()
 	ChestSlot->SetImage(nullptr);
 
 	//BindEvent(ChestSlot);
-
-	ChestSlot->ItemBtnClicked.BindLambda([this](UItemSlotUserWidget* InSlot)
-	{
-		if (ChestSlot->Image == nullptr)
-			return;
-
-		ChestSlot->SetImage(nullptr);
-		InventorySubsystem->AddItem("Chest");
-		FlushInven();
-	});
-
+	ChestSlotBindEvent(ChestSlot);
 
 	ULocalPlayer* LocalPlayer = GetOwningLocalPlayer();
 	InventorySubsystem = ULocalPlayer::GetSubsystem<UInventorySubsystem>(LocalPlayer);
@@ -85,6 +75,16 @@ void UInventoryUserWidget::NativeOnInitialized()
 
 void UInventoryUserWidget::FlushInven()
 {
+	if (InventorySubsystem->Chest)
+	{
+		UTexture2D* Texture = InventorySubsystem->Chest->ItemImage;
+		ChestSlot->Image->SetBrushFromTexture(Texture, false);
+	}
+	else
+	{
+		ChestSlot->Image->SetBrushFromTexture(nullptr, false);
+	}
+
 	for (int32 i = 0; i < InvenSize; ++i)
 	{
 		if (InventorySubsystem->Inventory[i] == nullptr)
@@ -150,5 +150,20 @@ void UInventoryUserWidget::BindEvent(UItemSlotUserWidget* ItemSlot)
 
 			//InventorySubsystem->Inventory[InSlot->ItemIndex] = nullptr;
 			FlushInven();
+		});
+}
+
+void UInventoryUserWidget::ChestSlotBindEvent(UItemSlotUserWidget* ItemSlot)
+{
+	ItemSlot->ItemBtnClicked.BindLambda([this](UItemSlotUserWidget* InSlot)
+		{
+			/*if (InSlot->Image == nullptr)
+				return;*/
+
+			InventorySubsystem->UnEquipChest(this);
+			/*InSlot->SetImage(nullptr);*/
+			//InventorySubsystem->AddItem("Chest");
+			/*InventorySubsystem->*/
+			//FlushInven();
 		});
 }

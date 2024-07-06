@@ -275,5 +275,11 @@ private:
 	void SpawnFlags();
 	void DestroyFlags();
 
+private:
+	UMaterial* InitChestMaterial = nullptr;
+	void SaveInitChestMaterial();
+public:
+	void SetInitChestMaterial();
+
 };
 

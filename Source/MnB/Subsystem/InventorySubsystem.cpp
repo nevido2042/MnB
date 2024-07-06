@@ -62,6 +62,16 @@ bool UInventorySubsystem::MoveItemToInventory(TSharedPtr<FItemData>& InItem)
 	return bAdded;
 }
 
+void UInventorySubsystem::UnEquipChest(UInventoryUserWidget* Widget)
+{
+	if (Chest == nullptr) return;
+
+	UItem* Item = Chest->ItemFunctionClass->GetDefaultObject<UItem>();
+	Item->UnEquipItem(Cast<AController>(Widget->GetOwningPlayer()), *Chest);
+	MoveItemToInventory(Chest);
+	Widget->FlushInven();
+}
+
 void UInventorySubsystem::UseItem(UInventoryUserWidget* Widget, uint32 InIndex)
 {
 	TWeakPtr<FItemData> ItemData = Inventory[InIndex];
@@ -76,6 +86,7 @@ void UInventorySubsystem::UseItem(UInventoryUserWidget* Widget, uint32 InIndex)
 	if (ItemChest)
 	{
 		Item->UseItem(PlayerController, *ItemData.Pin());
+		Chest = Inventory[InIndex];
 		Inventory[InIndex] = nullptr;
 	}
 
