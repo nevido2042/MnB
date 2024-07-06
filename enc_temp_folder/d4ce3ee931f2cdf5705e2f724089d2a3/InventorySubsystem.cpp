@@ -95,11 +95,6 @@ void UInventorySubsystem::UseItem(UInventoryUserWidget* Widget, uint32 InIndex)
 	UItem_Chest* ItemChest = Cast<UItem_Chest>(Item);
 	if (ItemChest)
 	{
-		if (Chest)
-		{
-			MoveItemToInventory(Chest);
-		}
-
 		Item->UseItem(PlayerController, *ItemData.Pin());
 		Chest = Inventory[InIndex];
 		Inventory[InIndex] = nullptr;
@@ -108,11 +103,6 @@ void UInventorySubsystem::UseItem(UInventoryUserWidget* Widget, uint32 InIndex)
 	UItem_Head* ItemHead = Cast<UItem_Head>(Item);
 	if (ItemHead)
 	{
-		if (Head)
-		{
-			MoveItemToInventory(Head);
-		}
-
 		Item->UseItem(PlayerController, *ItemData.Pin());
 		Head = Inventory[InIndex];
 		Inventory[InIndex] = nullptr;

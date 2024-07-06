@@ -46,10 +46,8 @@ void AControllerPC::OnPossess(APawn* aPawn)
 	UInventorySubsystem* InventorySubsystem = ULocalPlayer::GetSubsystem<UInventorySubsystem>(GetLocalPlayer());
 	InventorySubsystem->MakeInventory();
 
-	InventorySubsystem->AddItem("BrownChest");
-	InventorySubsystem->AddItem("BrownHead");
-	InventorySubsystem->AddItem("WhiteChest");
-	InventorySubsystem->AddItem("WhiteHead");
+	InventorySubsystem->AddItem("Chest");
+	InventorySubsystem->AddItem("Head");
 }
 
 void AControllerPC::PickUpItem(const FName& InKey)
