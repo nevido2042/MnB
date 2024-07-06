@@ -33,6 +33,7 @@ protected:
 	void UseItem(class UInventoryUserWidget* Widget, uint32 InIndex);
 
 	void UnEquipChest(UInventoryUserWidget* Widget);
+	void UnEquipHead(UInventoryUserWidget* Widget);
 
 public:
 	bool AddItem(const FName& InKey);
@@ -42,6 +43,7 @@ protected:
 	TArray<TSharedPtr<FItemData>> Inventory;
 
 	TSharedPtr<FItemData> Chest;
+	TSharedPtr<FItemData> Head;
 
 	class UDataSubsystem* DataSubsystem;
 };

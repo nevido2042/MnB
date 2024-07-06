@@ -277,9 +277,11 @@ private:
 
 private:
 	UMaterial* InitChestMaterial = nullptr;
-	void SaveInitChestMaterial();
+	UMaterial* InitHeadMaterial = nullptr;
+	void SaveInitMaterial();
 public:
 	void SetInitChestMaterial();
+	void SetInitHeadMaterial();
 
 };
 

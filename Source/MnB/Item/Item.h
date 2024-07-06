@@ -50,3 +50,13 @@ protected:
 	virtual void UseItem(AController* Controller, FItemData& ItemData);
 	virtual void UnEquipItem(AController* Controller, FItemData& ItemData);
 };
+
+UCLASS()
+class UItem_Head : public UItem
+{
+	GENERATED_BODY()
+	friend class UInventorySubsystem;
+protected:
+	virtual void UseItem(AController* Controller, FItemData& ItemData);
+	virtual void UnEquipItem(AController* Controller, FItemData& ItemData);
+};

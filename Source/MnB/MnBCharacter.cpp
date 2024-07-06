@@ -653,9 +653,15 @@ void AMnBCharacter::SetInitChestMaterial()
 	GetMesh()->SetMaterial(1, InitChestMaterial);
 }
 
-void AMnBCharacter::SaveInitChestMaterial()
+void AMnBCharacter::SetInitHeadMaterial()
+{
+	GetMesh()->SetMaterial(2, InitHeadMaterial);
+}
+
+void AMnBCharacter::SaveInitMaterial()
 {
 	InitChestMaterial = GetMesh()->GetMaterial(1)->GetMaterial();
+	InitHeadMaterial = GetMesh()->GetMaterial(2)->GetMaterial();
 }
 
 void AMnBCharacter::StartGetOnMontage()

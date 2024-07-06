@@ -33,7 +33,6 @@
 
 void UItem_Chest::UseItem(AController* Controller, FItemData& ItemData)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Chest"));
 	AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Controller->GetPawn());
 	MnBCharacter->GetMesh()->SetMaterial(1, ItemData.Material);
 }
@@ -42,4 +41,16 @@ void UItem_Chest::UnEquipItem(AController* Controller, FItemData& ItemData)
 {
 	AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Controller->GetPawn());
 	MnBCharacter->SetInitChestMaterial();
+}
+
+void UItem_Head::UseItem(AController* Controller, FItemData& ItemData)
+{
+	AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Controller->GetPawn());
+	MnBCharacter->GetMesh()->SetMaterial(2, ItemData.Material);
+}
+
+void UItem_Head::UnEquipItem(AController* Controller, FItemData& ItemData)
+{
+	AMnBCharacter* MnBCharacter = Cast<AMnBCharacter>(Controller->GetPawn());
+	MnBCharacter->SetInitHeadMaterial();
 }

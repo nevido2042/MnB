@@ -89,7 +89,7 @@ void UInventoryUserWidget::FlushInven()
 
 	if (InventorySubsystem->Head)
 	{
-		UTexture2D* Texture = InventorySubsystem->Head->ItemImage;
+		UTexture2D* Texture = InventorySubsystem->Chest->ItemImage;
 		HeadSlot->Image->SetBrushFromTexture(Texture, false);
 	}
 	else
@@ -153,16 +153,16 @@ void UInventoryUserWidget::BindEvent(UItemSlotUserWidget* ItemSlot)
 			TWeakPtr<FItemData> ItemData = InventorySubsystem->Inventory[Index];
 			if (ItemData.IsValid())
 			{
-				/*if (ItemData.Pin()->ItemFunctionClass = UItem_Chest::StaticClass())
+				if (ItemData.Pin()->ItemFunctionClass = UItem_Chest::StaticClass())
 				{
 					ChestSlot->SetImage(InventorySubsystem->Inventory[InSlot->ItemIndex]->ItemImage);
-				}*/
+				}
 
 				InventorySubsystem->UseItem(this, Index);
 			}
 
 			//InventorySubsystem->Inventory[InSlot->ItemIndex] = nullptr;
-			/*FlushInven();*/
+			FlushInven();
 		});
 }
 

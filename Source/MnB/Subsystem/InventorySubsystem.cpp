@@ -72,6 +72,16 @@ void UInventorySubsystem::UnEquipChest(UInventoryUserWidget* Widget)
 	Widget->FlushInven();
 }
 
+void UInventorySubsystem::UnEquipHead(UInventoryUserWidget* Widget)
+{
+	if (Head == nullptr) return;
+
+	UItem* Item = Head->ItemFunctionClass->GetDefaultObject<UItem>();
+	Item->UnEquipItem(Cast<AController>(Widget->GetOwningPlayer()), *Head);
+	MoveItemToInventory(Head);
+	Widget->FlushInven();
+}
+
 void UInventorySubsystem::UseItem(UInventoryUserWidget* Widget, uint32 InIndex)
 {
 	TWeakPtr<FItemData> ItemData = Inventory[InIndex];
@@ -90,7 +100,13 @@ void UInventorySubsystem::UseItem(UInventoryUserWidget* Widget, uint32 InIndex)
 		Inventory[InIndex] = nullptr;
 	}
 
-	// interface로 번들 가능한 것에 대해서만 처리해도 되겠네요
+	UItem_Head* ItemHead = Cast<UItem_Head>(Item);
+	if (ItemHead)
+	{
+		Item->UseItem(PlayerController, *ItemData.Pin());
+		Head = Inventory[InIndex];
+		Inventory[InIndex] = nullptr;
+	}
 	/*UItem_Weapon* ItemWeapon = Cast<UItem_Weapon>(Item);
 	if (ItemWeapon)
 	{

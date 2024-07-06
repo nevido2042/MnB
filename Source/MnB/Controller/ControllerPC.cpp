@@ -47,6 +47,7 @@ void AControllerPC::OnPossess(APawn* aPawn)
 	InventorySubsystem->MakeInventory();
 
 	InventorySubsystem->AddItem("Chest");
+	InventorySubsystem->AddItem("Head");
 }
 
 void AControllerPC::PickUpItem(const FName& InKey)

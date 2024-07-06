@@ -11,6 +11,8 @@
  */
 //class UItemSlotUserWidget
 
+class UItemSlotUserWidget;
+
 UCLASS()
 class MNB_API UInventoryUserWidget : public UUserWidget
 {
@@ -25,7 +27,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	class UUniformGridPanel* Panel = nullptr;
 
-	class UItemSlotUserWidget* ChestSlot = nullptr;
+	UItemSlotUserWidget* ChestSlot = nullptr;
+	UItemSlotUserWidget* HeadSlot = nullptr;
 
 	UInventorySubsystem* InventorySubsystem;
 
@@ -54,5 +57,5 @@ public:
 private:
 	void BindEvent(UItemSlotUserWidget* Slot);
 
-	void ChestSlotBindEvent(UItemSlotUserWidget* ItemSlot);
+	void EquipmentSlotBindEvent();
 };
